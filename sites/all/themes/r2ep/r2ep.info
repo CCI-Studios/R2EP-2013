@@ -1,0 +1,27 @@
+name = Run 2 End Poverty Template
+description = Base theme for R2EP
+core = 7.x
+
+scripts[] = js/scripts.js
+
+stylesheets[all][] = css/style.css
+
+regions[header_top] = Top Header
+regions[header_bottom] = Bottom Header
+regions[header_left] = Left Header
+regions[banner] = Navigation Banner
+
+regions[highlighted] = Highlighted
+regions[pre_content] = Before Content
+
+regions[help] = Help
+regions[content] = Content
+regions[sidebar_first] = Left sidebar
+regions[sidebar_second] = Right sidebar
+
+regions[post_content] = After Content
+
+regions[bottom_one] = First Bottom Column
+regions[bottom_two] = Second Bottom Column
+
+regions[footer] = Footer

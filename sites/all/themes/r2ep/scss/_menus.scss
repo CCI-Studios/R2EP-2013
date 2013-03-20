@@ -1,0 +1,67 @@
+ul.menu {
+	margin: 0;
+	padding: 0;
+
+	li {
+		position: relative;
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+
+		margin: 0 0 0 1.714285714em;
+		padding: 0;
+
+		list-style: none;
+	}
+
+	a, span {
+		display: block;
+
+		font-size: 1.142857143em;
+		color: black;
+		text-transform: uppercase;
+
+		&:hover { color: white; }
+		&.active {
+			color: white;
+		}
+	}
+
+	ul {
+		//display: none;
+		position: absolute;
+		top: 100%;
+		right: 0;
+		padding: 1em;
+
+		background: red;
+	}
+
+	ul li {
+		margin: 0;
+		white-space: nowrap;
+	}
+
+	li:hover > ul {
+		display: block;
+	}
+}
+
+.region-footer {
+	ul.menu {
+		li {
+			margin-left: 0.428571428em;
+			padding-left: 0.428571428em;
+
+			border-left: 1px solid white;
+
+			&:first-child {
+				border-left: none;
+			}
+
+			a, span {
+				font-size: 1em;
+			}
+		}
+	}
+}

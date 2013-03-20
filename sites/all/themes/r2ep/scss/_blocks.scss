@@ -1,0 +1,45 @@
+// search block
+.block-search {
+	position: relative;
+
+	input[type="text"] {
+		padding: 0.5em 2em 0.5em 0.642857143em;
+
+		background: url(../images/transparent-white.png);
+		border: 1px solid white;
+		border-radius: 0.5em;
+		color: white;
+		outline: none;
+
+		&:focus {
+			border-color: white;
+		}
+
+		&::-webkit-input-placeholder { color: white; }
+		&:-moz-placeholder { color: white; }
+		&::-moz-placeholder { color: white; }
+		&:-ms-input-placeholder { color: white; }
+	}
+
+	input[type="submit"] {
+		position: absolute;
+		top: 3px;
+		right: 3px;
+		width: 25px;
+		height: 25px;
+
+		text-indent: -9999px;
+		background: url(../images/searchButton.png) center center no-repeat;
+		border: none;
+	}
+}
+
+
+
+// region layouts
+.region-post-content {
+	.block {
+		float: left;
+		width: 50%;
+	}
+}

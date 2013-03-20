@@ -1,0 +1,20 @@
+@import "variables";
+
+img {
+	max-width: 100%;
+}
+
+
+
+
+// thumb-list
+.thumb-list {
+	li {
+		text-align: center;
+	}
+
+	img {
+		padding: 2px;
+		border: 1px solid $grey-light;
+	}
+}

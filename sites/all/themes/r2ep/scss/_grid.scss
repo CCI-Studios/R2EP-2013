@@ -1,0 +1,35 @@
+@import "variables";
+@import "mixins";
+
+$padding: 1em;
+
+.gridContainer {
+	margin-left: -$padding;
+
+	@include clearfix;
+}
+
+[class*="col-"] {
+	float: left;
+	padding-left: $padding;
+}
+
+@for $i from 1 through 10 {
+	@for $j from 1 through $i {
+		.col-#{$j}-#{$i} {
+			width: $j/$i *100%;
+		}
+	}
+}
+
+
+ul.gridContainer {
+	margin: 0 0 0 -$padding;
+	padding: 0;
+
+	li[class*="col-"] {
+		margin: 0;
+		list-style: none;
+	}
+}
+

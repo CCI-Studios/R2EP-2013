@@ -1,0 +1,20 @@
+@import "variables";
+@import "mixins";
+
+body {
+	font-size: 87.5%; // 14px;
+	line-height: 1.285714286em;
+}
+
+a {
+	color: $orange-dark;
+	text-decoration: none;
+
+	&:hover { text-decoration: underline; }
+	&:visited { color: $orange-dark; }
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	color: $orange-dark;
+}
