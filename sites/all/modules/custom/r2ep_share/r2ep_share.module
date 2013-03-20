@@ -1,0 +1,64 @@
+<?php
+define('R2EP_SHARE_BLOCK', 'r2ep_share_block');
+
+function r2ep_share_block_info() {
+	$blocks = array();
+	$blocks[R2EP_SHARE_BLOCK] = array(
+		'info' => t('Share this page'),
+	);
+
+	return $blocks;
+}
+
+function r2ep_share_block_view($delta = '') {
+	$path = drupal_get_path('module', 'r2ep_share');
+	$block = array();
+
+	switch ($delta) {
+		case R2EP_SHARE_BLOCK:
+			$block['subject'] = t('Share This Page');
+			$block['content'] = _r2ep_share_content();
+			break;
+	}
+
+	return $block;
+}
+
+function _r2ep_share_content() {
+	$path = drupal_get_path('module', 'r2ep_share');
+	drupal_add_css($path .'/r2ep_share.css');
+	$content = array();
+
+	$title = drupal_get_title();
+	$url = $GLOBALS['base_url'] .'/'. request_path();
+
+	$services = array(
+		'facebook' => 'http://www.facebook.com/sharer.php?u=%url&t=%title',
+		'twitter' => 'http://twitter.com/share?text=%title&url=%url',
+		'google' => 'https://plus.google.com/share?url=%url',
+		// 'pintrest' => '',
+		'linkedin' => 'http://www.linkedin.com/shareArticle?mini=true&url=%url&title=%title',
+		'tumblr' => 'http://www.tumblr.com/share/link?url=%url&name=%title',
+		// 'rss' => '',
+	);
+
+	$content['#theme'] = 'item_list';
+	$content['#items'] = array();
+	$content['#attributes'] = array('class'=> 'share-icons clearfix');
+
+	foreach($services as $name => $link) {
+		$link = str_replace('%url', urlencode($url), $link);
+		$link = str_replace('%title', urlencode($title), $link);
+
+		$content['#items'][] = array(
+			'data' => l($name, $link, array('attributes' => array('target' => '_blank'))),
+			'class' => array('sprite-'. $name, 'sprite'),
+		);
+	}
+	$content['#items'][] = array(
+		'data' => l('email', "mailto:?subject=$title&body=$url"),
+		'class' => array('sprite-email', 'sprite'),
+	);
+
+	return $content;
+}

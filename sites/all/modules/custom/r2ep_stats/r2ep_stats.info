@@ -1,0 +1,7 @@
+name = R2EP Statistics Blocks
+description = Provides statistics for several R2EP content types
+core = 7.x
+
+package = R2EP
+; dependencies[] =
+files[] = r2ep_stats.module

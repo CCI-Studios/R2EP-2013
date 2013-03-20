@@ -1,0 +1,7 @@
+name = R2EP Sharing Block
+description = Allows users to share the contents of the page to different social networks
+core = 7.x
+
+package = R2EP
+; dependencies[] =
+files[] = r2ep_share.module

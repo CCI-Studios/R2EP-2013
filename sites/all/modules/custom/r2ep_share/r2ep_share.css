@@ -1,0 +1,39 @@
+ul.share-icons li {
+	float: left;
+	margin: 0 0.38em 0.5em;
+}
+
+.share-icons a {
+	display: block;
+	width: 44px;
+	height: 44px;
+
+	overflow: hidden;
+	text-indent: -1000px;
+}
+
+.sprite { background: url(images/sprite.png) no-repeat top left; };
+
+li.sprite-email { background-position: 0 -49px; width: 44px; height: 44px; }
+li.sprite-email:hover { background-position: 0 0; width: 44px; height: 44px; }
+
+li.sprite-facebook { background-position: 0 -147px; width: 44px; height: 44px; }
+li.sprite-facebook:hover { background-position: 0 -98px; width: 44px; height: 44px; }
+
+li.sprite-google { background-position: 0 -245px; width: 44px; height: 44px; }
+li.sprite-google:hover { background-position: 0 -196px; width: 44px; height: 44px; }
+
+li.sprite-linkedin { background-position: 0 -343px; width: 44px; height: 44px; }
+li.sprite-linkedin:hover { background-position: 0 -294px; width: 44px; height: 44px; }
+
+li.sprite-pintrest { background-position: 0 -441px; width: 44px; height: 44px; }
+li.sprite-pintrest:hover { background-position: 0 -392px; width: 44px; height: 44px; }
+
+li.sprite-rss { background-position: 0 -539px; width: 44px; height: 44px; }
+li.sprite-rss:hover { background-position: 0 -490px; width: 45px; height: 44px; }
+
+li.sprite-tumblr { background-position: 0 -637px; width: 44px; height: 44px; }
+li.sprite-tumblr:hover { background-position: 0 -588px; width: 44px; height: 44px; }
+
+li.sprite-twitter { background-position: 0 -735px; width: 44px; height: 44px; }
+li.sprite-twitter:hover { background-position: 0 -686px; width: 44px; height: 44px; }
