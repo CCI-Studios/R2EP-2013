@@ -13,6 +13,8 @@
 
 .floatLeft { float: left; }
 
+.clearfix { @include clearfix; }
+
 
 // Site Structure
 html, body {
@@ -47,20 +49,55 @@ header[role='banner'] {
 
 .region-hightlighted {}
 
-.region-title {
-	background: #252525;
-	color: white;
+.region-stats {
+	position: relative;
+	z-index: 10;
+	padding: 12px 0;
+
+	background: $orange-dark url(../images/stats-bg.jpg) top no-repeat;
 	border-top: 1px solid $orange-dark;
 	border-bottom: 1px solid $orange-dark;
+	box-shadow: 0 0 10px #333;
+
+	> .globalContainer {
+		width: 790px;
+	}
+}
+
+.region-title {
+	padding: 20px 0;
+
+	background: #252525;
+	color: white;
 }
 
 .content-wrapper {
+	position: relative;
+	z-index: 10;
 	padding: 1em 0;
+
 	background: #f4f4f4;
+	border-top: 1px solid $orange-dark;
+	border-bottom: 1px solid $orange-dark;
+	box-shadow: 0 0 10px #333;
 }
 
-.region-post-content {
+.page-content {
+	float: left;
+	width: 100%;
+
+	body.one-sidebar &, body.two-sidebars & {
+		width: 720px;
+		padding-right: 20px;
+	}
 }
+
+.region-sidebars {
+	float: left;
+	width: 220px;
+}
+
+.region-post-content { }
 
 #bottom { }
 

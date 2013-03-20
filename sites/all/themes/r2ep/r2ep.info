@@ -12,12 +12,13 @@ regions[header_left] = Left Header
 regions[banner] = Navigation Banner
 
 regions[highlighted] = Highlighted
+regions[stats] = Statistics
 regions[pre_content] = Before Content
 
 regions[help] = Help
 regions[content] = Content
-regions[sidebar_first] = Left sidebar
-regions[sidebar_second] = Right sidebar
+regions[sidebar_first] = Top sidebar
+regions[sidebar_second] = Main sidebar
 
 regions[post_content] = After Content
 

@@ -1,3 +1,9 @@
+// general
+.views-label {
+	font-weight: bold;
+}
+
+
 // events listings
 div .events-list {
 	li.views-row {
@@ -23,5 +29,20 @@ div .events-list {
 
 			img { display: block; }
 		}
+	}
+}
+
+// contact block
+#block-views-event-contact-info-block {
+
+	.views-field {
+		text-align: center;
+		padding: 0 0 0.25em;
+	}
+
+	.views-field-field-contact-name {
+		color: $orange-rich;
+		font-size: 16px;
+		font-weight: bold;
 	}
 }

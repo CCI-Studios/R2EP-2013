@@ -17,4 +17,19 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
 	color: $orange-dark;
+	line-height: 1.1em;
+}
+
+h1 {
+	margin: 0;
+	font-size: 24px;
+
+	color: $orange-rich;
+	background: url(../images/h1-bg.png) right 3px no-repeat;
+	line-height: 43px;
+
+	span {
+		padding: 0 0.25em 0 0;
+		background: #252525;
+	}
 }

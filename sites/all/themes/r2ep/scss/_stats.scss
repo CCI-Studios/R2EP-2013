@@ -1,0 +1,29 @@
+ul.stats-list {
+	margin: 0;
+
+	> li {
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+		width: 32%;
+		margin: 0;
+
+		font-size: 22px;
+		color: black;
+		text-align: center;
+
+		background: url(../images/stats-div.png) left no-repeat;
+
+		&.first {
+			background: none;
+		}
+	}
+
+	img {
+		vertical-align: middle;
+	}
+
+	.runners { }
+	.raised { }
+	.teams { }
+}

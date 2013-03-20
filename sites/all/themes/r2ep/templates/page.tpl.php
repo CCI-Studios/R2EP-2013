@@ -82,20 +82,21 @@
 	<?php print render($page['header_left']); ?>
 </div></header>
 
-<?php print render($page['hightlighted']); ?>
+<?php print render($page['highlighted']); ?>
+<?php print render($page['stats']); ?>
 
 <div class="region region-title"><div class="globalContainer">
 	<?php print render($title_prefix); ?>
 	<?php if ($title): ?>
-		<h1 class="title" id="page-title"><?php print $title; ?></h1>
+		<h1 class="title" id="page-title"><span><?php print $title; ?></span></h1>
 	<?php endif; ?>
 	<?php print render($title_suffix); ?>
 
 	<?php print render($page['pre_content']); ?>
 </div></div>
 
-<div class="content-wrapper"><div class="globalContainer">
-	<div id="content">
+<div class="content-wrapper"><div class="globalContainer clearfix">
+	<div class="page-content">
 		<a id="main-content"></a>
 		<?php print $messages; ?>
 		<?php print render($tabs); ?>
