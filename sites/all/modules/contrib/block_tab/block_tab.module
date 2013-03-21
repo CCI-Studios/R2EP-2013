@@ -34,8 +34,8 @@ function block_tab_perm() {
 
 /**
  * Implementation of hook_preprocess_ELEMENT().
- * 
- * @param array $vars 
+ *
+ * @param array $vars
  */
 function block_tab_preprocess_block(&$vars) {
   $region_setting = variable_get('block_tab-regions', array());
@@ -80,7 +80,7 @@ function block_tab_preprocess_region(&$variables) {
 
     $title_html = '';
     foreach ((array) $titles as $title) {
-      $title_html .= '<span class="block_tab-title' . $title['active'] . '" id="block_tab-title-' . $title['key'] . '">' . check_plain($title['title']) . '</span>';
+      $title_html .= '<span class="block_tab-title' . $title['active'] . '" id="block_tab-title-' . $title['key'] . '"><span>' . check_plain($title['title']) . '</span></span>';
     }
 
     $variables['content'] = '<div class="block_tab-titles" region="' . $region . '">' . $title_html . '</div>
