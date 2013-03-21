@@ -28,16 +28,19 @@ ul.menu {
 	}
 
 	ul {
-		//display: none;
+		display: none;
 		position: absolute;
 		top: 100%;
-		right: 0;
+		left: 50%;
+		width: 22em;
+		margin-left: -11em;
 		padding: 1em;
 
 		background: red;
 	}
 
 	ul li {
+		display: block;
 		margin: 0;
 		white-space: nowrap;
 	}

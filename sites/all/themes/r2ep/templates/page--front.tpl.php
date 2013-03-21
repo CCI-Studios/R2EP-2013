@@ -93,23 +93,22 @@
 	<?php print render($title_suffix); ?>
 
 	<?php print render($page['pre_content']); ?>
+
+	<div class="page-content">
+		<a id="main-content"></a>
+		<?php print $messages; ?>
+		<?php print render($tabs); ?>
+		<?php print render($page['help']); ?>
+		<?php if ($action_links): ?>
+			<ul class="action-links"><?php print render($action_links); ?></ul>
+		<?php endif; ?>
+		<?php print render($page['content']); ?>
+		<?php print $feed_icons; ?>
+	</div>
 </div></div>
 
 <div class="page-wrapper"><div class="globalContainer clearfix">
 	<div class="content-wrapper">
-		<div class="page-content">
-			<a id="main-content"></a>
-			<?php print $messages; ?>
-			<?php print render($tabs); ?>
-			<?php print render($page['help']); ?>
-			<?php if ($action_links): ?>
-				<ul class="action-links"><?php print render($action_links); ?></ul>
-			<?php endif; ?>
-			<?php print render($page['content']); ?>
-			<?php print $feed_icons; ?>
-		</div>
-
-
 		<?php
 		$post_content = render($page['post_content']);
 		$bottom1 = render($page['bottom_one']);
@@ -120,7 +119,7 @@
 				<?php print $post_content; ?>
 
 				<?php if ($bottom1 || $bottom2): ?>
-					<div class="gridContainer">
+					<div>
 						<?php print $bottom1; ?>
 						<?php print $bottom2; ?>
 					</div>

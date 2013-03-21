@@ -47,12 +47,58 @@
 	}
 }
 
+// countdown block
+.eventCountdown {
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 10px;
+	text-shadow: 0 1px 1px rgba(255,255,255, 0.5);
 
+	.darkBlock {
+		display: block;
+		padding: 0.25em 0.5em;
+
+		background: black;
+		border-radius: 3px;
+		font-size: 18px;
+		color: white;
+	}
+}
+
+// event registration block
+.eventRegistration {
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 21px;
+	font-weight: bold;
+
+	text-shadow: 0 1px 1px rgba(255,255,255, 0.5);
+
+	.large {
+		font-size: 34px;
+		line-height: 1.2em;
+	}
+}
 
 // region layouts
 .region-post-content {
 	.block {
 		float: left;
 		width: 50%;
+	}
+}
+
+
+
+// sidebar style
+.region-sidebar-second {
+	.block {
+		padding-top: 1em;
+		background: url(../images/grey-divider.png) top right no-repeat;
+
+		&:first-child {
+			padding-top: 0;
+			background: none;
+		}
 	}
 }

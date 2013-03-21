@@ -71,7 +71,7 @@ header[role='banner'] {
 	color: white;
 }
 
-.content-wrapper {
+.page-wrapper {
 	position: relative;
 	z-index: 10;
 	padding: 1em 0;
@@ -82,7 +82,7 @@ header[role='banner'] {
 	box-shadow: 0 0 10px #333;
 }
 
-.page-content {
+.content-wrapper {
 	float: left;
 	width: 100%;
 
@@ -92,14 +92,48 @@ header[role='banner'] {
 	}
 }
 
+.region-post-content {
+	margin: 1em 0 0;
+}
+
 .region-sidebars {
 	float: left;
 	width: 220px;
 }
 
-.region-post-content { }
+.region-sidebar-first {
+	margin-top: -1em;
+	padding-bottom: 3em;
 
-#bottom { }
+	background: url(../images/sidebar-top-bg.png) bottom no-repeat;
+
+	> div {
+		background: $orange-dark url(../images/sidebar-top-glow.png) top no-repeat;
+	}
+
+	> div > div {
+		min-height: 130px;
+		margin: 0 4px;
+		padding: 1em;
+
+		border-left: 1px solid black;
+		border-right: 1px solid black;
+	}
+}
+
+.region-bottom-one {
+	float: left;
+	width: 50%;
+}
+
+.region-bottom-two {
+	float: left;
+	width: 100%;
+
+	.region-bottom-one + & {
+		width: 50%;
+	}
+}
 
 footer[role='contentinfo'] {
 	padding: 40px 0 80px;

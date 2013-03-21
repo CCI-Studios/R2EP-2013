@@ -17,10 +17,10 @@ regions[pre_content] = Before Content
 
 regions[help] = Help
 regions[content] = Content
+regions[post_content] = After Content
+
 regions[sidebar_first] = Top sidebar
 regions[sidebar_second] = Main sidebar
-
-regions[post_content] = After Content
 
 regions[bottom_one] = First Bottom Column
 regions[bottom_two] = Second Bottom Column
