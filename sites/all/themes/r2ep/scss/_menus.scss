@@ -50,21 +50,30 @@ ul.menu {
 	}
 }
 
-.region-footer {
-	ul.menu {
-		li {
-			margin-left: 0.428571428em;
-			padding-left: 0.428571428em;
+.menu-tight ul.menu {
+	li {
+		margin-left: 5px;
+		padding-left: 6px;
 
-			border-left: 1px solid white;
+		border-left: 1px solid white;
 
-			&:first-child {
-				border-left: none;
-			}
+		&:first-child {
+			border-left: none;
+		}
 
-			a, span {
-				font-size: 1em;
-			}
+		a, span {
+			font-size: 1em;
+		}
+	}
+}
+
+.menu-white ul.menu {
+	a, span {
+		color: white;
+
+		&:hover,
+		&.active {
+			color: $orange-rich;
 		}
 	}
 }

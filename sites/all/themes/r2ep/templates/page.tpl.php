@@ -116,11 +116,11 @@
 		$bottom2 = render($page['bottom_two']);
 
 		if ($post_content || $bottom1 || $bottom2): ?>
-			<div class="page-bottom-container">
+			<div class="page-bottom-container clearfix">
 				<?php print $post_content; ?>
 
 				<?php if ($bottom1 || $bottom2): ?>
-					<div class="gridContainer">
+					<div class="gridContainer page-bottom-bottom">
 						<?php print $bottom1; ?>
 						<?php print $bottom2; ?>
 					</div>

@@ -6,6 +6,7 @@
 }
 
 .globalContainer {
+	position: relative;
 	width: 960px;
 	margin: 0 auto;
 	padding: 0 10px;
@@ -26,9 +27,12 @@ body {
 }
 
 header[role='banner'] {
+	position: relative;
 	padding: 10px 0;
 
 	background: $orange-dark url(../images/header-bg.jpg) top no-repeat;
+	box-shadow: 0 0 10px #333;
+	z-index: 10;
 }
 
 .region-banner {}
@@ -121,14 +125,22 @@ header[role='banner'] {
 	}
 }
 
+.page-bottom-bottom {
+	margin-top: 2em;
+	padding-top: 3em;
+	background: url(../images/grey-divider.png) top right no-repeat;
+}
+
 .region-bottom-one {
 	float: left;
 	width: 50%;
+	padding-left: 1em;
 }
 
 .region-bottom-two {
 	float: left;
 	width: 100%;
+	padding-left: 1em;
 
 	.region-bottom-one + & {
 		width: 50%;
@@ -136,8 +148,9 @@ header[role='banner'] {
 }
 
 footer[role='contentinfo'] {
-	padding: 40px 0 80px;
+	padding: 20px 0 80px;
 
 	border-top: 1px solid $orange-dark;
 	font-size: 0.857142857em;
+	color: white;
 }

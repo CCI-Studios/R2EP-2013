@@ -12,7 +12,7 @@ ul.share-icons li {
 	text-indent: -1000px;
 }
 
-.sprite { background: url(images/sprite.png) no-repeat top left; };
+.sprite { background: url(images/sprite.png) no-repeat top left; }
 
 li.sprite-email { background-position: 0 -49px; width: 44px; height: 44px; }
 li.sprite-email:hover { background-position: 0 0; width: 44px; height: 44px; }

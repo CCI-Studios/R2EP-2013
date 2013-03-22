@@ -2,14 +2,23 @@
 @import "mixins";
 
 // general
-.block {
-	h2 {
-		text-align: center;
-		font-size: 24px;
-		color: $orange-rich;
-	}
+
+.block h2,
+.block_tab-title {
+	margin: 0 0 0.5em;
+
+	line-height: 24px;
+	color: $orange-rich;
+	font-size: 24px;
+	font-weight: bold;
 }
 
+// footer menu
+#block-menu-menu-secondary-menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
 
 // search block
 .block-search {
@@ -93,12 +102,19 @@
 // sidebar style
 .region-sidebar-second {
 	.block {
-		padding-top: 1em;
+		margin-top: 1em;
+		padding-top: 2.5em;
 		background: url(../images/grey-divider.png) top right no-repeat;
 
 		&:first-child {
 			padding-top: 0;
 			background: none;
 		}
+	}
+
+	h2 {
+		text-align: center;
+		font-size: 24px;
+		color: $orange-rich;
 	}
 }

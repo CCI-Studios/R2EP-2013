@@ -5,19 +5,16 @@
 
 
 // events listings
-div .events-list {
+div .mediaList {
 	li.views-row {
 		margin: 0 0 1em;
 	}
 
-	.views-row:nth-child(4n-3) {
-		clear: left;
-	}
-
-	.views-field-field-featured-image {
+	.mediaList-image {
 		text-align: center;
 
 		.field-content {
+			position: relative;
 			display: inline-block;
 			*display: inline;
 			*zoom: 1;
@@ -29,6 +26,22 @@ div .events-list {
 
 			img { display: block; }
 		}
+	}
+
+	.views-row:nth-child(4n-3) {
+		clear: left;
+	}
+
+	.button--play {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 35px;
+		height: 39px;
+		margin: -19px 0 0 -17px;
+
+		background: url(../images/play.png) center no-repeat;
+		pointer: cursor;
 	}
 }
 
@@ -44,5 +57,39 @@ div .events-list {
 		color: $orange-rich;
 		font-size: 16px;
 		font-weight: bold;
+	}
+}
+
+
+// header image
+#block-views-header-image-block {
+	.node > h2 { display: none; }
+
+	.content {
+		position: relative;
+	}
+
+	.field-name-field-image {
+		text-align: center;
+
+		.field-item {
+			display: inline;
+		}
+
+		img {
+			vertical-align: bottom;
+		}
+	}
+
+	.field-name-body {
+		position: absolute;
+		bottom: 1em;
+		left: 50%;
+		width: 940px;
+		margin-left: -470px;
+
+		color: white;
+		font-size: 30px;
+		text-shadow: 0 0 5px #333;
 	}
 }

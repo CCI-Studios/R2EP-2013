@@ -1,22 +1,36 @@
 @import "variables";
+@import "mixins";
+
+.block_tab-titles {
+	@include clearfix;
+}
 
 .block_tab-title {
-	margin: 0;
+	float: left;
+	margin: 0 0 0.27em;
 	padding: 0 20px;
 
 	background: none;
 	border-left: 1px solid $orange-rich;
-	color: $orange-rich;
-
-	text-decoration-color: red;
 
 	&.active, &:hover {
 		background: none;
 		color: black;
+		text-decoration: none;
+
+		span {
+			border-bottom: 3px solid $orange-rich;
+		}
 	}
 
 	&:first-child {
 		margin-left: 0;
-		font-weight: normal;
+		padding-left: 0;
+		border-left: none;
+	}
+
+	span {
+		display: block;
+		padding-bottom: 3px;
 	}
 }
