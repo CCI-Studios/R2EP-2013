@@ -33,9 +33,24 @@ header[role='banner'] {
 	background: $orange-dark url(../images/header-bg.jpg) top no-repeat;
 	box-shadow: 0 0 10px #333;
 	z-index: 10;
+
+	.globalContainer {
+		padding-right: 125px;
+	}
 }
 
-.region-banner {}
+.region-banner {
+	position: absolute;
+	top: -10px;
+	right: 0;
+	width: 117px;
+	height: 175px;
+	padding: 11px 22px 30px 17px;
+
+	background: url(../images/banner-bg.png) top left no-repeat;
+	text-align: center;
+}
+
 .region-header-left {
 	float: left;
 }
