@@ -75,11 +75,11 @@
  */
 ?>
 
-<header role="banner"><div class="globalContainer">
+<header role="banner"><div class="globalContainer clearfix">
 	<?php print render($page['banner']); ?>
 	<?php print render($page['header_top']); ?>
-	<?php print render($page['header_bottom']); ?>
 	<?php print render($page['header_left']); ?>
+	<?php print render($page['header_bottom']); ?>
 </div></header>
 
 <?php print render($page['highlighted']); ?>

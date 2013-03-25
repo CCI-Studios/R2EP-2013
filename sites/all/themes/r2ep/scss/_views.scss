@@ -59,37 +59,3 @@ div .mediaList {
 		font-weight: bold;
 	}
 }
-
-
-// header image
-#block-views-header-image-block {
-	.node > h2 { display: none; }
-
-	.content {
-		position: relative;
-	}
-
-	.field-name-field-image {
-		text-align: center;
-
-		.field-item {
-			display: inline;
-		}
-
-		img {
-			vertical-align: bottom;
-		}
-	}
-
-	.field-name-body {
-		position: absolute;
-		bottom: 1em;
-		left: 50%;
-		width: 940px;
-		margin-left: -470px;
-
-		color: white;
-		font-size: 30px;
-		text-shadow: 0 0 5px #333;
-	}
-}

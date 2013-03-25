@@ -89,15 +89,53 @@
 	}
 }
 
+// language switcher
+#block-locale-language {
+	ul {
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+		margin: 10px 0 0 7px;
+		padding: 0 0 0 8px;
+
+		list-style: none;
+		border-left: 1px solid white;
+
+		&:first-child { border: none; }
+	}
+
+	a { color: white; }
+	a:hover,
+	a.active { color: black; }
+}
+
+// sign in block
+#block-block-1 {
+	margin-top: 10px;
+
+	a { color: white; }
+	a:hover { color: black; }
+}
+
 // region layouts
+.region-header-top, .region-header-bottom {
+	.block {
+		float: left;
+		margin-left: 1em;
+	}
+}
+
 .region-post-content {
 	.block {
 		float: left;
 		width: 50%;
 	}
 }
-
-
 
 // sidebar style
 .region-sidebar-second {

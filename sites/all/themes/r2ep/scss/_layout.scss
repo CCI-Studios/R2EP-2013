@@ -36,7 +36,12 @@ header[role='banner'] {
 }
 
 .region-banner {}
+.region-header-left {
+	float: left;
+}
+
 .region-header-top {
+	float: right;
 	margin-bottom: 12px;
 	padding-bottom: 21px;
 
@@ -46,7 +51,9 @@ header[role='banner'] {
 }
 
 .region-header-bottom {
-	margin: 12px 0;
+	clear: right;
+	float: right;
+	margin: 0;
 
 	@include clearfix;
 }
