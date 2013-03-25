@@ -29,6 +29,11 @@ h1 {
 	background: url(../images/h1-bg.png) right 3px no-repeat;
 	line-height: 43px;
 
+	body.front & {
+		padding-bottom: 10px;
+		background: url(../images/h1-bg-home.png) bottom left no-repeat;
+	}
+
 	span {
 		padding: 0 0.25em 0 0;
 		background: #252525;
