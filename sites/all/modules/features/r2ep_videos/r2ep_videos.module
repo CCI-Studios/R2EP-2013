@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the R2EP Videos feature.
+ */
+
+include_once 'r2ep_videos.features.inc';
