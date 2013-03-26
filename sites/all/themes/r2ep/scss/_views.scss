@@ -59,3 +59,14 @@ div .mediaList {
 		font-weight: bold;
 	}
 }
+
+// sidebar pic
+#block-views-team-picture-block {
+	img {
+		display: block;
+		padding: 2px;
+
+		border: 1px solid lightGrey;
+	}
+}
+
