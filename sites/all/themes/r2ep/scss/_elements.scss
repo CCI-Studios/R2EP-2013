@@ -17,3 +17,19 @@ img {
 		border: 1px solid $grey-light;
 	}
 }
+
+#block-system-main {
+	.field-name-body img {
+		padding: 2px;
+		border: 1px solid lightGrey;
+
+		&.right {
+			float: right;
+			margin-left: 5px;
+		}
+		&.lieft {
+			float: left;
+			margin-right: 5px;
+		}
+	}
+}

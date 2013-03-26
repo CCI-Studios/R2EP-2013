@@ -1,4 +1,4 @@
-<div class="mediaBlock <?php print $classes;?> clearfix">
+<div class="mediaBlock--right <?php print $classes;?> clearfix">
 
 	<?php if (isset($title_suffix['contextual_links'])): ?>
 		<?php print render($title_suffix['contextual_links']); ?>
