@@ -54,7 +54,6 @@ function r2ep_stats_block_view($delta = '') {
 }
 
 function _r2ep_stats_national_stats() {
-	$path = drupal_get_path('module', 'r2ep_stats');
 	$block = array();
 
 	$runners = _r2ep_stats_get_runners();
@@ -63,13 +62,14 @@ function _r2ep_stats_national_stats() {
 
 	$money = _r2ep_stats_get_campaign_total($runners);
 
-	$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
-	$teams_label = $teams == 1 ? 'team' : 'teams';
+	$teams = _r2ep_stats_get_teams();
+	$teams_count = count($teams);
+	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
 	$block = _r2ep_stats_block(array(
 		$runner_count .' '. t($runners_label),
 		$money .' '. t('raised'),
-		$teams .' '. t($teams_label)
+		$teams_count .' '. t($teams_label)
 	), array('runners', 'coin', 'teams'));
 
 	return $block;
@@ -81,7 +81,6 @@ function _r2ep_stats_event_stats() {
 }
 
 function _r2ep_stats_team_stats() {
-	$path = drupal_get_path('module', 'r2ep_stats');
 	$block = array();
 	$node = menu_get_object();
 
@@ -95,13 +94,14 @@ function _r2ep_stats_team_stats() {
 
 	$money = _r2ep_stats_get_campaign_total($runners);
 
-	$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
-	$teams_label = $teams == 1 ? 'team' : 'teams';
+	$teams = _r2ep_stats_get_teams('TEAM');
+	$teams_count = count($teams);
+	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
 	$block = _r2ep_stats_block(array(
 		$runners_count .' '. t($runners_label),
 		$money .' '. t('raised'),
-		$teams .' '. t($teams_label)
+		$teams_count .' '. t($teams_label)
 	), array('runners', 'coin', 'teams'));
 
 	return $block;
@@ -113,6 +113,7 @@ function _r2ep_stats_runner_stats() {
 }
 
 
+// get stats
 function _r2ep_stats_get_runners($type = null) {
 	$runners = array();
 
@@ -135,6 +136,20 @@ function _r2ep_stats_get_runners($type = null) {
 	return $runners;
 }
 
+function _r2ep_stats_get_teams($type = null) {
+	$teams = array();
+
+	switch($type) {
+		case 'TEAM':
+		case 'EVENT':
+		case 'RUNNER':
+		default:
+			$teams = db_query("SELECT nid FROM {node} WHERE type = 'team' AND status = 1")->fetchCol();
+	}
+
+	return $teams;
+}
+
 function _r2ep_stats_get_campaign_total($runners = null) {
 	if (isset($runners) && count($runners) == 0) {
 		return 0;
@@ -155,6 +170,7 @@ function _r2ep_stats_get_campaign_total($runners = null) {
 	return money_format('%.0n', $total);
 }
 
+// format content
 function _r2ep_stats_block($texts, $images) {
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block = array();
