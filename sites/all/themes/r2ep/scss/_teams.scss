@@ -1,0 +1,18 @@
+@import "variables";
+@import "mixins";
+
+#block-r2ep-team-r2ep-team-join-block {
+
+	input[type="submit"] {
+		display: block;
+		width: 100%;
+		padding: 5px 10px;
+
+		font-size: 25px;
+		color: white;
+		text-align: center;
+		background: $orange-dark;
+		border: $orange-rich;
+		border-radius: 10px;
+	}
+}

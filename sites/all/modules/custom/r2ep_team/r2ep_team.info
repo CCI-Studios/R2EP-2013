@@ -1,0 +1,7 @@
+name = R2EP Team Modules
+description = Provides blocks etc for teams
+core = 7.x
+
+package = R2EP
+; dependencies[] =
+files[] = r2ep_team.module

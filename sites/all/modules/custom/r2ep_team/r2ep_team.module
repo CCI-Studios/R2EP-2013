@@ -1,0 +1,92 @@
+<?php
+
+define('R2EP_TEAM_JOIN_BLOCK', 'r2ep_team_join_block');
+
+function r2ep_team_block_info() {
+	$blocks = array();
+	$blocks[R2EP_TEAM_JOIN_BLOCK] = array(
+		'info' => t('R2EP Join Team'),
+	);
+
+	return $blocks;
+}
+
+function r2ep_team_block_view($delta = '') {
+	// $path = drupal_get_path('module', 'r2ep_stats');
+	// drupal_add_css($path .'/css/r2ep_stats.css');
+	$block = array();
+
+	switch ($delta) {
+		case R2EP_TEAM_JOIN_BLOCK:
+			$block['subject'] = t('Join Team');
+			$block['content'] = _r2ep_team_join_block();
+			break;
+	}
+
+	return $block;
+}
+
+function _r2ep_team_join_block() {
+	return drupal_get_form('r2ep_team_join_form');
+}
+
+function r2ep_team_join_form() {
+	global $user;
+	$node = menu_get_object();
+
+	if(!$node || $node->type != 'team') {
+		return '';
+	}
+
+	$form = array();
+
+	$form['team_id'] = array(
+		'#type'		=> 'hidden',
+		'#value'	=> $node->nid,
+	);
+
+	$found = false;
+	foreach ($node->field_runners['und'] as $field) {
+		if ($field['target_id'] == $user->uid) {
+			$found = true;
+			break;
+		}
+	}
+
+	if ($found) {
+		$form['submit'] = array(
+			'#type'		=> 'submit',
+			'#value'	=> t('Leave team'),
+		);
+	} else {
+		$form['submit'] = array(
+			'#type'		=> 'submit',
+			'#value'	=> t('Join team'),
+		);
+	}
+
+	return $form;
+}
+
+function r2ep_team_join_form_submit($form, &$form_state) {
+	global $user;
+	$node = menu_get_object();
+
+	$found = false;
+	$found_index = 0;
+	foreach ($node->field_runners['und'] as $index => $field) {
+		if ($field['target_id'] == $user->uid) {
+			$found = true;
+			$found_index = $index;
+			break;
+		}
+	}
+
+	if ($found) {
+		unset($node->field_runners['und'][$found_index]);
+	} else {
+		$node->field_runners['und'][] = array('target_id' => $user->uid);
+	}
+
+	node_save($node);
+}
