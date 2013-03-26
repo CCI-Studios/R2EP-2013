@@ -189,6 +189,7 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['id'] = 'field_date_value';
   $handler->display->display_options['filters']['field_date_value']['table'] = 'field_data_field_date';
   $handler->display->display_options['filters']['field_date_value']['field'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['value']['value'] = '2013';
   $handler->display->display_options['filters']['field_date_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['operator'] = 'field_date_value_op';
@@ -196,10 +197,11 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
+    4 => 0,
     3 => 0,
   );
   $handler->display->display_options['filters']['field_date_value']['granularity'] = 'year';
-  $handler->display->display_options['filters']['field_date_value']['year_range'] = '-2:+0';
+  $handler->display->display_options['filters']['field_date_value']['year_range'] = '-1:+0';
 
   /* Display: Events Page */
   $handler = $view->new_display('page', 'Events Page', 'page_1');

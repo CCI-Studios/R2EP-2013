@@ -447,7 +447,7 @@ function shadowbox_field_formatter_view($entity_type, $entity, $field, $instance
       $gallery_id = $field['field_name'];
       break;
     case 'nid':
-      $info = $entity_get_info($entity_type);
+      $info = entity_get_info($entity_type);
       $id = $info['entity keys']['id'];
       $gallery_id = "{$entity_type}-{$entity->$id}";
       break;

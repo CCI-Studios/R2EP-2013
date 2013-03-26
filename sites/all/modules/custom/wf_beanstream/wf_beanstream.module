@@ -1,0 +1,171 @@
+<?php
+/*
+	TODO:
+	- add fields to webform programatically
+
+
+*/
+
+function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
+
+	if ($form_id == "webform_node_form") {
+		//dsm($form);
+
+		$form['payment_options'] = array(
+			'#type'			=> 'fieldset',
+			'#title'		=> t('Payment Options'),
+			'#summary'		=> 'adfsasd',
+			'#collapsible'	=> true,
+			'#collapsed'	=> true,
+			'#group'		=> 'additional_settings',
+		);
+
+		$form['payment_options']['field_wfbs_use'] = $form['field_wfbs_use'];
+		unset($form['field_wfbs_use']);
+		$form['payment_options']['field_wfbs_api_key'] = $form['field_wfbs_api_key'];
+		unset($form['field_wfbs_api_key']);
+		$form['payment_options']['field_wfbs_price'] = $form['field_wfbs_price'];
+		unset($form['field_wfbs_price']);
+
+		$form['#validate'][] = '_wf_beanstream_form_alter_validate';
+	}
+
+	if (substr($form_id, 0, -3) == 'webform_client_form') {
+		$node = $form['#node'];
+
+		// check if payment processing is enabled
+		if ($node && $node->field_wfbs_use && $node->field_wfbs_use['und'][0]['value'] == '1') {
+
+			$form['payment_details'] = array(
+				'#type'		=> 'fieldset',
+				'#title'	=> t('Payment Details'),
+			);
+
+			$form['payment_details']['cardholder_name'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Cardholder Name'),
+				'#required'	=> true,
+			);
+
+			$form['payment_details']['card_number'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Credit Card Number'),
+				'#required'	=> true,
+			);
+
+			$form['payment_details']['card_type'] = array(
+				'#type'		=> 'select',
+				'#title'	=> t('Card Type'),
+				'#options'	=> array(
+					'mc'	=> t('Master Card'),
+					'visa'	=> t('Visa'),
+					'amex'	=> t('American Express'),
+				),
+				'#required'	=> true,
+			);
+
+			$form['payment_details']['expiry'] = array(
+				'#type'		=> 'fieldset',
+				'#title'	=> t('Expiry Date'),
+				'#required'	=> true,
+			);
+
+			$form['payment_details']['expiry']['card_month'] = array(
+				'#type'		=> 'select',
+				'#title'	=> t('Month'),
+				'#options'	=> array(),
+				'#required'	=> true,
+			);
+			for ($i = 1; $i < 13; $i++) {
+				$form['payment_details']['expiry']['card_month']['#options'][] = $i;
+			}
+
+			$form['payment_details']['expiry']['card_year'] = array(
+				'#type'		=> 'select',
+				'#title'	=> t('Year'),
+				'#options'	=> array(),
+				'#required'	=> true,
+			);
+			for ($i = date('y'); $i < date('y') + 5; $i++) {
+				$form['payment_details']['expiry']['card_year']['#options'][] = $i;
+			}
+
+			$form['#validate'][] = '_wf_beanstream_payment_form_validate';
+			$form['#submit'][] = '_wf_beanstream_payment_form_submit';
+		}
+	}
+}
+
+function _wf_beanstream_form_alter_validate(&$form, &$form_state) {
+	$form['field_wfbs_use'] = $form['payment_options']['field_wfbs_use'];
+	unset($form['payment_options']['field_wfbs_use']);
+	$form['field_wfbs_api_key'] = $form['payment_options']['field_wfbs_api_key'];
+	unset($form['payment_options']['field_wfbs_api_key']);
+	$form['field_wfbs_price'] = $form['payment_options']['field_wfbs_price'];
+	unset($form['payment_options']['field_wfbs_price']);
+}
+
+
+function _wf_beanstream_payment_form_validate($form, &$form_state) {
+
+	dsm($form_state);
+	dsm($form);
+
+	$key = $form['#node']['field_wfbs_api_key']['und'][0]['value'];
+	$price = $form['#node']['field_wfbs_price']['und'][0]['value'];
+	$sku = $form['#node']['field_wfbs_sku']['und'][0]['value'];
+	$cardholder_name = $form_state['values']['cardholder_name'];
+	$card_number = $form_state['values']['card_number'];
+	$card_type = $form_state['values']['card_type'];
+	$card_month = $form_state['values']['card_month'];
+	$card_year = $form_state['values']['card_year'];
+
+
+	form_set_error('name', 'asdf');
+}
+
+function _wf_beanstream_payment_form_submit($form, &$form_state) {
+
+	dsm($form_state);
+
+}
+
+function _wf_beanstream_submit_payment($prefix, $price, $sku, $name, $card, $type, $key = null) {
+
+	$input = array();
+	$input['trnAmount'] = '$1000';
+	$input['requestType'] = 'BACKEND';
+	$input['trnOrderNumber'] = $prefix .'-'. mktime();
+
+	// use dummy key
+	if (!$key) {
+		$key = '279350000';
+
+		// NOTE if you use test mode, you can only use the following CC numbers
+		//
+		// 4030000010001234 visa approved
+		// 4003050500040005 visa declined
+		// 5100000020002000 mc hold card
+		// use any valid expiry
+	}
+
+	$input['merchant_id'] = $key;
+	$input['trnCardOwner'] = $name;
+	$input['trnEmailAddress'] = '';
+	$input['trnPhoneNumber'] = '';
+
+	$paramString = '';
+	foreach ($input as $key => $value) {
+		$paramString .= $key .'='. urlencode($value) .'&';
+	}
+
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, "https://www.beanstream.com/scripts/process_transaction.asp");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $paramString);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+}
+

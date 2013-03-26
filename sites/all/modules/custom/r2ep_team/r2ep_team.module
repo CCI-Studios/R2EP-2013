@@ -1,11 +1,16 @@
 <?php
 
 define('R2EP_TEAM_JOIN_BLOCK', 'r2ep_team_join_block');
+define('R2EP_TEAM_EVENTS_BLOCK', 'r2ep_team_events_block');
 
 function r2ep_team_block_info() {
 	$blocks = array();
 	$blocks[R2EP_TEAM_JOIN_BLOCK] = array(
 		'info' => t('R2EP Join Team'),
+	);
+
+	$blocks[R2EP_TEAM_EVENTS_BLOCK] = array(
+		'info' => t('R2EP Team Events'),
 	);
 
 	return $blocks;
@@ -20,6 +25,10 @@ function r2ep_team_block_view($delta = '') {
 		case R2EP_TEAM_JOIN_BLOCK:
 			$block['subject'] = t('Join Team');
 			$block['content'] = _r2ep_team_join_block();
+			break;
+		case R2EP_TEAM_EVENTS_BLOCK:
+			$block['subject'] = t('Upcoming Events');
+			$block['content'] = _r2ep_team_events_block();
 			break;
 	}
 
@@ -45,18 +54,9 @@ function r2ep_team_join_form() {
 		'#value'	=> $node->nid,
 	);
 
-	$found = false;
+	$found = _r2ep_team_check_for_user($node, $user->uid);
 
-	if (isset($node->field_runners['und'])) {
-		foreach ($node->field_runners['und'] as $field) {
-			if ($field['target_id'] == $user->uid) {
-				$found = true;
-				break;
-			}
-		}
-	}
-
-	if ($found) {
+	if ($found !== false) {
 		$form['submit'] = array(
 			'#type'		=> 'submit',
 			'#value'	=> t('Leave team'),
@@ -75,24 +75,56 @@ function r2ep_team_join_form_submit($form, &$form_state) {
 	global $user;
 	$node = menu_get_object();
 
-	$found = false;
-	$found_index = 0;
+	$found = _r2ep_team_check_for_user($node, $user->uid);
 
-	if (isset($node->field_runners['und'])) {
-		foreach ($node->field_runners['und'] as $index => $field) {
-			if ($field['target_id'] == $user->uid) {
-				$found = true;
-				$found_index = $index;
-				break;
-			}
-		}
-	}
-
-	if ($found) {
-		unset($node->field_runners['und'][$found_index]);
+	if ($found !== false) {
+		unset($node->field_runners['und'][$found]);
 	} else {
 		$node->field_runners['und'][] = array('target_id' => $user->uid);
 	}
 
 	node_save($node);
+}
+
+function _r2ep_team_check_for_user($node, $uid) {
+	$found = false;
+
+	if (isset($node->field_runners['und'])) {
+		foreach ($node->field_runners['und'] as $index => $field) {
+			if ($field['target_id'] == $uid) {
+				$found = $index;
+				break;
+			}
+		}
+	}
+
+	return $found;
+}
+
+function _r2ep_team_events_block() {
+	$team = menu_get_object();
+
+	$runners = array();
+	if ($team && isset($team->field_runners['und'])) {
+		foreach ($team->field_runners['und'] as $field) {
+			$runners[] = $field['target_id'];
+		}
+	}
+
+	$query = db_query("SELECT nid FROM {node} WHERE type = 'campaign' AND status = 1 AND uid IN (:uid)", array(':uid' => $runners));
+	$campaigns = array_unique($query->fetchCol());
+
+	$query = db_query("SELECT field_event_target_id FROM {node} AS n INNER JOIN {field_data_field_event} AS f ON f.entity_id = n.nid WHERE n.nid IN (:nid)", array(':nid' => $campaigns));
+	$events = array_unique($query->fetchCol());
+
+	$output = array();
+
+	if (!empty($events)) {
+		$nodes = node_load_multiple($events);
+
+		$output['nodes'] = node_view_multiple($nodes, 'teaser');
+	// 	$output['pager']['#markup'] = theme('pager', $query->pager);
+	}
+
+	return $output;
 }
