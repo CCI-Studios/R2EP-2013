@@ -74,7 +74,10 @@ header[role='banner'] {
 	@include clearfix;
 }
 
-.region-hightlighted {}
+.region-highlighted {
+	max-width: 1220px;
+	margin: 0 auto;
+}
 
 .region-stats {
 	position: relative;
