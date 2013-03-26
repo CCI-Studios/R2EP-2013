@@ -94,11 +94,79 @@ function _r2ep_stats_event_stats() {
 }
 
 function _r2ep_stats_team_stats() {
-	$block = _r2ep_stats_national_stats();
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block = array();
+	$node = menu_get_object();
+
+	if (!$node || $node->type != 'team') {
+		return '';
+	}
+
+	if (isset($node->field_runners['und'])) {
+		$runners = array();
+		foreach ($node->field_runners['und'] as $field) {
+			$runners[] = $field['target_id'];
+		}
+		$runners_count = count($runners);
+		$runners_label = $runners_count == 1 ? 'runner' : 'runners';
+		dsm($runners);
+
+		$money = db_query("SELECT sum(g.field_goal_value) FROM {node} AS n INNER JOIN {field_data_field_goal} AS g ON g.entity_id = n.nid WHERE n.type = 'campaign' AND n.status = 1 AND n.uid IN (:uid)", array(':uid' => $runners))->fetchField();
+		setlocale(LC_MONETARY, 'en_US');
+		$money = money_format('%.0n', $money);
+
+		$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
+		$teams_label = $teams == 1 ? 'team' : 'teams';
+	} else {
+		$runners_count = 0;
+		$runners_label = 'runners';
+
+		$money = '$0';
+
+		$teams = 0;
+		$teams_label = 'teams';
+	}
+
+	$block = _r2ep_stats_block(array(
+		$runners_count .' '. t($runners_label),
+		$money .' '. t('raised'),
+		$teams .' '. t($teams_label)
+	), array('runners', 'coin', 'teams'));
+
 	return $block;
 }
 
 function _r2ep_stats_runner_stats() {
 	$block = _r2ep_stats_national_stats();
+	return $block;
+}
+
+
+function _r2ep_stats_block($texts, $images) {
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block = array();
+
+	if (count($texts) != count($images)) {
+		return $block;
+	}
+
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
+
+	for ($i = 0; $i < count($texts); $i++) {
+		$text = $texts[$i];
+		$image = $images[$i];
+
+		$block['#items'][] = array(
+			'data' => "<img src=\"/$path/images/$image.png\" />$text",
+			'class' => array($image),
+		);
+	}
+
 	return $block;
 }
