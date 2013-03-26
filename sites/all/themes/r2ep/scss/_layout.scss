@@ -32,7 +32,7 @@ header[role='banner'] {
 
 	background: $orange-dark url(../images/header-bg.jpg) top no-repeat;
 	box-shadow: 0 0 10px #333;
-	z-index: 10;
+	z-index: 15;
 
 	.globalContainer {
 		padding-right: 125px;
@@ -49,6 +49,7 @@ header[role='banner'] {
 
 	background: url(../images/banner-bg.png) top left no-repeat;
 	text-align: center;
+	z-index: 15;
 }
 
 .region-header-left {
@@ -131,6 +132,8 @@ header[role='banner'] {
 
 .region-post-content {
 	margin: 1em 0 0;
+
+	background: url(../images/post-content-bg.png) top center no-repeat;
 }
 
 .region-sidebars {
