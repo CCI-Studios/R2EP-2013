@@ -57,33 +57,20 @@ function _r2ep_stats_national_stats() {
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block = array();
 
-	$runners = db_query("SELECT COUNT(uid) FROM {users} where status = 1")->fetchField();
-	$runners_label = $runners == 1 ? 'runner' : 'runners';
-	setlocale(LC_MONETARY, 'en_US');
-	$money = money_format('%.2n', 1000);
+	$runners = _r2ep_stats_get_runners();
+	$runner_count = count($runners);
+	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
+
+	$money = _r2ep_stats_get_campaign_total($runners);
+
 	$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
 	$teams_label = $teams == 1 ? 'team' : 'teams';
 
-	$block = array(
-		'#theme' => 'item_list',
-		'#items' => array(
-			array(
-				'data' => '<img src="/'. $path .'/images/runners.png" /> '. $runners .' '. t($runners_label),
-				'class' => array('runners'),
-			),
-			array(
-				'data' => '<img src="/'. $path .'/images/coin.png" /> '. $money .' '. t('raised'),
-				'class' => array('raised'),
-			),
-			array(
-				'data' => '<img src="/'. $path .'/images/teams.png" /> '. $teams .' '. t($teams_label),
-				'class' => array('teams'),
-			),
-		),
-		'#attributes' => array(
-			'class' => 'stats-list'
-		),
-	);
+	$block = _r2ep_stats_block(array(
+		$runner_count .' '. t($runners_label),
+		$money .' '. t('raised'),
+		$teams .' '. t($teams_label)
+	), array('runners', 'coin', 'teams'));
 
 	return $block;
 }
@@ -102,30 +89,14 @@ function _r2ep_stats_team_stats() {
 		return '';
 	}
 
-	if (isset($node->field_runners['und'])) {
-		$runners = array();
-		foreach ($node->field_runners['und'] as $field) {
-			$runners[] = $field['target_id'];
-		}
-		$runners_count = count($runners);
-		$runners_label = $runners_count == 1 ? 'runner' : 'runners';
-		dsm($runners);
+	$runners = _r2ep_stats_get_runners('TEAM');
+	$runners_count = count($runners);
+	$runners_label = $runners_count == 1 ? 'runner' : 'runners';
 
-		$money = db_query("SELECT sum(g.field_goal_value) FROM {node} AS n INNER JOIN {field_data_field_goal} AS g ON g.entity_id = n.nid WHERE n.type = 'campaign' AND n.status = 1 AND n.uid IN (:uid)", array(':uid' => $runners))->fetchField();
-		setlocale(LC_MONETARY, 'en_US');
-		$money = money_format('%.0n', $money);
+	$money = _r2ep_stats_get_campaign_total($runners);
 
-		$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
-		$teams_label = $teams == 1 ? 'team' : 'teams';
-	} else {
-		$runners_count = 0;
-		$runners_label = 'runners';
-
-		$money = '$0';
-
-		$teams = 0;
-		$teams_label = 'teams';
-	}
+	$teams = db_query("SELECT COUNT(*) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
+	$teams_label = $teams == 1 ? 'team' : 'teams';
 
 	$block = _r2ep_stats_block(array(
 		$runners_count .' '. t($runners_label),
@@ -141,6 +112,48 @@ function _r2ep_stats_runner_stats() {
 	return $block;
 }
 
+
+function _r2ep_stats_get_runners($type = null) {
+	$runners = array();
+
+	switch($type) {
+		case 'TEAM':
+			$node = menu_get_object();
+			if ($node && isset($node->field_runners['und'])) {
+				foreach ($node->field_runners['und'] as $field) {
+					$runners[] = $field['target_id'];
+				}
+			}
+			break;
+		case 'EVENT':
+
+			break;
+		default: // everything
+			$runners = db_query("SELECT uid FROM {users} where status = 1")->fetchCol();
+	}
+
+	return $runners;
+}
+
+function _r2ep_stats_get_campaign_total($runners = null) {
+	if (isset($runners) && count($runners) == 0) {
+		return 0;
+	}
+
+	$total = db_select('node', 'n')
+		->condition('n.type', 'campaign')
+		->condition('n.status', 1);
+	$total->join('field_data_field_goal', 'g', 'g.entity_id = n.nid');
+	$total->addExpression('sum(g.field_goal_value)');
+
+	if ($runners) {
+		$total->condition('uid', $runners, 'IN');
+	}
+
+	$total = $total->execute()->fetchField();
+	setlocale(LC_MONETARY, 'en_US');
+	return money_format('%.0n', $total);
+}
 
 function _r2ep_stats_block($texts, $images) {
 	$path = drupal_get_path('module', 'r2ep_stats');
