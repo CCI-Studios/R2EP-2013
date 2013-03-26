@@ -1,0 +1,34 @@
+@import "variables";
+@import "mixins";
+
+.mediaBlock {
+
+}
+
+.mediaBlock-header {
+
+}
+
+.mediaBlock-content {
+	@include clearfix;
+}
+
+.mediaBlock-media {
+	float: left;
+	margin: 0 10px 10px 0;
+	padding: 2px;
+
+	border: 1px solid lightGrey;
+
+	img {
+		display: block;
+	}
+}
+
+.mediaBlock-body {
+
+}
+
+.mediaBlock-footer {
+
+}
