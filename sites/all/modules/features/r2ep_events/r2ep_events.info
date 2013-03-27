@@ -23,7 +23,6 @@ features[field][] = node-event-field_date
 features[field][] = node-event-field_description
 features[field][] = node-event-field_featured_image
 features[field][] = node-event-field_header_image
-features[field][] = node-event-field_images
 features[field][] = node-event-field_location
 features[node][] = event
 features[variable][] = comment_anonymous_event

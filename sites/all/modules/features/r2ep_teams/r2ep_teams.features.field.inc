@@ -35,7 +35,7 @@ function r2ep_teams_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => '292',
-        'profile2_private' => FALSE,
+        'profile2_private' => 0,
         'uri_scheme' => 'public',
       ),
       'translatable' => '0',
@@ -57,7 +57,7 @@ function r2ep_teams_field_default_fields() {
           'module' => 'image',
           'settings' => array(
             'image_link' => 'content',
-            'image_style' => '',
+            'image_style' => 'profile_thumbnail',
           ),
           'type' => 'image',
           'weight' => '0',
@@ -69,7 +69,7 @@ function r2ep_teams_field_default_fields() {
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
-        'default_image' => '314',
+        'default_image' => '2665',
         'file_directory' => 'teams/avatars',
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '',

@@ -35,7 +35,7 @@ function r2ep_runners_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => '292',
-        'profile2_private' => FALSE,
+        'profile2_private' => 0,
         'uri_scheme' => 'public',
       ),
       'translatable' => '0',
@@ -59,7 +59,7 @@ function r2ep_runners_field_default_fields() {
       'required' => 0,
       'settings' => array(
         'alt_field' => 0,
-        'default_image' => 0,
+        'default_image' => '2666',
         'file_directory' => 'users/avatars',
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '',
