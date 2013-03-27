@@ -103,7 +103,7 @@ function r2ep_events_strongarm() {
             'visible' => FALSE,
           ),
           'teaser' => array(
-            'weight' => '3',
+            'weight' => '11',
             'visible' => FALSE,
           ),
         ),

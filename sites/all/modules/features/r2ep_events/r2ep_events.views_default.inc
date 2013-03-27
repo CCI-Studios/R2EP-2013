@@ -110,6 +110,7 @@ function r2ep_events_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Upcoming Events';
+  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -194,6 +195,7 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['operator'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['identifier'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['expose']['required'] = TRUE;
   $handler->display->display_options['filters']['field_date_value']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
@@ -202,16 +204,6 @@ function r2ep_events_views_default_views() {
   );
   $handler->display->display_options['filters']['field_date_value']['granularity'] = 'year';
   $handler->display->display_options['filters']['field_date_value']['year_range'] = '-1:+0';
-
-  /* Display: Events Page */
-  $handler = $view->new_display('page', 'Events Page', 'page_1');
-  $handler->display->display_options['display_description'] = 'Displays upcoming events with the option to pick a year to filter by.';
-  $handler->display->display_options['path'] = 'events';
-  $handler->display->display_options['menu']['type'] = 'normal';
-  $handler->display->display_options['menu']['title'] = 'Events';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'main-menu';
-  $handler->display->display_options['menu']['context'] = 0;
 
   /* Display: Upcoming Events Block */
   $handler = $view->new_display('block', 'Upcoming Events Block', 'block_2');
@@ -256,6 +248,9 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['operator'] = '>=';
   $handler->display->display_options['filters']['field_date_value']['granularity'] = 'month';
   $handler->display->display_options['filters']['field_date_value']['default_date'] = 'today';
+
+  /* Display: Event List */
+  $handler = $view->new_display('block', 'Event List', 'block_1');
   $translatables['events'] = array(
     t('Master'),
     t('Upcoming Events'),
@@ -272,9 +267,8 @@ function r2ep_events_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('Events Page'),
-    t('Displays upcoming events with the option to pick a year to filter by.'),
     t('Upcoming Events Block'),
+    t('Event List'),
   );
   $export['events'] = $view;
 

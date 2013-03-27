@@ -17,6 +17,11 @@ function r2ep_teams_ds_field_settings_info() {
   $ds_fieldsetting->bundle = 'team';
   $ds_fieldsetting->view_mode = 'teaser';
   $ds_fieldsetting->settings = array(
+    'team_stats' => array(
+      'weight' => '2',
+      'label' => 'hidden',
+      'format' => 'default',
+    ),
     'title' => array(
       'weight' => '1',
       'label' => 'hidden',
@@ -53,11 +58,13 @@ function r2ep_teams_ds_layout_settings_info() {
       ),
       'body' => array(
         1 => 'title',
+        2 => 'team_stats',
       ),
     ),
     'fields' => array(
       'field_avatar' => 'media',
       'title' => 'body',
+      'team_stats' => 'body',
     ),
     'classes' => array(),
     'wrappers' => array(

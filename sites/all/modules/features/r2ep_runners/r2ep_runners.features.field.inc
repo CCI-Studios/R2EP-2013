@@ -48,13 +48,9 @@ function r2ep_runners_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'image',
-          'settings' => array(
-            'image_link' => '',
-            'image_style' => '',
-          ),
-          'type' => 'image',
-          'weight' => 4,
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '4',
         ),
       ),
       'entity_type' => 'profile2',
@@ -121,11 +117,11 @@ function r2ep_runners_field_default_fields() {
       'description' => 'Tell us a little about yourself, your passion and why you do what you do.',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 3,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'profile2',
@@ -185,11 +181,10 @@ function r2ep_runners_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
-          'module' => 'text',
+          'label' => 'inline',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'hidden',
+          'weight' => '3',
         ),
       ),
       'entity_type' => 'profile2',
@@ -249,11 +244,10 @@ function r2ep_runners_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
-          'module' => 'text',
+          'label' => 'inline',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'hidden',
+          'weight' => '1',
         ),
       ),
       'entity_type' => 'profile2',
@@ -301,11 +295,10 @@ function r2ep_runners_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
-          'module' => 'email',
+          'label' => 'inline',
           'settings' => array(),
-          'type' => 'email_default',
-          'weight' => 2,
+          'type' => 'hidden',
+          'weight' => '2',
         ),
       ),
       'entity_type' => 'profile2',
