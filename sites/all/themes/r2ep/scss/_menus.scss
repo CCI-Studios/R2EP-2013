@@ -34,15 +34,37 @@ ul.menu {
 		left: 50%;
 		width: 22em;
 		margin-left: -11em;
-		padding: 1em;
+		padding: 4px;
 
-		background: red;
+		background: black;
 	}
 
 	ul li {
 		display: block;
+		padding: 0.5em 0.8em 0;
 		margin: 0;
 		white-space: nowrap;
+
+		border: 1px solid $orange-dark;
+		border-top: none;
+		border-bottom: none;
+
+		&.first { border-top: 1px solid $orange-dark; }
+		&.last {
+			border-bottom: 1px solid $orange-dark;
+			padding-bottom: 0.5em;
+		}
+	}
+
+	ul {
+		a, span {
+			display: block;
+			color: $orange-dark;
+
+			&:hover {
+				color: white;
+			}
+		}
 	}
 
 	li:hover > ul {
