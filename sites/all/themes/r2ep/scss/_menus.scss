@@ -30,39 +30,39 @@ ul.menu {
 	ul {
 		display: none;
 		position: absolute;
-		top: 100%;
-		left: 50%;
+		top: 137%;
+		left: -20px;
 		width: 22em;
-		margin-left: -11em;
 		padding: 4px;
 
-		background: black;
+		background: #262626 url(../images/menu-drop-bg.png) top repeat-x;
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			bottom: 100%;
+			left: 35px;
+
+			border: 10px solid transparent;
+			border-bottom-color: #272727;
+		}
 	}
 
 	ul li {
 		display: block;
-		padding: 0.5em 0.8em 0;
-		margin: 0;
+		margin: 0.5em 0.8em;
 		white-space: nowrap;
-
-		border: 1px solid $orange-dark;
-		border-top: none;
-		border-bottom: none;
-
-		&.first { border-top: 1px solid $orange-dark; }
-		&.last {
-			border-bottom: 1px solid $orange-dark;
-			padding-bottom: 0.5em;
-		}
 	}
 
 	ul {
 		a, span {
 			display: block;
-			color: $orange-dark;
+			color: white;
 
-			&:hover {
-				color: white;
+			&.active, &:hover {
+				color: $orange-dark;
+				text-decoration: none;
 			}
 		}
 	}

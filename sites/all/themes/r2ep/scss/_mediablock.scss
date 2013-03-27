@@ -1,13 +1,8 @@
 @import "variables";
 @import "mixins";
 
-.mediaBlock {
-
-}
-
-.mediaBlock-header {
-
-}
+.mediaBlock { }
+.mediaBlock-header { }
 
 .mediaBlock-content {
 	@include clearfix;
@@ -25,13 +20,8 @@
 	}
 }
 
-.mediaBlock-body {
-
-}
-
-.mediaBlock-footer {
-
-}
+.mediaBlock-body { }
+.mediaBlock-footer { }
 
 
 // right
