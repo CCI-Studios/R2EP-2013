@@ -1,11 +1,15 @@
 <?php
 
 define('R2EP_EVENT_REGISTRATION_BLOCK', 'r2ep_event_registration_block');
+define('R2EP_EVENT_COUNTDOWN_BLOCK', 'r2ep_event_countdown_block');
 
 function r2ep_block_info() {
 	$blocks = array();
 	$blocks[R2EP_EVENT_REGISTRATION_BLOCK] = array(
 		'info' => t('Register For This Event'),
+	);
+	$blocks[R2EP_EVENT_COUNTDOWN_BLOCK] = array(
+		'info' => t('Event countdown'),
 	);
 
 	return $blocks;
@@ -18,6 +22,10 @@ function r2ep_block_view($delta = '') {
 		case R2EP_EVENT_REGISTRATION_BLOCK:
 			$block['subject'] = t('Register for this event');
 			$block['content'] = _r2ep_event_registration_block();
+			break;
+		case R2EP_EVENT_COUNTDOWN_BLOCK:
+			$block['subject'] = t('Event Countdown');
+			$block['content'] = _r2ep_event_countdown();
 			break;
 	}
 
@@ -55,6 +63,44 @@ function _r2ep_event_registration_block() {
 	}
 
 	return $content;
+}
+
+function _r2ep_event_countdown() {
+	$node = menu_get_object();
+
+	if ($node->field_date) {
+		$date = $node->field_date['und'][0]['value'];
+		$now = time();
+
+		$diff = abs($now - $date);
+		$days = floor($diff/(60*60*24));
+		$hours = floor(($diff - $days*60*60*24)/ (60*60));
+		$minutes = floor(($diff - $days*60*60*24 - $hours*60*60)/ (60));
+
+		$content = array(
+			'#theme'		=> 'item_list',
+			'#items'	=> array(),
+			'#attributes'	=> array(
+				'class' => array('gridContainer eventCountdown'),
+			),
+		);
+
+		$content['#items'][] = array(
+			'data' => '<div class="darkBlock">'. $days .'</div>'. t('days'),
+			'class' => array('col-1-3'),
+		);
+		$content['#items'][] = array(
+			'data' => '<div class="darkBlock">'. $hours .'</div>'. t('hours'),
+			'class' => array('col-1-3'),
+		);
+		$content['#items'][] = array(
+			'data' => '<div class="darkBlock">'. $minutes .'</div>'. t('minutes'),
+			'class' => array('col-1-3'),
+		);
+
+		return $content;
+	}
+
 }
 
 // handle successful payments
