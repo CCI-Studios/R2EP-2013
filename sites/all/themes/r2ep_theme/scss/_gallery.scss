@@ -24,8 +24,8 @@
 		position: absolute;
 		bottom: 5em;
 		left: 50%;
-		width: 940px;
-		margin-left: -470px;
+		width: 800px;
+		margin-left: -400px;
 
 		color: white;
 		font-size: 18px;
@@ -69,4 +69,10 @@
 
 	// pause
 	.views-slideshow-controls-text-pause { display: none; }
+}
+
+
+#block-views-header-image-block + #block-views-general-header-block,
+#block-views-header-gallery-block + #block-views-general-header-block {
+	display: none;
 }
