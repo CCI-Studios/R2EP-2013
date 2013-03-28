@@ -64,6 +64,7 @@ class wf_beanstream_transaction {
 
 	function addItem($sku, $quantity, $cost, $name) {
 		$this->itemCount++;
+		$cost = floatval($cost); // Note: Bad for many joined transactions, not a concern for this application
 
 		$this->input['prod_id_'. $this->itemCount] = $sku;
 		$this->input['prod_quantity_'. $this->itemCount] = $quantity;
