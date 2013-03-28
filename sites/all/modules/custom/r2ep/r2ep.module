@@ -127,6 +127,7 @@ function r2ep_webform_submission_insert($node, $submission) {
 function _r2ep_campaign_submitted($node, $submission) {
 	global $user;
 	$user_fields = user_load($user->uid);
+	$mapping = _r2ep_webform_component_mapping($node);
 
 	$campaign = new stdClass();
 	$campaign->title = $user_fields->realname .'\'s '. t('Campaign');
@@ -138,14 +139,28 @@ function _r2ep_campaign_submitted($node, $submission) {
 	$campaign->status = 1;
 	$campaign->promote = 0;
 	$campaign->comment = 1; // off
-
-	$campaign->field_event = array('und' => array(array('target_id' => 3))); // event_id
+	$campaign->field_event = array('und' => array(array(
+		'target_id' => $submission->data[$mapping['event_id']][0]
+	))); // event_id
 
 	$campaign = node_submit($campaign);
 	node_save($campaign);
 
 	drupal_goto('node/'. $campaign->nid .'/edit');
 }
+
+function _r2ep_webform_component_mapping($node) {
+	$mapping = array();
+	$components = $node->webform['components'];
+
+	foreach ($components as $i => $component) {
+		$key = $component['form_key'];
+		$mapping[$key] = $i;
+	}
+
+	return $mapping;
+}
+
 
 // create a donation after a user submits a donation form
 function _r2ep_donation_submitted($node, $submission) {
