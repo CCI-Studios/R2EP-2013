@@ -118,8 +118,9 @@
 	a.active { color: black; }
 }
 
-// sign in block
-#block-block-1 {
+
+#block-block-1, // sign in block
+#block-block-19 { // sign out
 	margin-top: 10px;
 
 	a { color: white; }
