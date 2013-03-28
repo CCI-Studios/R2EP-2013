@@ -115,8 +115,12 @@ function _r2ep_team_events_block() {
 		$query = db_query("SELECT nid FROM {node} WHERE type = 'campaign' AND status = 1 AND uid IN (:uid)", array(':uid' => $runners));
 		$campaigns = array_unique($query->fetchCol());
 
-		$query = db_query("SELECT field_event_target_id FROM {node} AS n INNER JOIN {field_data_field_event} AS f ON f.entity_id = n.nid WHERE n.nid IN (:nid)", array(':nid' => $campaigns));
-		$events = array_unique($query->fetchCol());
+		if ($campaigns) {
+			$query = db_query("SELECT field_event_target_id FROM {node} AS n INNER JOIN {field_data_field_event} AS f ON f.entity_id = n.nid WHERE n.nid IN (:nid)", array(':nid' => $campaigns));
+			$events = array_unique($query->fetchCol());
+		} else {
+			$events = array();
+		}
 	} else {
 		$campaigns = array();
 		$events = array();
