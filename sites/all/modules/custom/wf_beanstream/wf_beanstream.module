@@ -26,6 +26,16 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 		unset($form['field_wfbs_api_key']);
 		$form['payment_options']['field_wfbs_price'] = $form['field_wfbs_price'];
 		unset($form['field_wfbs_price']);
+		$form['payment_options']['field_wfbs_flexible'] = $form['field_wfbs_flexible'];
+		unset($form['field_wfbs_flexible']);
+		$form['payment_options']['field_wfbs_reocurring'] = $form['field_wfbs_reocurring'];
+		unset($form['field_wfbs_reocurring']);
+		$form['payment_options']['field_wfbs_sku'] = $form['field_wfbs_sku'];
+		unset($form['field_wfbs_sku']);
+		$form['payment_options']['field_wfbs_note'] = $form['field_wfbs_note'];
+		unset($form['field_wfbs_note']);
+		$form['payment_options']['field_wfbs_prefix'] = $form['field_wfbs_prefix'];
+		unset($form['field_wfbs_prefix']);
 
 		$form['#validate'][] = '_wf_beanstream_form_alter_validate';
 	}
@@ -35,25 +45,95 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 
 		// check if payment processing is enabled
 		if ($node && $node->field_wfbs_use && $node->field_wfbs_use['und'][0]['value'] == '1') {
+			global $user;
+			$user_fields = user_load($user->uid);
 
-			$form['payment_details'] = array(
+			if ($user_fields->uid != 0) {
+				$first_name = $user_fields->field_first_name['und'][0]['value'];
+				$last_name = $user_fields->field_last_name['und'][0]['value'];
+				$email = $user_fields->mail;
+			} else {
+				$first_name = '';
+				$last_name = '';
+				$email = '';
+			}
+
+			$form['wfbs_personal_info'] = array(
+				'#type'		=> 'fieldset',
+				'#title'	=> t('Personal Information'),
+			);
+			$form['wfbs_payment_details'] = array(
 				'#type'		=> 'fieldset',
 				'#title'	=> t('Payment Details'),
 			);
 
-			$form['payment_details']['cardholder_name'] = array(
+			$form['wfbs_personal_info']['wfbs_first_name'] = array(
 				'#type'		=> 'textfield',
-				'#title'	=> t('Cardholder Name'),
+				'#title'	=> t('First Name'),
+				'#required'	=> true,
+				'#value'	=> $first_name,
+			);
+			$form['wfbs_personal_info']['wfbs_last_name'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Last Name'),
+				'#required'	=> true,
+				'#value'	=> $last_name,
+			);
+			$form['wfbs_personal_info']['wfbs_email'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Email Address'),
+				'#value'	=> $email,
+			);
+			$form['wfbs_personal_info']['wfbs_phone'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Phone Number'),
 				'#required'	=> true,
 			);
 
-			$form['payment_details']['card_number'] = array(
+			$form['wfbs_personal_info']['wfbs_address1'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Address'),
+				'#required'	=> true,
+			);
+			$form['wfbs_personal_info']['wfbs_address2'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Address'),
+			);
+			$form['wfbs_personal_info']['wfbs_city'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('City'),
+				'#required'	=> true,
+			);
+			$form['wfbs_personal_info']['wfbs_province'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Province'),
+				'#required'	=> true,
+			);
+			$form['wfbs_personal_info']['wfbs_postal'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Postal Code'),
+				'#required'	=> true,
+			);
+			$form['wfbs_personal_info']['wfbs_country'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Country'),
+				'#required'	=> true,
+			);
+
+			$form['wfbs_payment_details']['wfbs_cardholder_name'] = array(
+				'#type'		=> 'textfield',
+				'#title'	=> t('Cardholder Name'),
+				'#required'	=> true,
+				'#value'	=> "$first_name $last_name",
+			);
+
+			$form['wfbs_payment_details']['wfbs_card_number'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Credit Card Number'),
 				'#required'	=> true,
 			);
 
-			$form['payment_details']['card_type'] = array(
+			$form['wfbs_payment_details']['wfbs_card_type'] = array(
 				'#type'		=> 'select',
 				'#title'	=> t('Card Type'),
 				'#options'	=> array(
@@ -64,30 +144,30 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#required'	=> true,
 			);
 
-			$form['payment_details']['expiry'] = array(
+			$form['wfbs_payment_details']['wfbs_expiry'] = array(
 				'#type'		=> 'fieldset',
 				'#title'	=> t('Expiry Date'),
 				'#required'	=> true,
 			);
 
-			$form['payment_details']['expiry']['card_month'] = array(
+			$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_month'] = array(
 				'#type'		=> 'select',
 				'#title'	=> t('Month'),
 				'#options'	=> array(),
 				'#required'	=> true,
 			);
 			for ($i = 1; $i < 13; $i++) {
-				$form['payment_details']['expiry']['card_month']['#options'][] = $i;
+				$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_month']['#options'][sprintf('%02d', $i)] = $i;
 			}
 
-			$form['payment_details']['expiry']['card_year'] = array(
+			$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_year'] = array(
 				'#type'		=> 'select',
 				'#title'	=> t('Year'),
 				'#options'	=> array(),
 				'#required'	=> true,
 			);
 			for ($i = date('y'); $i < date('y') + 5; $i++) {
-				$form['payment_details']['expiry']['card_year']['#options'][] = $i;
+				$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_year']['#options'][$i] = $i;
 			}
 
 			$form['#validate'][] = '_wf_beanstream_payment_form_validate';
@@ -103,69 +183,76 @@ function _wf_beanstream_form_alter_validate(&$form, &$form_state) {
 	unset($form['payment_options']['field_wfbs_api_key']);
 	$form['field_wfbs_price'] = $form['payment_options']['field_wfbs_price'];
 	unset($form['payment_options']['field_wfbs_price']);
+	$form['field_wfbs_flexible'] = $form['payment_options']['field_wfbs_flexible'];
+	unset($form['payment_options']['field_wfbs_flexible']);
+	$form['field_wfbs_reocurring'] = $form['payment_options']['field_wfbs_reocurring'];
+	unset($form['payment_options']['field_wfbs_reocurring']);
+	$form['field_wfbs_sku'] = $form['payment_options']['field_wfbs_sku'];
+	unset($form['payment_options']['field_wfbs_sku']);
+	$form['field_wfbs_note'] = $form['payment_options']['field_wfbs_note'];
+	unset($form['payment_options']['field_wfbs_note']);
+	$form['field_wfbs_prefix'] = $form['payment_options']['field_wfbs_prefix'];
+	unset($form['payment_options']['field_wfbs_prefix']);
 }
 
 
 function _wf_beanstream_payment_form_validate($form, &$form_state) {
-
-	dsm($form_state);
 	dsm($form);
-
-	$key = $form['#node']['field_wfbs_api_key']['und'][0]['value'];
-	$price = $form['#node']['field_wfbs_price']['und'][0]['value'];
-	$sku = $form['#node']['field_wfbs_sku']['und'][0]['value'];
-	$cardholder_name = $form_state['values']['cardholder_name'];
-	$card_number = $form_state['values']['card_number'];
-	$card_type = $form_state['values']['card_type'];
-	$card_month = $form_state['values']['card_month'];
-	$card_year = $form_state['values']['card_year'];
-
-
-	form_set_error('name', 'asdf');
+	dsm($form_state);
+	form_set_error('', 'adsfdfs');
 }
 
 function _wf_beanstream_payment_form_submit($form, &$form_state) {
 
-	dsm($form_state);
+	$key = $form['#node']->field_wfbs_api_key['und'][0]['value'];
+	$price = $form['#node']->field_wfbs_price['und'][0]['value'];
+	$sku = $form['#node']->field_wfbs_sku['und'][0]['value'];
+	$note = $form['#node']->field_wfbs_note['und'][0]['value'];
+	$prefix = $form['#node']->field_wfbs_prefix['und'][0]['value'];
+
+	$firstname = $form_state['values']['wfbs_first_name'];
+	$lastname = $form_state['values']['wfbs_last_name'];
+	$email = $form_state['values']['wfbs_email'];
+	$phone = $form_state['values']['wfbs_phone'];
+
+	$cardholder_name = $form_state['values']['wfbs_cardholder_name'];
+	$card_number = $form_state['values']['wfbs_card_number'];
+	$card_type = $form_state['values']['wfbs_card_type'];
+	$card_month = $form_state['values']['wfbs_card_month'];
+	$card_year = $form_state['values']['wfbs_card_year'];
+
+	$address1 = $form_state['values']['wfbs_address1'];
+	$address2 = $form_state['values']['wfbs_address2'];
+	$city = $form_state['values']['wfbs_city'];
+	$province = $form_state['values']['wfbs_province'];
+	$postal = $form_state['values']['wfbs_postal'];
+	$country = $form_state['values']['wfbs_country'];
+
+
+	$trn = new wf_beanstream_transaction(); // TODO: Set key
+	$trn->setCardInfo($cardholder_name, $card_number, $card_month, $card_year);
+	$trn->setContactInfo($cardholder_name, $email, $phone, $address1, $address2, $city,
+		$province, $postal, $country);
+	$trn->setPersonalInfo($firstname, $lastname);
+
+	$trn->addItem($sku, 1, $price, $note);
+
+	// TODO add monthly option
+	$trn->attemptTransaction($prefix);
+
+	if ($trn->succeeded) {
+		module_invoke_all('wfbs_payment_success', $trn, $form, $form_state);
+	} else {
+		form_set_error('', $trn->output['messageText']);
+		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);
+	}
 
 }
 
-function _wf_beanstream_submit_payment($prefix, $price, $sku, $name, $card, $type, $key = null) {
-
-	$input = array();
-	$input['trnAmount'] = '$1000';
-	$input['requestType'] = 'BACKEND';
-	$input['trnOrderNumber'] = $prefix .'-'. mktime();
-
-	// use dummy key
-	if (!$key) {
-		$key = '279350000';
-
-		// NOTE if you use test mode, you can only use the following CC numbers
-		//
-		// 4030000010001234 visa approved
-		// 4003050500040005 visa declined
-		// 5100000020002000 mc hold card
-		// use any valid expiry
-	}
-
-	$input['merchant_id'] = $key;
-	$input['trnCardOwner'] = $name;
-	$input['trnEmailAddress'] = '';
-	$input['trnPhoneNumber'] = '';
-
-	$paramString = '';
-	foreach ($input as $key => $value) {
-		$paramString .= $key .'='. urlencode($value) .'&';
-	}
-
-
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, "https://www.beanstream.com/scripts/process_transaction.asp");
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $paramString);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+function wf_beanstream_wfbs_payment_success($transaction, $form, $data) {
 
 }
 
+function wf_beanstream_wfbs_payment_failed($transaction, $form, $data) {
+
+}

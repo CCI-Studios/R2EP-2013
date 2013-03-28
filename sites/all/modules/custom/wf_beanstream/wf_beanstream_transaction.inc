@@ -62,5 +62,60 @@ class wf_beanstream_transaction {
 		$this->anonymous = $anonymous;
 	}
 
+	function addItem($sku, $quantity, $cost, $name) {
+		$this->itemCount++;
 
+		$this->input['prod_id_'. $this->itemCount] = $sku;
+		$this->input['prod_quantity_'. $this->itemCount] = $quantity;
+		$this->input['prod_name_'. $this->itemCount] = $name;
+		$this->input['prod_cost_'. $this->itemCount] = number_format($cost, 2, '.', '');
+		$this->totalAmount += $quantity * $cost;
+	}
+
+	function makeMonthly($comment, $amount, $firstdate = false) {
+		$this->input['trnRecurring'] = '1';
+		$this->input['rbBillingPeriod'] = 'M';
+		$this->input['rbBillingIncrement'] = '1';
+		$this->input['trnComments'] = $comment;
+		$this->totalAmount = $amount;
+
+		if ($firstdate) {
+			$this->input['rbCharge'] = '0';
+			$this->input['rbFirstBilling'] = $firstdate;
+		} else {
+			$this->input['rbCharge'] = '1';
+		}
+	}
+
+	function attemptTransaction($prefix) {
+		$this->input['trnAmount'] = number_format($this->totalAmount, 2);
+		$this->input['requestType'] = 'BACKEND';
+		$this->input['trnOrderNumber'] = $prefix .'-'. mktime();
+
+		$params = "";
+		foreach ($this->input as $key => $value) {
+			$params .= $key .'='. urlencode($value) .'&';
+		}
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "https://www.beanstream.com/scripts/process_transaction.asp");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		$result = curl_exec($ch);
+
+		if ($result !== false) {
+			parse_str($result, $this->output);
+		}
+
+		if ($result == false) {
+			$this->succeeded = false;
+			$this->output['messageText'] = "Temporary error - please try again";
+		} else if ($this->output['errorType'] == 'N' && $this->output['messageText'] == 'Approved') {
+			$this->succeeded = true;
+		}
+
+		return $this->succeeded;
+	}
 }
