@@ -120,6 +120,22 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#required'	=> true,
 			);
 
+			// dynamic price
+			if ($node->field_wfbs_flexible) {
+				$form['wfbs_payment_details']['wfbs_set_price'] = array(
+					'#type'		=> 'radios',
+					'#title'	=> t('Select Amount'),
+					'#options'	=> array('25'=>'$25', '50'=>'$50', '100'=>'$100', '500'=>'$500'),
+				);
+
+				$form['wfbs_payment_details']['wfbs_price'] = array(
+					'#type'		=> 'textfield',
+					'#title'	=> t('Other Amount'),
+					'#element_validate' => array('element_validate_number'),
+				);
+			}
+
+			// card info
 			$form['wfbs_payment_details']['wfbs_cardholder_name'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Cardholder Name'),
@@ -201,12 +217,26 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	// bail early
 	if (form_get_errors()) return;
 
+	dsm($form_state);
+
 	// if there are no other validation errors, do the transaction
 	$key = $form['#node']->field_wfbs_api_key['und'][0]['value'];
-	$price = $form['#node']->field_wfbs_price['und'][0]['value'];
 	$sku = $form['#node']->field_wfbs_sku['und'][0]['value'];
 	$note = $form['#node']->field_wfbs_note['und'][0]['value'];
 	$prefix = $form['#node']->field_wfbs_prefix['und'][0]['value'];
+
+	if ($form['#node']->field_wfbs_flexible) {
+		if ($form_state['values']['wfbs_price']) {
+			$price = $form_state['values']['wfbs_price'];
+		} else if ($form_state['values']['wfbs_set_price']) {
+			$price = $form_state['values']['wfbs_set_price'];
+		} else {
+			form_set_error('sdf', t('Please select an amount to donate'));
+			return; // bail out
+		}
+	} else {
+		$price = $form['#node']->field_wfbs_price['und'][0]['value'];
+	}
 
 	$firstname = $form_state['values']['wfbs_first_name'];
 	$lastname = $form_state['values']['wfbs_last_name'];
