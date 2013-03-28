@@ -1,0 +1,95 @@
+<?php
+
+define('R2EP_EVENT_REGISTRATION_BLOCK', 'r2ep_event_registration_block');
+
+function r2ep_block_info() {
+	$blocks = array();
+	$blocks[R2EP_EVENT_REGISTRATION_BLOCK] = array(
+		'info' => t('Register For This Event'),
+	);
+
+	return $blocks;
+}
+
+function r2ep_block_view($delta = '') {
+	$block = array();
+
+	switch ($delta) {
+		case R2EP_EVENT_REGISTRATION_BLOCK:
+			$block['subject'] = t('Register for this event');
+			$block['content'] = _r2ep_event_registration_block();
+			break;
+	}
+
+	return $block;
+}
+
+function _r2ep_event_registration_block() {
+	$node = menu_get_object();
+
+	if ($node->field_registration_form) {
+		$form = $node->field_registration_form['und'][0]['target_id'];
+		$link = drupal_get_path_alias("node/$form") .'?eid='. $node->nid;
+
+		$content = "<div><a href=\"/$link\"><span class=\"large\">Register</span><br/>For This Event</a></div>";
+	} else {
+		$content = '';
+	}
+
+	return $content;
+}
+
+// handle successful payments
+// function r2ep_wfbs_payment_success($transaction, $form, $data) {
+// }
+
+// handle failed payments
+// function r2ep_wfbs_payment_failed($transaction, $form, $data) {
+// }
+
+// handle form submissions
+function r2ep_webform_submission_insert($node, $submission) {
+	if ($node->field_r2ep_make_campaign) {
+		_r2ep_campaign_submitted($node, $submission);
+	}
+
+	if ($node->field_r2ep_make_donation) {
+		_r2ep_donation_submitted($node, $submission);
+	}
+}
+
+
+// create a campaign after a users submits a registration form
+function _r2ep_campaign_submitted($node, $submission) {
+	global $user;
+	$user_fields = user_load($user->uid);
+
+	$campaign = new stdClass();
+	$campaign->title = $user_fields->realname .'\'s '. t('Campaign');
+	$campaign->type = 'campaign';
+	node_object_prepare($campaign);
+
+	$campaign->language = LANGUAGE_NONE;
+	$campaign->uid = $user->uid;
+	$campaign->status = 1;
+	$campaign->promote = 0;
+	$campaign->comment = 1; // off
+
+	$campaign->field_event = array('und' => array(array('target_id' => 3))); // event_id
+
+	$campaign = node_submit($campaign);
+	node_save($campaign);
+
+	dsm($node);
+	dsm($submission);
+	dsm($campaign);
+
+	drupal_goto('node/'. $campaign->nid .'/edit');
+}
+
+// create a donation after a user submits a donation form
+function _r2ep_donation_submitted($node, $submission) {
+	dsm('r2ep');
+	dsm($node);
+	dsm($submission);
+}

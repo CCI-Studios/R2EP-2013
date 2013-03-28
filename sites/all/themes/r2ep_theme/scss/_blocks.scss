@@ -75,7 +75,8 @@
 }
 
 // event registration block
-.eventRegistration {
+#block-r2ep-r2ep-event-registration-block {
+	text-decoration: none;
 	text-transform: uppercase;
 	text-align: center;
 	font-size: 21px;
@@ -87,6 +88,9 @@
 		font-size: 34px;
 		line-height: 1.2em;
 	}
+
+	a { color: black; }
+	a:hover { text-decoration: none; }
 }
 
 // language switcher

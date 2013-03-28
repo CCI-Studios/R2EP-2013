@@ -1,0 +1,6 @@
+name = Run 2 End Poverty
+description = General hooks etc for R2EP
+core = 7.x
+
+package = R2EP
+files[] = r2ep.module
