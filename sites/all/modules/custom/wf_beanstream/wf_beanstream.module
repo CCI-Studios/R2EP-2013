@@ -197,13 +197,11 @@ function _wf_beanstream_form_alter_validate(&$form, &$form_state) {
 
 
 function _wf_beanstream_payment_form_validate($form, &$form_state) {
-	dsm($form);
-	dsm($form_state);
-	form_set_error('', 'adsfdfs');
-}
 
-function _wf_beanstream_payment_form_submit($form, &$form_state) {
+	// bail early
+	if (form_get_errors()) return;
 
+	// if there are no other validation errors, do the transaction
 	$key = $form['#node']->field_wfbs_api_key['und'][0]['value'];
 	$price = $form['#node']->field_wfbs_price['und'][0]['value'];
 	$sku = $form['#node']->field_wfbs_sku['und'][0]['value'];
@@ -229,7 +227,7 @@ function _wf_beanstream_payment_form_submit($form, &$form_state) {
 	$country = $form_state['values']['wfbs_country'];
 
 
-	$trn = new wf_beanstream_transaction(); // TODO: Set key
+	$trn = new wf_beanstream_transaction($key); // TODO: Set key
 	$trn->setCardInfo($cardholder_name, $card_number, $card_month, $card_year);
 	$trn->setContactInfo($cardholder_name, $email, $phone, $address1, $address2, $city,
 		$province, $postal, $country);
@@ -243,14 +241,46 @@ function _wf_beanstream_payment_form_submit($form, &$form_state) {
 	if ($trn->succeeded) {
 		module_invoke_all('wfbs_payment_success', $trn, $form, $form_state);
 	} else {
-		form_set_error('', $trn->output['messageText']);
+		form_set_error('', t('There was an error processing your Credit Card. Please try again.'));
 		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);
 	}
+}
+
+function _wf_beanstream_payment_form_submit($form, &$form_state) {
+
 
 }
 
-function wf_beanstream_wfbs_payment_success($transaction, $form, $data) {
+function wf_beanstream_wfbs_payment_success($trn, $form, $data) {
+	global $user;
+	$v = $data['values'];
 
+	$transaction = new stdClass();
+	$transaction->title = $trn->input['trnOrderNumber'];
+	$transaction->type = 'transaction';
+	node_object_prepare($transaction);
+
+	$transaction->language = LANGUAGE_NONE;
+	$transaction->uid = $user->uid;
+	$transaction->status = 1;
+	$transaction->promote = 0;
+	$transaction->comment = 1;
+
+	$transaction->field_first_name = array('und' => array(array('value' => $v['wfbs_first_name'])));
+	$transaction->field_last_name = array('und' => array(array('value' => $v['wfbs_last_name'])));
+	$transaction->field_contact_phone = array('und' => array(array('value' => $v['wfbs_phone'])));
+	$transaction->field_contact_email = array('und' => array(array('value' => $v['wfbs_email'])));
+	$transaction->field_contact_address1 = array('und' => array(array('value' => $v['wfbs_address1'])));
+	$transaction->field_contact_address2 = array('und' => array(array('value' => $v['wfbs_address2'])));
+	$transaction->field_contact_city = array('und' => array(array('value' => $v['wfbs_city'])));
+	$transaction->field_contact_country = array('und' => array(array('value' => $v['wfbs_country'])));
+	$transaction->field_contact_province = array('und' => array(array('value' => $v['wfbs_province'])));
+	$transaction->field_postal = array('und' => array(array('value' => $v['wfbs_postal'])));
+	$transaction->field_wfbs_price = array('und' => array(array('value' => $trn->totalAmount)));
+	$transaction->field_wfbs_transaction = array('und' => array(array('value' => json_encode($trn->output))));
+
+	$transaction = node_submit($transaction);
+	node_save($transaction);
 }
 
 function wf_beanstream_wfbs_payment_failed($transaction, $form, $data) {
