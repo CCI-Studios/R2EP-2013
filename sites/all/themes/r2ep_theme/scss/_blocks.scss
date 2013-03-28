@@ -19,11 +19,23 @@
 	text-align: center;
 }
 
-// footer menu
-#block-menu-menu-secondary-menu {
+// footer details
+#block-block-3 {
 	position: absolute;
 	top: 0;
-	right: 0;
+	left: 0;
+}
+
+.region-footer {
+	.block {
+		float: right;
+		clear: both;
+	}
+}
+
+// adjust main menu
+#block-system-main-menu {
+	margin-top: 5px;
 }
 
 // search block
@@ -134,11 +146,14 @@
 }
 
 // region layouts
-.region-header-top, .region-header-bottom {
-	.block {
-		float: left;
-		margin-left: 1em;
-	}
+.region-header-top .block {
+	float: left;
+	margin-left: 1em;
+}
+
+.region-header-bottom .block {
+	float: left;
+	margin-left: 0.5em;
 }
 
 .region-post-content {
@@ -148,6 +163,11 @@
 
 		h2 { text-align: center; }
 	}
+}
+
+// footer SM
+#block-block-21 {
+	margin-top: 0.5em;
 }
 
 // sidebar style
