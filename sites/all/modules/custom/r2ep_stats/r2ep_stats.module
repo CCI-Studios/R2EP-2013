@@ -1,9 +1,10 @@
 <?php
-
 define('R2EP_BLOCK_NATIONAL', 'r2ep_national_stats');
 define('R2EP_BLOCK_EVENT', 'r2ep_event_stats');
 define('R2EP_BLOCK_TEAM', 'r2ep_team_stats');
 define('R2EP_BLOCK_RUNNER', 'r2ep_runner_stats');
+
+module_load_include('inc', 'r2ep_stats', 'r2ep_stats.queries');
 
 function r2ep_stats_block_info() {
 	$blocks = array();
@@ -56,14 +57,12 @@ function r2ep_stats_block_view($delta = '') {
 function _r2ep_stats_national_stats() {
 	$block = array();
 
-	$runners = _r2ep_stats_get_runners();
-	$runner_count = count($runners);
+	$runner_count = _r2ep_stats_get_runner_count('NATIONAL');
 	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
 
-	$money = _r2ep_stats_get_campaign_total($runners);
+	$money = _r2ep_stats_get_donation_total('NATIONAL');
 
-	$teams = _r2ep_stats_get_teams();
-	$teams_count = count($teams);
+	$teams_count = _r2ep_stats_get_team_count('NATIONAL');
 	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
 	$block = _r2ep_stats_block(array(
@@ -76,25 +75,19 @@ function _r2ep_stats_national_stats() {
 }
 
 function _r2ep_stats_event_stats() {
-	$block = _r2ep_stats_national_stats();
-	return $block;
-}
-
-function _r2ep_stats_team_stats() {
 	$block = array();
 	$node = menu_get_object();
 
-	if (!$node || $node->type != 'team') {
+	if (!$node || $node->type != 'event') {
 		return '';
 	}
 
-	$runners = _r2ep_stats_get_runners('TEAM');
-	$runners_count = count($runners);
+	$runners_count = _r2ep_stats_get_runner_count('EVENT', $node->nid);
 	$runners_label = $runners_count == 1 ? 'runner' : 'runners';
 
-	$money = _r2ep_stats_get_campaign_total($runners);
+	$money = _r2ep_stats_get_donation_total('EVENT', $node->nid);
 
-	$teams = _r2ep_stats_get_teams('TEAM');
+	$teams = _r2ep_stats_get_teams('EVENT');
 	$teams_count = count($teams);
 	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
@@ -107,95 +100,37 @@ function _r2ep_stats_team_stats() {
 	return $block;
 }
 
+function _r2ep_stats_team_stats() {
+	// $block = array();
+	// $node = menu_get_object();
+
+	// if (!$node || $node->type != 'team') {
+	// 	return '';
+	// }
+
+	// $runners_count = _r2ep_stats_get_runner_count('TEAM', $node);
+	// $runners_label = $runners_count == 1 ? 'runner' : 'runners';
+
+	// $money = _r2ep_stats_get_campaign_total($runners);
+
+	// $teams = array(); //_r2ep_stats_get_teams('TEAM');
+	// $teams_count = count($teams);
+	// $teams_label = $teams_count == 1 ? 'team' : 'teams';
+
+	// $block = _r2ep_stats_block(array(
+	// 	$runners_count .' '. t($runners_label),
+	// 	$money .' '. t('raised'),
+	// 	$teams_count .' '. t($teams_label)
+	// ), array('runners', 'coin', 'teams'));
+
+	// return $block;
+	return 'team';
+}
+
 function _r2ep_stats_runner_stats() {
-	$block = _r2ep_stats_national_stats();
-	return $block;
+	// $block = _r2ep_stats_national_stats();
+	// return $block;
+	return 'runner';
 }
 
 
-// get stats
-function _r2ep_stats_get_runners($type = null) {
-	$runners = array();
-
-	switch($type) {
-		case 'TEAM':
-			$node = menu_get_object();
-			if ($node && isset($node->field_runners['und'])) {
-				foreach ($node->field_runners['und'] as $field) {
-					$runners[] = $field['target_id'];
-				}
-			}
-			break;
-		case 'EVENT':
-
-			break;
-		default: // everything
-			$runners = db_query("SELECT uid FROM {users} where status = 1")->fetchCol();
-	}
-
-	return $runners;
-}
-
-function _r2ep_stats_get_teams($type = null) {
-	$teams = array();
-
-	switch($type) {
-		case 'TEAM':
-		case 'EVENT':
-		case 'RUNNER':
-		default:
-			$teams = db_query("SELECT nid FROM {node} WHERE type = 'team' AND status = 1")->fetchCol();
-	}
-
-	return $teams;
-}
-
-function _r2ep_stats_get_campaign_total($runners = null) {
-	if (isset($runners) && count($runners) == 0) {
-		return 0;
-	}
-
-	$total = db_select('node', 'n')
-		->condition('n.type', 'campaign')
-		->condition('n.status', 1);
-	$total->join('field_data_field_goal', 'g', 'g.entity_id = n.nid');
-	$total->addExpression('sum(g.field_goal_value)');
-
-	if ($runners) {
-		$total->condition('uid', $runners, 'IN');
-	}
-
-	$total = $total->execute()->fetchField();
-	setlocale(LC_MONETARY, 'en_US');
-	return money_format('%.0n', $total);
-}
-
-// format content
-function _r2ep_stats_block($texts, $images) {
-	$path = drupal_get_path('module', 'r2ep_stats');
-	$block = array();
-
-	if (count($texts) != count($images)) {
-		return $block;
-	}
-
-	$block = array(
-		'#theme' => 'item_list',
-		'#items' => array(),
-		'#attributes' => array(
-			'class' => 'stats-list'
-		),
-	);
-
-	for ($i = 0; $i < count($texts); $i++) {
-		$text = $texts[$i];
-		$image = $images[$i];
-
-		$block['#items'][] = array(
-			'data' => "<img src=\"/$path/images/$image.png\" />$text",
-			'class' => array($image),
-		);
-	}
-
-	return $block;
-}

@@ -4,4 +4,5 @@ core = 7.x
 
 package = R2EP
 ; dependencies[] =
+files[] = r2ep_stats.queries.inc
 files[] = r2ep_stats.module
