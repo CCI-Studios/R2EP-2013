@@ -1,0 +1,16 @@
+// inline labels
+.field.field-label-inline {
+	.field-label {
+		display: inline;
+		float: none;
+	}
+
+	.field-items {
+		display: inline-block;
+		float: none;
+	}
+
+	.field-item {
+		display: block;
+	}
+}
