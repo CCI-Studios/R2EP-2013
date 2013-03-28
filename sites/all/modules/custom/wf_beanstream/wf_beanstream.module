@@ -38,7 +38,7 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 		$form['#validate'][] = '_wf_beanstream_form_alter_validate';
 	}
 
-	if (substr($form_id, 0, -3) == 'webform_client_form') {
+	if (substr($form_id, 0, 19) == 'webform_client_form') {
 		$node = $form['#node'];
 
 		// check if payment processing is enabled
