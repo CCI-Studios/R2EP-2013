@@ -25,13 +25,31 @@ function r2ep_block_view($delta = '') {
 }
 
 function _r2ep_event_registration_block() {
+	global $user;
 	$node = menu_get_object();
 
 	if ($node->field_registration_form) {
-		$form = $node->field_registration_form['und'][0]['target_id'];
-		$link = drupal_get_path_alias("node/$form") .'?eid='. $node->nid;
+		$query = new EntityFieldQuery();
+		$query->entityCondition('entity_type', 'node')
+			->entityCondition('bundle', 'campaign')
+			->propertyCondition('uid', $user->uid)
+			->propertyCondition('status', 1)
+			->fieldCondition('field_event', 'target_id', $node->nid);
 
-		$content = "<div><a href=\"/$link\"><span class=\"large\">Register</span><br/>For This Event</a></div>";
+		$count = clone $query;
+		$count = $count->count()->execute();
+
+		if ($count) {
+			$query->range(0, 1);
+			$results = $query->execute();
+			$node = reset($results['node']);
+			$link = drupal_get_path_alias('node/'. $node->nid);
+			$content = "<div style='padding-top: 10px;'><a href=\"/$link\">View My<br/><span class=\"large\">Campaign</span></a></div>";
+		} else {
+			$form = $node->field_registration_form['und'][0]['target_id'];
+			$link = drupal_get_path_alias("node/$form") .'?eid='. $node->nid;
+			$content = "<div><a href=\"/$link\"><span class=\"large\">Register</span><br/>For This Event</a></div>";
+		}
 	} else {
 		$content = '';
 	}
