@@ -112,22 +112,26 @@ function _r2ep_event_countdown() {
 // }
 
 // handle form submissions
-function r2ep_webform_submission_insert($node, $submission) {
-	if ($node->field_r2ep_make_campaign) {
-		_r2ep_campaign_submitted($node, $submission);
+
+function r2ep_form_alter(&$form, &$form_state, $form_id) {
+
+	if (isset($form['#node']) &&
+		isset($form['#node']->field_r2ep_make_campaign) &&
+		$form['#node']->field_r2ep_make_campaign['und'][0]['value']) {
+		$form['#submit'][] = '_r2ep_campaign_submitted';
 	}
 
-	if ($node->field_r2ep_make_donation) {
-		_r2ep_donation_submitted($node, $submission);
+	if (isset($form['#node']) &&
+		isset($form['#node']->field_r2ep_make_donation) &&
+		$form['#node']->field_r2ep_make_donation['und'][0]['value']) {
+		$form['#submit'][] = '_r2ep_donation_submitted';
 	}
 }
 
-
 // create a campaign after a users submits a registration form
-function _r2ep_campaign_submitted($node, $submission) {
+function _r2ep_campaign_submitted(&$form, &$form_state) {
 	global $user;
 	$user_fields = user_load($user->uid);
-	$mapping = _r2ep_webform_component_mapping($node);
 
 	$campaign = new stdClass();
 	$campaign->title = $user_fields->realname .'\'s '. t('Campaign');
@@ -140,7 +144,7 @@ function _r2ep_campaign_submitted($node, $submission) {
 	$campaign->promote = 0;
 	$campaign->comment = 1; // off
 	$campaign->field_event = array('und' => array(array(
-		'target_id' => $submission->data[$mapping['event_id']][0]
+		'target_id' => $form_state['values']['submitted'][4]
 	))); // event_id
 
 	$campaign = node_submit($campaign);
@@ -163,8 +167,36 @@ function _r2ep_webform_component_mapping($node) {
 
 
 // create a donation after a user submits a donation form
-function _r2ep_donation_submitted($node, $submission) {
-	dsm('r2ep');
-	dsm($node);
-	dsm($submission);
+function _r2ep_donation_submitted(&$form, &$form_state) {
+	$donation = new stdClass();
+	$donation->title = 'donation-'. mktime();
+	$donation->type = 'donation';
+	node_object_prepare($donation);
+
+	$donation->language = LANGUAGE_NONE;
+	$donation->uid = 0;
+	$donation->status = 1;
+	$donation->promote = 0;
+	$donation->comment = 1;
+
+	$donation->field_first_name = array('und' => array(array('value' => $form_state['values']['wfbs_first_name'])));
+	$donation->field_last_name = array('und' => array(array('value' => $form_state['values']['wfbs_last_name'])));
+	$donation->field_contact_email = array('und' => array(array('value' => $form_state['values']['wfbs_email'])));
+	$donation->field_contact_phone = array('und' => array(array('value' => $form_state['values']['wfbs_phone'])));
+	$donation->field_contact_address1 = array('und' => array(array('value' => $form_state['values']['wfbs_address1'])));
+	$donation->field_contact_address2 = array('und' => array(array('value' => $form_state['values']['wfbs_address2'])));
+	$donation->field_contact_city = array('und' => array(array('value' => $form_state['values']['wfbs_city'])));
+	$donation->field_contact_province = array('und' => array(array('value' => $form_state['values']['wfbs_province'])));
+	$donation->field_contact_postal = array('und' => array(array('value' => $form_state['values']['wfbs_postal'])));
+	$donation->field_contact_country = array('und' => array(array('value' => $form_state['values']['wfbs_country'])));
+	$donation->field_campaign = array('und' => array(array('target_id' => $form_state['values']['submitted'][4])));
+
+	if ($form_state['values']['wfbs_price']) {
+		$donation->field_wfbs_price = array('und' => array(array('value' => $form_state['values']['wfbs_price'])));
+	} else {
+		$donation->field_wfbs_price = array('und' => array(array('value' => $form_state['values']['wfbs_set_price'])));
+	}
+
+	$donation = node_submit($donation);
+	node_save($donation);
 }
