@@ -2,6 +2,10 @@
 
 img {
 	max-width: 100%;
+
+	.ie8 & {
+		max-width: none;
+	}
 }
 
 

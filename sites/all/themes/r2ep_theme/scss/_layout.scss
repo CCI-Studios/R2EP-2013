@@ -2,7 +2,12 @@
 @import "mixins";
 
 * {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box;
 	box-sizing: border-box;
+
+	*behavior: url(/sites/all/themes/r2ep_theme/js/boxsize.htc); // IE7 only
 }
 
 .globalContainer {
@@ -67,7 +72,6 @@ header[role='banner'] {
 }
 
 .region-header-bottom {
-	clear: right;
 	float: right;
 	margin: 0;
 

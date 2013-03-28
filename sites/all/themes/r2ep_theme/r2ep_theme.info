@@ -3,6 +3,7 @@ description = Base theme for R2EP
 core = 7.x
 
 scripts[] = js/scripts.js
+scripts[] = js/modernizer.js
 
 stylesheets[all][] = css/style.css
 
