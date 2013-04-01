@@ -3,6 +3,45 @@
 define('R2EP_EVENT_REGISTRATION_BLOCK', 'r2ep_event_registration_block');
 define('R2EP_EVENT_COUNTDOWN_BLOCK', 'r2ep_event_countdown_block');
 
+function r2ep_menu() {
+	echo 'adsfasfd';
+	$items = array();
+	$items['donate'] = array(
+		'title'	=> 'Donate',
+		'description' => 'Donate to the correct place',
+		'page callback' => '_r2ep_donate_menu',
+		'access callback' => true,
+	);
+
+	return $items;
+}
+
+function _r2ep_donate_menu() {
+	$url = parse_url($_SERVER['HTTP_REFERER']);
+	$query = substr($url['path'], 1);
+	$node_url = drupal_get_normal_path($query);
+
+	if (!$node_url) {
+		drupal_goto('node/124');
+	} else {
+		$nid = array_pop(explode('/', $node_url));
+		$node = node_load($nid);
+
+		if (!$node) {
+			drupal_goto('node/124');
+		} else if ($node->type == 'event') {
+			drupal_goto('node/124', array('query'=>array('eid'=>$nid))); // FIXME
+		} else if ($node->type == 'campaign') {
+			drupal_goto('node/77', array('query'=>array('cid'=>$nid)));
+		} else if ($node->type == '') {
+			drupal_goto('node/124'); // FIXME
+		} else {
+			drupal_goto('node/124'); // FIXME
+		}
+	}
+
+}
+
 function r2ep_block_info() {
 	$blocks = array();
 	$blocks[R2EP_EVENT_REGISTRATION_BLOCK] = array(
