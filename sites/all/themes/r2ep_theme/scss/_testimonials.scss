@@ -1,0 +1,21 @@
+.testimonialsList {
+
+	.views-row {
+		margin-top: 1em;
+
+		&:first-child { margin-top: 0; }
+	}
+
+	.field-name-field-description {
+		font-style: italic;
+	}
+
+	.field-name-title {
+		margin-left: 2em;
+		font-weight: bold;
+	}
+
+	.field-name-field-short-description {
+		margin-left: 2em;
+	}
+}
