@@ -40,6 +40,7 @@ features[variable][] = menu_parent_team
 features[variable][] = node_options_team
 features[variable][] = node_preview_team
 features[variable][] = node_submitted_team
+features[views_view][] = my_teams
 features[views_view][] = newest_teams
 features[views_view][] = team_picture
 features[views_view][] = teams

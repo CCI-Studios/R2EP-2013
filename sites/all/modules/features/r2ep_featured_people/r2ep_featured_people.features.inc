@@ -26,10 +26,10 @@ function r2ep_featured_people_views_api() {
  */
 function r2ep_featured_people_node_info() {
   $items = array(
-    'featured_person' => array(
-      'name' => t('Featured Person'),
+    'blog_post' => array(
+      'name' => t('Blog Post'),
       'base' => 'node_content',
-      'description' => t('Featured People show up in the tabbed section'),
+      'description' => '',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
