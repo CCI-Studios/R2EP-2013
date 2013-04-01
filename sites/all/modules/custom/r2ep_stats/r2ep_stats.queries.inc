@@ -147,16 +147,18 @@ function _r2ep_stats_get_team_count_for_runners($runners) {
 function _r2ep_stats_get_teams_for_runners($runners) {
 	$teams = array();
 
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'team')
-		->propertyCondition('status', 1)
-		->fieldCondition('field_runners', 'target_id', $runners, 'IN');
+	if ($runners && count($runners)) {
+		$query = new EntityFieldQuery();
+		$query->entityCondition('entity_type', 'node')
+			->entityCondition('bundle', 'team')
+			->propertyCondition('status', 1)
+			->fieldCondition('field_runners', 'target_id', $runners, 'IN');
 
-	$result = $query->execute();
+		$result = $query->execute();
 
-	if (isset($result['node']) && count($result['node'])) {
-		$teams = array_keys($result['node']);
+		if (isset($result['node']) && count($result['node'])) {
+			$teams = array_keys($result['node']);
+		}
 	}
 
 	return $teams;
