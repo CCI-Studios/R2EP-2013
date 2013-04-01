@@ -39,9 +39,7 @@ header[role='banner'] {
 	box-shadow: 0 0 10px #333;
 	z-index: 15;
 
-	.globalContainer {
-		padding-right: 125px;
-	}
+	.globalContainer { padding-right: 125px; }
 }
 
 .region-banner {
@@ -73,9 +71,9 @@ header[role='banner'] {
 
 .region-header-bottom {
 	float: right;
+	clear: right;
+	width: auto;
 	margin: 0;
-
-	@include clearfix;
 }
 
 .region-highlighted {

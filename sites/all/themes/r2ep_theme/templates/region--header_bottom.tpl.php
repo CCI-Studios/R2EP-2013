@@ -27,7 +27,7 @@
  */
 ?>
 <?php if ($content): ?>
-  <div class="<?php print $classes; ?> clearfix">
+  <div class="<?php print $classes; ?>">
     <?php print $content; ?>
   </div><!-- /.region -->
 <?php endif; ?>
