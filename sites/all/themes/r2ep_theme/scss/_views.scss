@@ -20,11 +20,17 @@ div .mediaList {
 			*display: inline;
 			*zoom: 1;
 			padding: 3px;
+			overflow: hidden;
 
 			background: white;
 			border-radius: 3px;
 			border: 1px solid #d2d2d2;
 
+			a {
+				display: block;
+				max-width: 100%;
+				overflow: hidden;
+			}
 			img { display: block; }
 		}
 	}
