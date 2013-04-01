@@ -142,6 +142,7 @@ function r2ep_header_image_gallery_views_default_views() {
   $handler->display->display_options['style_options']['views_slideshow_cycle']['cleartype'] = 0;
   $handler->display->display_options['style_options']['views_slideshow_cycle']['cleartypenobg'] = 0;
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = TRUE;
   /* Field: Content: Header Images */
   $handler->display->display_options['fields']['field_header_images']['id'] = 'field_header_images';
   $handler->display->display_options['fields']['field_header_images']['table'] = 'field_data_field_header_images';
@@ -176,6 +177,11 @@ function r2ep_header_image_gallery_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Header Image (field_header_image) */
+  $handler->display->display_options['filters']['field_header_image_target_id']['id'] = 'field_header_image_target_id';
+  $handler->display->display_options['filters']['field_header_image_target_id']['table'] = 'field_data_field_header_image';
+  $handler->display->display_options['filters']['field_header_image_target_id']['field'] = 'field_header_image_target_id';
+  $handler->display->display_options['filters']['field_header_image_target_id']['operator'] = 'not empty';
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
@@ -215,6 +221,7 @@ function r2ep_header_image_gallery_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '1';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = TRUE;
   /* Field: Content: Header Image */
   $handler->display->display_options['fields']['field_header_image']['id'] = 'field_header_image';
   $handler->display->display_options['fields']['field_header_image']['table'] = 'field_data_field_header_image';
@@ -247,6 +254,11 @@ function r2ep_header_image_gallery_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Header Image (field_header_image) */
+  $handler->display->display_options['filters']['field_header_image_target_id']['id'] = 'field_header_image_target_id';
+  $handler->display->display_options['filters']['field_header_image_target_id']['table'] = 'field_data_field_header_image';
+  $handler->display->display_options['filters']['field_header_image_target_id']['field'] = 'field_header_image_target_id';
+  $handler->display->display_options['filters']['field_header_image_target_id']['operator'] = 'not empty';
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
