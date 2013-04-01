@@ -1,0 +1,8 @@
+#block-menu-menu-account-access-menu {
+	.logged-in & {
+		li.last {
+			display: none;
+		}
+	}
+
+}

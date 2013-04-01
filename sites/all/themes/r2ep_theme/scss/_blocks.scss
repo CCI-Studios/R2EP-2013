@@ -33,10 +33,9 @@
 	}
 }
 
-// adjust main menu
-#block-system-main-menu {
-	margin-top: 5px;
-}
+// adjust menus
+#block-system-main-menu { margin-top: 5px; }
+#block-menu-menu-account-access-menu { margin-top: 10px;}
 
 // search block
 .block-search {
@@ -134,15 +133,6 @@
 	a { color: white; }
 	a:hover,
 	a.active { color: black; }
-}
-
-
-#block-block-1, // sign in block
-#block-block-19 { // sign out
-	margin-top: 10px;
-
-	a { color: white; }
-	a:hover { color: black; }
 }
 
 // region layouts
