@@ -9,7 +9,7 @@ function r2ep_theme_form_alter(&$form, &$form_state, $form_id) {
 	}
 }
 
-function r2ep_preprocess_field(&$variables, $hook){
+function r2ep_theme_preprocess_field(&$variables, $hook){
 
 	// remove inline clearfix
     $element = $variables['element'];
