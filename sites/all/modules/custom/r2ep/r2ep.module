@@ -191,7 +191,10 @@ function _r2ep_donation_submitted(&$form, &$form_state) {
 	$donation->field_contact_province = array('und' => array(array('value' => $form_state['values']['wfbs_province'])));
 	$donation->field_contact_postal = array('und' => array(array('value' => $form_state['values']['wfbs_postal'])));
 	$donation->field_contact_country = array('und' => array(array('value' => $form_state['values']['wfbs_country'])));
-	$donation->field_campaign = array('und' => array(array('target_id' => $form_state['values']['submitted'][4])));
+
+	if (count($form_state['values']['submitted']) > 3) {
+		$donation->field_campaign = array('und' => array(array('target_id' => $form_state['values']['submitted'][4])));
+	}
 
 	if ($form_state['values']['wfbs_price']) {
 		$donation->field_wfbs_price = array('und' => array(array('value' => $form_state['values']['wfbs_price'])));
