@@ -2,6 +2,7 @@
 
 define('R2EP_EVENT_REGISTRATION_BLOCK', 'r2ep_event_registration_block');
 define('R2EP_EVENT_COUNTDOWN_BLOCK', 'r2ep_event_countdown_block');
+define('R2EP_REGISTRATION_PROGRESS', 'r2ep_registration_progress');
 
 function r2ep_block_info() {
 	$blocks = array();
@@ -10,6 +11,9 @@ function r2ep_block_info() {
 	);
 	$blocks[R2EP_EVENT_COUNTDOWN_BLOCK] = array(
 		'info' => t('Event countdown'),
+	);
+	$blocks[R2EP_REGISTRATION_PROGRESS] = array(
+		'info' => t('Registration Progress'),
 	);
 
 	return $blocks;
@@ -27,6 +31,9 @@ function r2ep_block_view($delta = '') {
 			$block['subject'] = t('Event Countdown');
 			$block['content'] = _r2ep_event_countdown();
 			break;
+		case R2EP_REGISTRATION_PROGRESS:
+			$block['subject'] = t('Registration Progress');
+			$block['content'] = _r2ep_registration_progress();
 	}
 
 	return $block;
@@ -101,6 +108,45 @@ function _r2ep_event_countdown() {
 		return $content;
 	}
 
+}
+
+function _r2ep_registration_progress() {
+	global $user;
+	$user_fields = user_load($user->uid);
+	$block = array();
+	$percent = null;
+	$link = null;
+	$message = null;
+
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->propertyCondition('status', 1)
+		->propertyCondition('uid', $user->uid);
+	$campaigns = $query->count()->execute();
+
+	if (!isset($user_fields->field_avatar) || isset($user_fields->field_avatar['und'][0]['is_default'])) {
+		$percent = '10%';
+		$link = '/user/'.$user->uid.'/edit';
+		$message = 'Upload a photo';
+	} else if (!isset($user_fields->field_description) || !$user_fields->field_description['und'][0]['value']) {
+		$percent = '30%';
+		$link = '/user/'.$user->uid.'/edit';
+		$message = 'Upload a description';
+	} else if ($campaigns == 0) {
+		$percent = '50%';
+		$link = '/events';
+		$message = 'Register for an event';
+	} else {
+		return '';
+	}
+
+	// FIXME
+	// add sharing
+	// add donating
+
+	$block = "<p>You are $percent complete. <a href=\"". $link. "\">$message</a></p>";
+	return $block;
 }
 
 // handle successful payments
