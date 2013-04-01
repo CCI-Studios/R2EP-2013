@@ -18,6 +18,9 @@ function r2ep_teams_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_avatar',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -35,7 +38,7 @@ function r2ep_teams_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => '292',
-        'profile2_private' => 0,
+        'profile2_private' => FALSE,
         'uri_scheme' => 'public',
       ),
       'translatable' => '0',
@@ -99,6 +102,9 @@ function r2ep_teams_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_description',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'format' => array(
           'columns' => array(

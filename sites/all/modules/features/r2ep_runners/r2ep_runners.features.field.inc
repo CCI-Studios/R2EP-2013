@@ -18,6 +18,9 @@ function r2ep_runners_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_avatar',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -51,6 +54,16 @@ function r2ep_runners_field_default_fields() {
           'settings' => array(),
           'type' => 'hidden',
           'weight' => '4',
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => 'content',
+            'image_style' => 'profile_thumbnail',
+          ),
+          'type' => 'image',
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'user',
@@ -89,6 +102,9 @@ function r2ep_runners_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_first_name',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'format' => array(
           'columns' => array(
@@ -123,6 +139,12 @@ function r2ep_runners_field_default_fields() {
           'type' => 'hidden',
           'weight' => '2',
         ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '5',
+        ),
       ),
       'entity_type' => 'user',
       'field_name' => 'field_first_name',
@@ -152,6 +174,9 @@ function r2ep_runners_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_last_name',
+      'field_permissions' => array(
+        'type' => '0',
+      ),
       'foreign keys' => array(
         'format' => array(
           'columns' => array(
@@ -185,6 +210,12 @@ function r2ep_runners_field_default_fields() {
           'settings' => array(),
           'type' => 'hidden',
           'weight' => '1',
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '4',
         ),
       ),
       'entity_type' => 'user',
