@@ -2,11 +2,13 @@ ul.menu {
 	margin: 0;
 	padding: 0;
 
-	li {
+	li, li.leafs {
 		position: relative;
 		display: inline-block;
 		*display: inline;
 		*zoom: 1;
+		list-style: none;
+		list-style-image: none;
 
 		margin: 0 0 0 8px;;
 		padding: 0;

@@ -74,6 +74,10 @@ header[role='banner'] {
 	clear: right;
 	width: auto;
 	margin: 0;
+
+	.ie7 & {
+		min-width: 405px;
+	}
 }
 
 .region-highlighted {

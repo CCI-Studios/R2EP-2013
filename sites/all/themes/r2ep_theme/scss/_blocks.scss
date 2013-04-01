@@ -33,6 +33,11 @@
 	}
 }
 
+// header social media hack
+.ie7 #block-block-20 {
+	min-width: 60px;
+}
+
 // adjust menus
 #block-system-main-menu { margin-top: 5px; }
 #block-menu-menu-account-access-menu { margin-top: 10px;}
