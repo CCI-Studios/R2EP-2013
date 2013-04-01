@@ -125,7 +125,9 @@ function _r2ep_registration_progress() {
 		->propertyCondition('uid', $user->uid);
 	$campaigns = $query->count()->execute();
 
-	if (!isset($user_fields->field_avatar) || isset($user_fields->field_avatar['und'][0]['is_default'])) {
+	if (!isset($user_fields->field_avatar) ||
+		count($user_fields->field_avatar) == 0 ||
+		isset($user_fields->field_avatar['und'][0]['is_default'])) {
 		$percent = '10%';
 		$link = '/user/'.$user->uid.'/edit';
 		$message = 'Upload a photo';
