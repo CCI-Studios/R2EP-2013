@@ -176,6 +176,27 @@ function r2ep_form_alter(&$form, &$form_state, $form_id) {
 			$form['#submit'][] = '_r2ep_donation_submitted';
 		}
 	}
+
+	if ($form_id == 'campaign_node_form') {
+		$form['canned_message'] = array(
+			'#type' => 'select',
+			'#title' => t('Use a canned message'),
+			'#weight' => 3,
+			'#after_build' => array('_r2ep_campaign_add_js'),
+			'#options' => array(
+				'none'	=> t('None'),
+				'Belief in Possibility'	=> t('Belief in Possibility'),
+				'Running for Change'	=> t('Running for Change'),
+				'Running for the Team' => t('Running for the Team'),
+				'Outsmarting Poverty with EWB' => t('Outsmarting Poverty with EWB'),
+			),
+		);
+	}
+}
+
+function _r2ep_campaign_add_js($element) {
+	drupal_add_js(drupal_get_path('module', 'r2ep'). '/js/r2ep.js');
+	return($element);
 }
 
 // create a campaign after a users submits a registration form
