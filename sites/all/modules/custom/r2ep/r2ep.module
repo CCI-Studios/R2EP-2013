@@ -265,11 +265,12 @@ function _r2ep_donation_submitted(&$form, &$form_state) {
 		$donation->field_campaign = array('und' => array(array('target_id' => $form_state['values']['submitted'][4])));
 	}
 
-	if ($form_state['values']['wfbs_price']) {
-		$donation->field_wfbs_price = array('und' => array(array('value' => $form_state['values']['wfbs_price'])));
+	if (isset($form_state['values']['wfbs_price'])) {
+		$price = $form_state['values']['wfbs_price']; // get value from form
 	} else {
-		$donation->field_wfbs_price = array('und' => array(array('value' => $form_state['values']['wfbs_set_price'])));
+		$price = $form['#node']->field_wfbs_price['und'][0]['value']; // get value from node
 	}
+	$donation->field_wfbs_price = array('und' => array(array('value' => $price)));
 
 	$donation = node_submit($donation);
 	node_save($donation);
