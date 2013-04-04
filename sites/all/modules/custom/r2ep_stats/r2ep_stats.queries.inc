@@ -72,7 +72,7 @@ function _r2ep_stats_get_campaigns_for_runners($runners) {
 
 	$campaigns = array();
 
-	if (isset($result['node'] && count($result['node'])) {
+	if (isset($result['node']) && count($result['node'])) {
 		foreach($result['node'] as $node) {
 			$campaigns[] = $node->nid;
 		}
