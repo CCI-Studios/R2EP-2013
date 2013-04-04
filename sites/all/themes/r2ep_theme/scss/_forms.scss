@@ -1,0 +1,27 @@
+@import "variables";
+@import "mixins";
+
+.btn {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	padding: 5px 10px;
+
+	color: white;
+	background: $orange-rich;
+	border: 1px solid $orange-rich;
+	font-size: 25px;
+	line-height: 25px;
+	border-radius: 10px;
+	text-align: center;
+
+	&:visited {
+		color: white;
+	}
+}
+
+.btn--block {
+	display: block;
+
+}
+

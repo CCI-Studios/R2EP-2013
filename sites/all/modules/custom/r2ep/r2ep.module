@@ -3,6 +3,8 @@
 define('R2EP_EVENT_REGISTRATION_BLOCK', 'r2ep_event_registration_block');
 define('R2EP_EVENT_COUNTDOWN_BLOCK', 'r2ep_event_countdown_block');
 define('R2EP_REGISTRATION_PROGRESS', 'r2ep_registration_progress');
+define('R2EP_SHARE_LINK', 'r2ep_share_link');
+define('R2EP_CREATE_TEAM_LINK', 'r2ep_create_team_link');
 
 function r2ep_block_info() {
 	$blocks = array();
@@ -14,6 +16,12 @@ function r2ep_block_info() {
 	);
 	$blocks[R2EP_REGISTRATION_PROGRESS] = array(
 		'info' => t('Registration Progress'),
+	);
+	$blocks[R2EP_SHARE_LINK] = array(
+		'info' => t('Share Campaign')
+	);
+	$blocks[R2EP_CREATE_TEAM_LINK] = array(
+		'info' => t('Create Team')
 	);
 
 	return $blocks;
@@ -34,9 +42,29 @@ function r2ep_block_view($delta = '') {
 		case R2EP_REGISTRATION_PROGRESS:
 			$block['subject'] = t('Registration Progress');
 			$block['content'] = _r2ep_registration_progress();
+			break;
+		case R2EP_SHARE_LINK:
+			$block['subject'] = t('Share Campaign');
+			$block['content'] = _r2ep_share_campaign_link();
+			break;
+		case R2EP_CREATE_TEAM_LINK:
+			$block['subject'] = t('Create Team');
+			$block['content'] = _r2ep_create_team_link();
 	}
 
 	return $block;
+}
+
+function _r2ep_create_team_link() {
+	return t('<a class="btn btn--block" href="/node/add/team">Create Team</a>');
+}
+
+function _r2ep_share_campaign_link() {
+	$node = menu_get_object();
+
+	if (!isset($node)) return '';
+
+	return t('<a class="btn btn--block" href="@url">Share</a>', array('@url' => "/share/{$node->nid}"));
 }
 
 function _r2ep_event_registration_block() {

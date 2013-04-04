@@ -65,11 +65,41 @@ function _r2ep_stats_national_stats() {
 	$teams_count = _r2ep_stats_get_all_teams_count();
 	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
-	$block = _r2ep_stats_block(array(
-		$runner_count .' '. t($runners_label),
-		$money .' '. t('raised'),
-		$teams_count .' '. t($teams_label)
-	), array('runners', 'coin', 'teams'));
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
+
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/runners',
+			'@path'	=> $path,
+			'@img'	=> 'runners.png',
+			'@text'	=> $runner_count .' '. $runners_label
+		)),
+		'class' => array('runners'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $money .' '. t('raised'),
+		)),
+		'class' => array('coin'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/teams',
+			'@path'	=> $path,
+			'@img'	=> 'teams.png',
+			'@text'	=> $teams_count .' '. t($teams_label)
+		)),
+		'class' => array('teams'),
+	);
 
 	return $block;
 }
@@ -83,19 +113,49 @@ function _r2ep_stats_event_stats() {
 	}
 
 	$runners = _r2ep_stats_get_runners_for_event($node->nid);
-	$runners_count = count($runners);
-	$runners_label = $runners_count == 1 ? 'runner' : 'runners';
+	$runner_count = count($runners);
+	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
 
 	$money = _r2ep_stats_get_donations_total_for_runners($runners);
 
 	$teams_count = _r2ep_stats_get_team_count_for_runners($runners);
 	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
-	$block = _r2ep_stats_block(array(
-		$runners_count .' '. t($runners_label),
-		$money .' '. t('raised'),
-		$teams_count .' '. t($teams_label)
-	), array('runners', 'coin', 'teams'));
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
+
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/runners?event_id='. $node->nid,
+			'@path'	=> $path,
+			'@img'	=> 'runners.png',
+			'@text'	=> $runner_count .' '. $runners_label
+		)),
+		'class' => array('runners'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $money .' '. t('raised'),
+		)),
+		'class' => array('coin'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/teams?event_id='. $node->nid,
+			'@path'	=> $path,
+			'@img'	=> 'teams.png',
+			'@text'	=> $teams_count .' '. t($teams_label)
+		)),
+		'class' => array('teams'),
+	);
 
 	return $block;
 }
@@ -109,21 +169,51 @@ function _r2ep_stats_team_stats() {
 	}
 
 	$runners = _r2ep_stats_get_runners_for_team($node->nid);
-	$runners_count = count($runners);
-	$runners_label = $runners_count == 1 ? 'runner' : 'runners';
+	$runner_count = count($runners);
+	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
 
 	$money = _r2ep_stats_get_donations_total_for_runners($runners);
+
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
 
 	// FIXME change to goal
 	$teams = array(); //_r2ep_stats_get_teams('TEAM');
 	$teams_count = count($teams);
 	$teams_label = $teams_count == 1 ? 'CHANGE' : 'CHANGE';
 
-	$block = _r2ep_stats_block(array(
-		$runners_count .' '. t($runners_label),
-		$money .' '. t('raised'),
-		$teams_count .' '. t($teams_label)
-	), array('runners', 'coin', 'teams'));
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/runners?team_id='. $node->nid,
+			'@path'	=> $path,
+			'@img'	=> 'runners.png',
+			'@text'	=> $runner_count .' '. $runners_label
+		)),
+		'class' => array('runners'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $money .' '. t('raised'),
+		)),
+		'class' => array('coin'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+			'@url'	=> '/teams?team_id='. $node->nid,
+			'@path'	=> $path,
+			'@img'	=> 'teams.png',
+			'@text'	=> $teams_count .' '. t($teams_label)
+		)),
+		'class' => array('teams'),
+	);
 
 	return $block;
 }
