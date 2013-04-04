@@ -10,10 +10,12 @@ ul.menu {
 		list-style: none;
 		list-style-image: none;
 
-		margin: 0 0 0 8px;;
+		margin: 0 0 0 20px;
 		padding: 0;
 
 		list-style: none;
+
+		&.first { margin-left: 0; }
 	}
 
 	a, span {
@@ -55,6 +57,8 @@ ul.menu {
 		display: block;
 		margin: 0.5em 0.8em;
 		white-space: nowrap;
+
+		&:first-child { margin-left: 0.8em; }
 	}
 
 	ul {

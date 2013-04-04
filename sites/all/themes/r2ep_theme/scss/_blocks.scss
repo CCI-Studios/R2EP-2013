@@ -24,6 +24,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 350px;
 }
 
 .region-footer {
@@ -41,6 +42,12 @@
 // adjust menus
 #block-system-main-menu { margin-top: 5px; }
 #block-menu-menu-account-access-menu { margin-top: 10px;}
+
+#block-system-user-menu {
+	a, span {
+		font-weight: bold;
+	}
+}
 
 // search block
 .block-search {
@@ -144,12 +151,12 @@
 // region layouts
 .region-header-top .block {
 	float: left;
-	margin-left: 1em;
+	margin-left: 14px;
 }
 
 .region-header-bottom .block {
 	float: left;
-	margin-left: 0.5em;
+	margin-left: 14px;
 }
 
 .region-post-content {
