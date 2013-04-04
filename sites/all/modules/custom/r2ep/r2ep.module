@@ -74,6 +74,11 @@ function _r2ep_event_registration_block() {
 	global $user;
 	$node = menu_get_object();
 
+	if ($user->uid == 0) {
+		$content = "<div style='padding-top: 10px;'><a href=\"/user/register\"><span class=\"large\">Sign Up</span> Now!</a></div>";
+		return $content;
+	}
+
 	if ($node->field_registration_form) {
 		$query = new EntityFieldQuery();
 		$query->entityCondition('entity_type', 'node')
