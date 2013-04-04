@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 define('R2EP_TEAM_JOIN_BLOCK', 'r2ep_team_join_block');
 define('R2EP_TEAM_EVENTS_BLOCK', 'r2ep_team_events_block');
@@ -8,7 +8,6 @@ function r2ep_team_block_info() {
 	$blocks[R2EP_TEAM_JOIN_BLOCK] = array(
 		'info' => t('R2EP Join Team'),
 	);
-
 	$blocks[R2EP_TEAM_EVENTS_BLOCK] = array(
 		'info' => t('R2EP Team Events'),
 	);
@@ -33,6 +32,10 @@ function r2ep_team_block_view($delta = '') {
 	}
 
 	return $block;
+}
+
+function _r2ep_team_showdown() {
+	return 'adsf';
 }
 
 function _r2ep_team_join_block() {
@@ -137,4 +140,14 @@ function _r2ep_team_events_block() {
 	}
 
 	return $output;
+}
+
+function r2ep_team_form_alter(&$form, $form_state, $form_id) {
+
+	if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-team-showdown-block') {
+		$node = menu_get_object();
+
+		$form['nid']['#value'] = $node->nid;
+	}
+
 }

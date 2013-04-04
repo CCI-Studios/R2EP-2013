@@ -16,3 +16,11 @@
 		border-radius: 10px;
 	}
 }
+
+.node-team .field-name-field-event {
+	margin: 1em 0;
+}
+
+// hide exposed filter
+#edit-nid-wrapper { display: none; }
+.form-item-sort-by label { display: none; }
