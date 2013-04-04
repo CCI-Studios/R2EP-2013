@@ -239,7 +239,10 @@ function computed_field_field_total_donations_compute(&$entity_field, $entity_ty
 			}
 
 			// get all campaigns for all team members
-			if (count($runners) && isset($entity->field_event) && count($entity->field_event)) {
+			if (count($runners) &&
+				isset($entity->field_event) &&
+				isset($entity->field_event['und']) &&
+				count($entity->field_event['und'])) {
 				$query = new EntityFieldQuery();
 				$query->entityCondition('entity_type', 'node')
 					->entityCondition('bundle', 'campaign')
