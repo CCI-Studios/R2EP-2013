@@ -25,3 +25,47 @@
 
 }
 
+input[type=text], input[type=password],
+input[type=number], input[type=email],
+textarea {
+	background: white;
+	padding: 5px 7px;
+	border: 1px solid $grey-light;
+	border-radius: 0.25em;
+	outline: none;
+
+	-webkit-transition: box-shadow 0.2s linear;
+
+	&:hover {
+		box-shadow: 0 0 10px rgba(0,0,0, 0.4);
+	}
+
+	&:focus {
+		border: 1px solid $orange-rich;
+		box-shadow: 0 0 10px rgba(0,0,0, 0.4);
+	}
+}
+
+.searchForm {
+	form {
+		display: inline;
+		position: relative;
+	}
+
+	input[type=text] {
+		padding-right: 35px;
+	}
+
+	input[type="submit"] {
+		position: absolute;
+		top: -4px;
+		right: 3px;
+		width: 25px;
+		height: 25px;
+
+		color: transparent;
+		text-indent: -9999px;
+		background: url(../images/searchButton-grey.png) center center no-repeat;
+		border: none;
+	}
+}
