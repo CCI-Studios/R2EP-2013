@@ -39,7 +39,7 @@
       <?php print $header; ?>
       <div class="searchForm">
         <form action="/teams" method="get">
-          <input type="text" name="title" />
+          <input type="text" name="title" placeholder="Find a Team" />
           <input type="submit" />
         </form>
       </div>
