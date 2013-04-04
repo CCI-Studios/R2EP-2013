@@ -17,6 +17,9 @@ ul.stats-list {
 		&.first {
 			background: none;
 		}
+
+		a { color: black; }
+		a:hover { text-decoration: none; }
 	}
 
 	img {
@@ -29,3 +32,9 @@ ul.stats-list {
 	.raised { }
 	.teams { }
 }
+
+.views-exposed-form .views-exposed-widget .form-submit { margin: 0; }
+
+// hide filter fields
+#edit-field-event-target-id-wrapper,
+#edit-team-id-wrapper { display: none; }
