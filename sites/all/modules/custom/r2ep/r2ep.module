@@ -56,7 +56,10 @@ function r2ep_block_view($delta = '') {
 }
 
 function _r2ep_create_team_link() {
-	return t('<a class="btn btn--block" href="/node/add/team">Create Team</a>');
+	$node = menu_get_object();
+	if (!$node) return '';
+
+	return t('<a class="btn btn--block" href="/node/add/team?field_event[und][0]='.$node->nid.'">Create Team</a>');
 }
 
 function _r2ep_share_campaign_link() {
@@ -236,11 +239,12 @@ function computed_field_field_total_donations_compute(&$entity_field, $entity_ty
 			}
 
 			// get all campaigns for all team members
-			if (count($runners)) {
+			if (count($runners) && isset($entity->field_event) && count($entity->field_event)) {
 				$query = new EntityFieldQuery();
 				$query->entityCondition('entity_type', 'node')
 					->entityCondition('bundle', 'campaign')
-					->propertyCondition('uid', $runners, 'IN');
+					->propertyCondition('uid', $runners, 'IN')
+					->fieldCondition('field_event', 'target_id', $entity->field_event['und'][0]['target_id']);
 				$results = $query->execute();
 
 				if (isset($results['node'])) {
@@ -268,7 +272,6 @@ function computed_field_field_total_donations_compute(&$entity_field, $entity_ty
 			$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
 			$query->addExpression('sum(p.field_wfbs_price_value)');
 			$total += $query->execute()->fetchField();
-
 			$entity_field[0]['value'] = $total;
 			break;
 	}
@@ -286,16 +289,22 @@ function r2ep_node_insert($node) {
 			$cnode = node_load($campaign);
 			node_object_prepare($cnode);
 			node_save($cnode);
+
+			drupal_goto("node/$campaign");
 		}
 
 		if ($team) {
 			$tnode = node_load($team);
 			node_save($tnode);
+
+			drupal_goto("node/$team");
 		}
 
 		if ($event) {
 			$enode = node_load($event);
 			node_save($enode);
+
+			drupal_goto("node/$event");
 		}
 	}
 }

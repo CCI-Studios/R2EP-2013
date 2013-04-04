@@ -172,7 +172,8 @@ function _r2ep_stats_team_stats() {
 	$runner_count = count($runners);
 	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
 
-	$money = _r2ep_stats_get_donations_total_for_runners($runners);
+	setlocale(LC_MONETARY, 'en_US');
+	$money = money_format('%.0n', $node->field_total_donations['und'][0]['value']);
 
 	$block = array(
 		'#theme' => 'item_list',
