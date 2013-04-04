@@ -62,9 +62,8 @@ header[role='banner'] {
 .region-header-top {
 	float: right;
 	margin-bottom: 12px;
-	padding-bottom: 21px;
 
-	background: url(../images/borderWhite.png) bottom repeat-x;
+
 
 	@include clearfix;
 }
@@ -74,6 +73,9 @@ header[role='banner'] {
 	clear: right;
 	width: auto;
 	margin: 0;
+	padding-top: 21px;
+
+	background: url(../images/borderWhite.png) top repeat-x;
 
 	.ie7 & {
 		min-width: 405px;
