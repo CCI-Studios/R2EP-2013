@@ -138,6 +138,21 @@ function _r2ep_stats_get_all_teams_count() {
 	return db_query("SELECT count(nid) FROM {node} WHERE type = 'team' AND status = 1")->fetchField();
 }
 
+function _r2ep_stats_get_team_count_for_event($event_id) {
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'team')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_event', 'target_id', $event_id);
+	$result = $query->execute();
+
+	if (isset($result['node'])) {
+		return count($result['node']);
+	} else {
+		return 0;
+	}
+}
+
 function _r2ep_stats_get_team_count_for_runners($runners) {
 	$teams = _r2ep_stats_get_teams_for_runners($runners);
 

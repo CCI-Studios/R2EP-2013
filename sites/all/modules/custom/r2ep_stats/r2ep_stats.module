@@ -118,7 +118,7 @@ function _r2ep_stats_event_stats() {
 
 	$money = _r2ep_stats_get_donations_total_for_runners($runners);
 
-	$teams_count = _r2ep_stats_get_team_count_for_runners($runners);
+	$teams_count = _r2ep_stats_get_team_count_for_event($node->nid);
 	$teams_label = $teams_count == 1 ? 'team' : 'teams';
 
 	$block = array(
@@ -132,7 +132,7 @@ function _r2ep_stats_event_stats() {
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block['#items'][] = array(
 		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
-			'@url'	=> '/runners?event_id='. $node->nid,
+			'@url'	=> '/runners?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
 			'@text'	=> $runner_count .' '. $runners_label
@@ -149,7 +149,7 @@ function _r2ep_stats_event_stats() {
 	);
 	$block['#items'][] = array(
 		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
-			'@url'	=> '/teams?event_id='. $node->nid,
+			'@url'	=> '/teams?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'teams.png',
 			'@text'	=> $teams_count .' '. t($teams_label)
