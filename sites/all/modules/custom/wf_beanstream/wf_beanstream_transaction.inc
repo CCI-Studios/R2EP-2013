@@ -50,7 +50,7 @@ class wf_beanstream_transaction {
 		$this->input['ordCity'] = $city;
 		$this->input['ordProvince'] = $prov;
 		$this->input['ordPostalCode'] = $code;
-		$this->input['ordCountry'] = $country;
+		$this->input['ordCountry'] = substr($country, 0, 2);
 	}
 
 	function setPersonalInfo($fname, $lname, $peng = false, $paperreceipt = false, $anonymous = false) {
