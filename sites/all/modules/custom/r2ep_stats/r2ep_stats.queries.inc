@@ -1,6 +1,46 @@
 <?php
 
-// runners
+// queryies for event node
+function _r2ep_stats_number_of_runners_for_event($event_id) {
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->fieldCondition('field_event', 'target_id', $event_id);
+
+	return $query->count()->execute();
+}
+
+function _r2ep_stats_number_of_teams_for_event($event_id) {
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'team')
+		->propertyCondition('status', 1)
+		->fieldCondition('field_event', 'target_id', $event_id);
+	$result = $query->execute();
+
+	if (isset($result['node'])) {
+		return count($result['node']);
+	} else {
+		return 0;
+	}
+}
+
+// queries for user node
+function _r2ep_stats_number_of_campaigns_for_user($uid) {
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->propertyCondition('status', 1)
+		->propertyCondition('uid', $uid);
+
+	return $query->count()->execute();
+}
+
+
+
+///////////////////////////////////////////////
+
+
 function _r2ep_stats_get_all_runners_count() {
 	return db_query("SELECT count(uid) FROM {users} where status = 1")->fetchField();
 }
@@ -178,9 +218,6 @@ function _r2ep_stats_get_teams_for_runners($runners) {
 
 	return $teams;
 }
-
-
-
 
 // format content
 function _r2ep_stats_block($texts, $images) {

@@ -5,6 +5,7 @@ define('R2EP_BLOCK_TEAM', 'r2ep_team_stats');
 define('R2EP_BLOCK_RUNNER', 'r2ep_runner_stats');
 
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.queries');
+module_load_include('inc', 'r2ep_stats', 'r2ep_stats.computed');
 
 function r2ep_stats_block_info() {
 	$blocks = array();
@@ -20,7 +21,7 @@ function r2ep_stats_block_info() {
 		'info' => t('R2EP Team Statistics'),
 	);
 
-	$block[R2EP_BLOCK_RUNNER] = array(
+	$blocks[R2EP_BLOCK_RUNNER] = array(
 		'info' => t('R2EP Runner Statistics'),
 	);
 
@@ -104,6 +105,7 @@ function _r2ep_stats_national_stats() {
 	return $block;
 }
 
+// updated
 function _r2ep_stats_event_stats() {
 	$block = array();
 	$node = menu_get_object();
@@ -112,14 +114,14 @@ function _r2ep_stats_event_stats() {
 		return '';
 	}
 
-	$runners = _r2ep_stats_get_runners_for_event($node->nid);
-	$runner_count = count($runners);
-	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
+	$runners = @$node->field_runners_count['und'][0]['value'];
+	$donations = @$node->field_total_donations['und'][0]['value'];
+	$teams = @$node->field_teams_count['und'][0]['value'];
 
-	$money = _r2ep_stats_get_donations_total_for_runners($runners);
-
-	$teams_count = _r2ep_stats_get_team_count_for_event($node->nid);
-	$teams_label = $teams_count == 1 ? 'team' : 'teams';
+	$runners_label = $runners == 1 ? 'runner' : 'runners';
+	setlocale(LC_MONETARY, 'en_US');
+	$money = money_format('%.0n', $donations);
+	$teams_label = $teams == 1 ? 'team' : 'teams';
 
 	$block = array(
 		'#theme' => 'item_list',
@@ -135,7 +137,7 @@ function _r2ep_stats_event_stats() {
 			'@url'	=> '/runners?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
-			'@text'	=> $runner_count .' '. $runners_label
+			'@text'	=> $runners .' '. $runners_label
 		)),
 		'class' => array('runners'),
 	);
@@ -152,7 +154,7 @@ function _r2ep_stats_event_stats() {
 			'@url'	=> '/teams?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'teams.png',
-			'@text'	=> $teams_count .' '. t($teams_label)
+			'@text'	=> $teams .' '. t($teams_label)
 		)),
 		'class' => array('teams'),
 	);
@@ -160,6 +162,7 @@ function _r2ep_stats_event_stats() {
 	return $block;
 }
 
+// updated
 function _r2ep_stats_team_stats() {
 	$block = array();
 	$node = menu_get_object();
@@ -167,13 +170,16 @@ function _r2ep_stats_team_stats() {
 	if (!$node || $node->type != 'team') {
 	 	return '';
 	}
+	dsm($node);
 
-	$runners = _r2ep_stats_get_runners_for_team($node->nid);
-	$runner_count = count($runners);
-	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
+	$runners = @count($node->field_runners['und']);
+	$donations_total = @$node->field_total_donations['und'][0]['value'];
+	$donations_count = @$node->field_donation_count['und'][0]['value'];
 
+	$runners_label = $runners == 1 ? 'runner' : 'runners';
 	setlocale(LC_MONETARY, 'en_US');
-	$money = money_format('%.0n', $node->field_total_donations['und'][0]['value']);
+	$money = money_format('%.0n', $donations_total);
+	$donations_label = $donations_count == 1? ' donation' : 'donations';
 
 	$block = array(
 		'#theme' => 'item_list',
@@ -194,7 +200,7 @@ function _r2ep_stats_team_stats() {
 			'@url'	=> '/runners?team_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
-			'@text'	=> $runner_count .' '. $runners_label
+			'@text'	=> $runners .' '. $runners_label
 		)),
 		'class' => array('runners'),
 	);
@@ -207,22 +213,135 @@ function _r2ep_stats_team_stats() {
 		'class' => array('coin'),
 	);
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
-			'@url'	=> '/teams?team_id='. $node->nid,
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
 			'@path'	=> $path,
-			'@img'	=> 'teams.png',
-			'@text'	=> $teams_count .' '. t($teams_label)
+			'@img'	=> 'coin.png',
+			'@text'	=> $donations_count .' '. t($donations_label)
 		)),
-		'class' => array('teams'),
+		'class' => array('coin'),
 	);
 
 	return $block;
 }
 
 function _r2ep_stats_runner_stats() {
-	// $block = _r2ep_stats_national_stats();
-	// return $block;
-	return 'runner';
+	$block = array();
+	$uid = arg(1);
+	if (!$uid) {
+		return;
+	}
+
+	$user = user_load($uid);
+	$campaigns = @$user->field_campaign_count['und'][0]['value'];
+	$donations_count = @$user->field_donation_count['und'][0]['value'];
+	$donations_total = @$user->field_total_donations['und'][0]['value'];
+
+	$campaigns_label = $campaigns == 1 ? ' campaign' : ' campaign';
+	setlocale(LC_MONETARY, 'en_US');
+	$money = money_format('%.0n', $donations_total);
+	$donations_label = $donations_count == 1? ' donation' : 'donations';
+
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
+
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $campaigns .' '. $campaigns_label
+		)),
+		'class' => array('campaigns'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $money .' '. t('raised'),
+		)),
+		'class' => array('coin'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $donations_count .' '. t($donations_label)
+		)),
+		'class' => array('coin'),
+	);
+
+	return $block;
 }
 
 
+// computed fields
+function computed_field_field_total_donations_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+
+	if ($entity_type == 'user') {
+		_r2ep_stats_total_donations_user($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+	} else if ($entity_type == 'node') {
+		switch ($entity->type) {
+			case 'campaign':
+				_r2ep_stats_total_donations_campaign($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'event':
+				_r2ep_stats_total_donations_event($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'team':
+				_r2ep_stats_total_donations_team($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+		}
+	}
+
+}
+
+function computed_field_field_donation_count_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+
+	if ($entity_type == 'user') {
+		_r2ep_stats_donation_count_user($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+	} else if ($entity_type == 'node') {
+		switch ($entity->type) {
+			case 'campaign':
+				_r2ep_stats_donation_count_campaign($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'event':
+				_r2ep_stats_donation_count_event($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'team':
+				_r2ep_stats_donation_count_team($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+		}
+	}
+}
+
+function computed_field_field_runners_count_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+
+	if ($entity_type == 'node') {
+		switch($entity->type) {
+			case 'event':
+				$entity_field[0]['value'] = _r2ep_stats_number_of_runners_for_event($entity->nid);
+				break;
+		}
+	}
+}
+
+function computed_field_field_teams_count_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	if ($entity_type == 'node') {
+		switch($entity->type) {
+			case 'event':
+				$entity_field[0]['value'] = _r2ep_stats_number_of_teams_for_event($entity->nid);
+				break;
+		}
+	}
+}
+
+function computed_field_field_campaign_count_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	if ($entity_type == 'user') {
+		$entity_field[0]['value'] = _r2ep_stats_number_of_campaigns_for_user($entity->uid);
+	}
+}
