@@ -59,10 +59,16 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 			$form['wfbs_personal_info'] = array(
 				'#type'		=> 'fieldset',
 				'#title'	=> t('Personal Information'),
+				'#attributes' => array(
+					'class' => array('gridContainer')
+				),
 			);
 			$form['wfbs_payment_details'] = array(
 				'#type'		=> 'fieldset',
 				'#title'	=> t('Payment Details'),
+				'#attributes' => array(
+					'class' => array('gridContainer')
+				),
 			);
 
 			$form['wfbs_personal_info']['wfbs_first_name'] = array(
@@ -70,52 +76,73 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#title'	=> t('First Name'),
 				'#required'	=> true,
 				'#value'	=> $first_name,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_last_name'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Last Name'),
 				'#required'	=> true,
 				'#value'	=> $last_name,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_email'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Email Address'),
 				'#value'	=> $email,
+				'#required' => true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_phone'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Phone Number'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 
 			$form['wfbs_personal_info']['wfbs_address1'] = array(
 				'#type'		=> 'textfield',
-				'#title'	=> t('Address'),
+				'#title'	=> t('Address 1'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_address2'] = array(
 				'#type'		=> 'textfield',
-				'#title'	=> t('Address'),
+				'#title'	=> t('Address 2'),
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_city'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('City'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_province'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Province'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_postal'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Postal Code'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_country'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Country'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 
 			// dynamic price
@@ -124,12 +151,16 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 					'#type'		=> 'radios',
 					'#title'	=> t('Select Amount'),
 					'#options'	=> array('25'=>'$25', '50'=>'$50', '100'=>'$100', '500'=>'$500'),
+					'#prefix'	=> '<div class="col-1-3">',
+					'#suffix'	=> '</div>',
 				);
 
 				$form['wfbs_payment_details']['wfbs_price'] = array(
 					'#type'		=> 'textfield',
 					'#title'	=> t('Other Amount'),
 					'#element_validate' => array('element_validate_number'),
+					'#prefix'	=> '<div class="col-1-3">',
+					'#suffix'	=> '</div>',
 				);
 			}
 
@@ -144,6 +175,8 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 						'0' => 'One Time',
 						'1' => 'Monthly',
 					),
+					'#prefix'	=> '<div class="col-1-3">',
+					'#suffix'	=> '</div>',
 				);
 			}
 
@@ -153,12 +186,16 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#title'	=> t('Cardholder Name'),
 				'#required'	=> true,
 				'#value'	=> "$first_name $last_name",
+				'#prefix'	=> '<div class="clear col-1-2">',
+				'#suffix'	=> '</div><div class="col-1-2">&nbsp;</div>',
 			);
 
 			$form['wfbs_payment_details']['wfbs_card_number'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Credit Card Number'),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2 clear">',
+				'#suffix'	=> '</div>',
 			);
 
 			$form['wfbs_payment_details']['wfbs_card_type'] = array(
@@ -170,36 +207,37 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 					'amex'	=> t('American Express'),
 				),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-2">',
+				'#suffix'	=> '</div>',
 			);
 
-			$form['wfbs_payment_details']['wfbs_expiry'] = array(
-				'#type'		=> 'fieldset',
-				'#title'	=> t('Expiry Date'),
-				'#required'	=> true,
-			);
-
-			$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_month'] = array(
+			$form['wfbs_payment_details']['wfbs_card_month'] = array(
 				'#type'		=> 'select',
 				'#title'	=> t('Month'),
 				'#options'	=> array(),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-6 clear">',
+				'#suffix'	=> '</div>',
 			);
 			for ($i = 1; $i < 13; $i++) {
-				$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_month']['#options'][sprintf('%02d', $i)] = $i;
+				$form['wfbs_payment_details']['wfbs_card_month']['#options'][sprintf('%02d', $i)] = $i;
 			}
 
-			$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_year'] = array(
+			$form['wfbs_payment_details']['wfbs_card_year'] = array(
 				'#type'		=> 'select',
 				'#title'	=> t('Year'),
 				'#options'	=> array(),
 				'#required'	=> true,
+				'#prefix'	=> '<div class="col-1-6">',
+				'#suffix'	=> '</div>',
 			);
 			for ($i = date('y'); $i < date('y') + 5; $i++) {
-				$form['wfbs_payment_details']['wfbs_expiry']['wfbs_card_year']['#options'][$i] = $i;
+				$form['wfbs_payment_details']['wfbs_card_year']['#options'][$i] = $i;
 			}
 
 			$form['#validate'][] = '_wf_beanstream_payment_form_validate';
 			$form['#submit'][] = '_wf_beanstream_payment_form_submit';
+			$form['actions']['submit']['#value'] = t('Submit Donation');
 		}
 	}
 }
@@ -289,7 +327,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	if ($trn->succeeded) {
 		module_invoke_all('wfbs_payment_success', $trn, $form, $form_state);
 	} else {
-		form_set_error('', t('There was an error processing your Credit Card. Please try again.'));
+		form_set_error('', $trn->output['messageText']);
 		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);
 	}
 }

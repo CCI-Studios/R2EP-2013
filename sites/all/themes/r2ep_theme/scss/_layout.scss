@@ -18,7 +18,7 @@
 }
 
 .floatLeft { float: left; }
-
+.clear { clear: both; }
 .clearfix { @include clearfix; }
 
 

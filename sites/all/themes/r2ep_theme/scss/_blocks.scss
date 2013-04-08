@@ -106,6 +106,8 @@
 
 // event registration block
 #block-r2ep-r2ep-event-registration-block {
+	margin-top: 16px;
+
 	text-decoration: none;
 	text-transform: uppercase;
 	text-align: center;
@@ -190,5 +192,21 @@
 		text-align: center;
 		font-size: 24px;
 		color: $orange-rich;
+	}
+}
+
+#block-r2ep-r2ep-registration-progress {
+	min-height: 22px;
+
+	font-weight: bold;
+	background: url(../images/grey-divider.png) right 14px no-repeat;
+
+	p {
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+		padding-right: 4px;
+
+		background: #f4f4f4;
 	}
 }
