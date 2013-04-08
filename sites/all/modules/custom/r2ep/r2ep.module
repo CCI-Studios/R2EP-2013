@@ -361,7 +361,9 @@ function _r2ep_donation_submitted(&$form, &$form_state) {
 		$donation->field_event = array('und' => array(array('target_id' => $event_id)));
 	}
 
-	if (isset($form_state['values']['wfbs_price'])) {
+	if (isset($form_state['values']['wfbs_set_price']) && $form_state['values']['wfbs_set_price'] !== 'other') {
+		$price = $form_state['values']['wfbs_set_price']; // set a fixed price
+	} else if (isset($form_state['values']['wfbs_price'])) {
 		$price = $form_state['values']['wfbs_price']; // get value from form
 	} else {
 		$price = $form['#node']->field_wfbs_price['und'][0]['value']; // get value from node
