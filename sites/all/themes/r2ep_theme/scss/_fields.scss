@@ -14,3 +14,13 @@
 		display: block;
 	}
 }
+
+
+.field-name-field-campaign-count,
+.field-name-field-total-donations,
+.field-name-field-donation-count {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	padding-right: 1em;
+}
