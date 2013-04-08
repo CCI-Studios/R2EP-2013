@@ -3,6 +3,7 @@ define('R2EP_BLOCK_NATIONAL', 'r2ep_national_stats');
 define('R2EP_BLOCK_EVENT', 'r2ep_event_stats');
 define('R2EP_BLOCK_TEAM', 'r2ep_team_stats');
 define('R2EP_BLOCK_RUNNER', 'r2ep_runner_stats');
+define('R2EP_BLOCK_THERMOMETER', 'r2ep_block_thermometer');
 
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.queries');
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.computed');
@@ -12,17 +13,17 @@ function r2ep_stats_block_info() {
 	$blocks[R2EP_BLOCK_NATIONAL] = array(
 		'info' => t('R2EP National Statistics'),
 	);
-
 	$blocks[R2EP_BLOCK_EVENT] = array(
 		'info' => t('R2EP Event Statistics'),
 	);
-
 	$blocks[R2EP_BLOCK_TEAM] = array(
 		'info' => t('R2EP Team Statistics'),
 	);
-
 	$blocks[R2EP_BLOCK_RUNNER] = array(
 		'info' => t('R2EP Runner Statistics'),
+	);
+	$blocks[R2EP_BLOCK_THERMOMETER] = array(
+		'info' => t('R2EP Goal Countdown'),
 	);
 
 	return $blocks;
@@ -49,6 +50,10 @@ function r2ep_stats_block_view($delta = '') {
 		case R2EP_BLOCK_RUNNER:
 			$block['subject'] = t('Runner Statistics');
 			$block['content'] = _r2ep_stats_runner_stats();
+			break;
+		case R2EP_BLOCK_THERMOMETER:
+			$block['subject'] = t('Help Reach Our Goal');
+			$block['content'] = _r2ep_stats_thermometer();
 			break;
 	}
 
@@ -343,4 +348,106 @@ function computed_field_field_campaign_count_compute(&$entity_field, $entity_typ
 	if ($entity_type == 'user') {
 		$entity_field[0]['value'] = _r2ep_stats_number_of_campaigns_for_user($entity->uid);
 	}
+}
+
+function computed_field_field_total_goal_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	if ($entity_type == 'user') {
+		_r2ep_stats_donation_total_user($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+	} else if ($entity_type == 'node') {
+		switch ($entity->type) {
+			case 'campaign':
+				_r2ep_stats_donation_total_campaign($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'event':
+				_r2ep_stats_donation_total_event($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+			case 'team':
+				_r2ep_stats_donation_total_team($entity_field, $entity_type, $entity, $field, $instance, $langcode, $items);
+				break;
+		}
+	}
+}
+
+function _r2ep_stats_thermometer() {
+	$content = array();
+	$goal = 0;
+	$current = 0;
+
+	if (arg(0) === 'user') {
+		$uid = arg(1);
+		$user = user_load($uid);
+
+		$goal = @$user->field_total_goal['und'][0]['value'];
+		$current = @$user->field_total_donations['und'][0]['value'];
+	} else {
+		$node = menu_get_object();
+
+		switch ($node->type) {
+			case 'campaign':
+				$goal = @$node->field_goal['und'][0]['value'];
+				$current = @$node->field_total_donations['und'][0]['value'];
+				break;
+			case 'event':
+				$goal = @$node->field_total_goal['und'][0]['value'];
+				$current = @$node->field_total_donations['und'][0]['value'];
+				break;
+			case 'team':
+				$goal = @$node->field_total_goal['und'][0]['value'];
+				$current = @$node->field_total_donations['und'][0]['value'];
+				break;
+		}
+	}
+
+	if (!$goal) return;
+	drupal_add_css(drupal_get_path('module', 'r2ep_stats') . '/r2ep_stats.css');
+
+	$percent = $current/$goal * 100;
+	setlocale(LC_MONETARY, 'en_US');
+	$goal_money = money_format('%.0n', $goal);
+	$half_money = money_format('%.0n', $goal/2);
+	$current_money = money_format('%.0n', $current);
+
+	$content['content'] = array(
+		'#prefix' => '<div class="thermometer">',
+		'#suffix' => '</div>',
+	);
+	$content['content']['details'] = array(
+		'#prefix'	=> '<div class="gridContainer">',
+		'#suffix'	=> '</div>',
+		array(
+			'#type'		=> 'markup',
+			'#markup'	=> "<span>$current_money</span><br/>raised so far",
+			'#prefix'	=> '<div class="col-1-2">',
+			'#suffix'	=> '</div>',
+		),
+		array(
+			'#type'		=> 'markup',
+			'#markup'	=> "<span>$goal_money</span><br/>our goal",
+			'#prefix'	=> '<div class="col-1-2">',
+			'#suffix'	=> '</div>',
+		)
+	);
+	$content['content']['guy'] = array(
+		'#prefix'	=> '<div class="details">',
+		'#suffix'	=> '</div>',
+		array(
+			'#type'		=> 'markup',
+			'#markup'	=> "<div class=\"background\" style=\"height: $percent%\">&nbsp;</div><div class=\"mask\">&nbsp;</div>",
+			'#prefix'	=> '<div class="chart">',
+			'#suffix'	=> '</div>',
+		),
+		array(
+			'#type'		=> 'markup',
+			'#markup'	=> "<span class='top'>$goal_money</span><span class='middle'>$half_money</span><span class='bottom'>$0</span>",
+			'#prefix'	=> '<div class="graph">',
+			'#suffix'	=> '</div>',
+		)
+	);
+	$content['content']['clear'] = array(
+		'#type'		=> 'markup',
+		'#markup'	=> '<div class="clear"></div>',
+	);
+
+
+	return $content;
 }

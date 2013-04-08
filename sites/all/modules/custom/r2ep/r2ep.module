@@ -57,9 +57,8 @@ function r2ep_block_view($delta = '') {
 
 function _r2ep_create_team_link() {
 	$node = menu_get_object();
-	if (!$node) return '';
 
-	return t('<a class="btn btn--block" href="/node/add/team?field_event[und][0]='.$node->nid.'">Create Team</a>');
+	return t('<a class="btn btn--block" href="/node/add/team">Create Team</a>');
 }
 
 function _r2ep_share_campaign_link() {
@@ -229,7 +228,7 @@ function r2ep_node_update($node) {
 			->fieldCondition('field_runners', 'target_id', array($runner_id), 'IN');
 		$results = $query->execute();
 
-		if ($results['node']) {
+		if (isset($results['node'])) {
 			$teams = array_keys($results['node']);
 
 			$teams = node_load_multiple($teams);

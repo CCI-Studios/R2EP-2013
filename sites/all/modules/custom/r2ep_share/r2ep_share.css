@@ -38,3 +38,11 @@ li.sprite-tumblr:hover { background-position: 0 -588px; width: 44px; height: 44p
 
 li.sprite-twitter { background-position: 0 -735px; width: 44px; height: 44px; }
 li.sprite-twitter:hover { background-position: 0 -686px; width: 44px; height: 44px; }
+
+
+#block-r2ep-share-r2ep-hidden-share-block {
+	width: 260px;
+	margin: 0 auto;
+}
+
+.page-content #block-r2ep-share-r2ep-hidden-share-block { display: none; }

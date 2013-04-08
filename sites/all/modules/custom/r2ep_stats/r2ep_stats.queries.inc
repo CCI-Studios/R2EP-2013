@@ -36,8 +36,6 @@ function _r2ep_stats_number_of_campaigns_for_user($uid) {
 	return $query->count()->execute();
 }
 
-
-
 ///////////////////////////////////////////////
 
 

@@ -11,6 +11,7 @@
 	color: $orange-rich;
 	font-size: 24px;
 	font-weight: bold;
+	letter-spacing: 2px;
 }
 
 .block .searchForm {
@@ -209,4 +210,19 @@
 
 		background: #f4f4f4;
 	}
+}
+
+// share link
+#block-block-22 {
+	margin: 0 -9px 1.5em;
+	padding: 0 0 0.5em;
+
+	font-size: 18px;
+	font-weight: bold;
+	color: $orange-rich;
+	border-bottom: 1px solid $orange-rich;
+	text-transform: uppercase;
+
+	a { color: white; }
+	a:hover { color: white; }
 }

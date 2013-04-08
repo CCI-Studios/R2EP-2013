@@ -1,10 +1,16 @@
 <?php
 define('R2EP_SHARE_BLOCK', 'r2ep_share_block');
+define('R2EP_HIDDEN_SHARE_BLOCK', 'r2ep_hidden_share_block');
 
 function r2ep_share_block_info() {
 	$blocks = array();
 	$blocks[R2EP_SHARE_BLOCK] = array(
-		'info' => t('Share this page'),
+		'info'		=> t('Share this page'),
+		'cache'		=> DRUPAL_CACHE_PER_PAGE,
+	);
+	$blocks[R2EP_HIDDEN_SHARE_BLOCK] = array(
+		'info'		=> t('Hidden Share this page Block'),
+		'cache'		=> DRUPAL_CACHE_PER_PAGE,
 	);
 
 	return $blocks;
@@ -18,6 +24,10 @@ function r2ep_share_block_view($delta = '') {
 		case R2EP_SHARE_BLOCK:
 			$block['subject'] = t('Share This Page');
 			$block['content'] = _r2ep_share_content();
+			break;
+		case R2EP_HIDDEN_SHARE_BLOCK:
+			$block['subject'] = 'Share This Page';
+			$block['content'] = _r2ep_hidden_share_content();
 			break;
 	}
 
@@ -61,4 +71,8 @@ function _r2ep_share_content() {
 	);
 
 	return $content;
+}
+
+function _r2ep_hidden_share_content() {
+	return _r2ep_share_content();
 }

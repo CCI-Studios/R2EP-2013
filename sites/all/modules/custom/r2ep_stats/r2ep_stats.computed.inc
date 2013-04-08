@@ -236,3 +236,63 @@ function _r2ep_stats_donation_count_team(&$entity_field, $entity_type, $entity, 
 
 	$entity_field[0]['value'] = $total;
 }
+
+
+// calc total goals
+function _r2ep_stats_donation_total_user(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$query = db_select('node', 'n')
+		->condition('n.type', 'campaign')
+		->condition('n.uid', $entity->uid);
+	$query->join('field_data_field_goal', 'g', 'g.entity_id = n.nid');
+	$query->addExpression('sum(g.field_goal_value)');
+
+	$entity_field[0]['value'] = $query->execute()->fetchField();
+}
+
+function _r2ep_stats_donation_total_team(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$total = 0;
+	$temp = @$entity->field_runners['und'];
+	$runners = array();
+	foreach ($temp as $runner) {
+		$runners[] = (int)$runner['target_id'];
+	}
+
+	// get all campaigns for all team members
+	if (count($runners) &&
+		isset($entity->field_event) &&
+		isset($entity->field_event['und']) &&
+		count($entity->field_event['und'])) {
+		$query = new EntityFieldQuery();
+		$query->entityCondition('entity_type', 'node')
+			->entityCondition('bundle', 'campaign')
+			->propertyCondition('uid', $runners, 'IN')
+			->fieldCondition('field_event', 'target_id', $entity->field_event['und'][0]['target_id']);
+		$results = $query->execute();
+
+		if (isset($results['node'])) {
+			$campaigns = array_keys($results['node']);
+
+			$query = db_select('node', 'n')
+				->condition('n.type', 'campaign')
+				->condition('n.nid', $campaigns, 'IN');
+			$query->join('field_data_field_goal', 'g', 'g.entity_id = n.nid');
+			$query->addExpression('sum(g.field_goal_value)');
+
+			$total += $query->execute()->fetchField();
+		}
+	}
+
+	dsm($total);
+	$entity_field[0]['value'] = $total;
+}
+
+function _r2ep_stats_donation_total_event(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
+	$query = db_select('node', 'n')
+		->condition('n.type', 'campaign')
+		->condition('e.field_event_target_id', $entity->nid);
+	$query->join('field_data_field_event', 'e', 'e.entity_id = n.nid');
+	$query->join('field_data_field_goal', 'g', 'g.entity_id = n.nid');
+	$query->addExpression('sum(g.field_goal_value)');
+
+	$entity_field[0]['value'] = $query->execute()->fetchField();
+}

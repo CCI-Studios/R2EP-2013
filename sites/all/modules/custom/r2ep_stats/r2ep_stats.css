@@ -1,0 +1,73 @@
+.thermometer {
+
+}
+
+.thermometer .gridContainer .col-1-2 {
+	text-align: center;
+	background: url(images/divider.png) 0.5em no-repeat;
+}
+.thermometer .gridContainer .col-1-2:first-child { background: none; }
+
+
+.thermometer .gridContainer span {
+	color: #fd6803;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.thermometer .details {
+	margin-top: 1em;
+}
+
+.thermometer .chart {
+	position: relative;
+	float: left;
+	width: 119px;
+}
+
+.thermometer .chart .background {
+	position: absolute;
+	z-index: 5;
+	bottom: 0;
+	left: 0;
+	width: 118px;
+
+	background: #fd6803;
+}
+
+.thermometer .chart .mask {
+	position: relative;
+	z-index: 10;
+	width: 119px;
+	height: 109px;
+
+	background: url(images/runner-mask.png) no-repeat;
+}
+
+.thermometer .graph {
+	position: relative;
+	float: left;
+	width: 100px;
+	height: 109px;
+	padding-left: 25px;
+
+	background: url(images/grid.png) left no-repeat;
+}
+
+.thermometer .top {
+	position: absolute;
+	top: -0.5em;
+	left: 25px;
+}
+.thermometer .middle {
+	position: absolute;
+	top: 50%;
+	left: 25px;
+	margin-top: -0.5em;
+}
+.thermometer .bottom {
+	position: absolute;
+	bottom: -0.5em;
+	left: 25px;
+}
+
