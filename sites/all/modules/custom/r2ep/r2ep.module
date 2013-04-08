@@ -166,15 +166,15 @@ function _r2ep_registration_progress() {
 		isset($user_fields->field_avatar['und'][0]['is_default'])) {
 		$percent = '10%';
 		$link = '/user/'.$user->uid.'/edit';
-		$message = 'Upload a photo';
+		$message = 'Upload a Photo';
 	} else if (!isset($user_fields->field_description) || !$user_fields->field_description['und'][0]['value']) {
 		$percent = '30%';
 		$link = '/user/'.$user->uid.'/edit';
-		$message = 'Upload a description';
+		$message = 'Upload a Description';
 	} else if ($campaigns == 0) {
 		$percent = '50%';
 		$link = '/events';
-		$message = 'Register for an event';
+		$message = 'Register for an Event';
 	} else {
 		return '';
 	}
@@ -183,135 +183,8 @@ function _r2ep_registration_progress() {
 	// add sharing
 	// add donating
 
-	$block = "<p>You are $percent complete. <a href=\"". $link. "\">$message</a></p>";
+	$block = "<p>Profile - $percent Complete > <a href=\"". $link. "\">$message</a></p>";
 	return $block;
-}
-
-// computed fields
-function computed_field_field_total_donations_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
-
-	if ($entity_type == 'user') {
-		$query = new EntityFieldQuery();
-		$query->entityCondition('entity_type', 'node')
-			->entityCondition('bundle', 'campaign')
-			->propertyCondition('uid', $entity->uid);
-		$results = $query->execute();
-
-		if (isset($results['node'])) {
-			$campaigns = array_keys($results['node']);
-
-			// sum all donations made to any of the campaigns
-			$query = db_select('node', 'n')
-				->condition('n.type', 'donation')
-				->condition('n.status', 1)
-				->condition('c.field_campaign_target_id', $campaigns, 'IN');
-			$query->join('field_data_field_campaign', 'c', 'c.entity_id = n.nid');
-			$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-			$query->addExpression('sum(p.field_wfbs_price_value)');
-
-			$entity_field[0]['value'] = $query->execute()->fetchField();
-		} else {
-			$entity_field[0]['value'] = 0;
-		}
-
-		return;
-	}
-
-
-	switch ($entity->type) {
-		case 'campaign':
-			$query = db_select('node', 'n')
-				->condition('n.type', 'donation')
-				->condition('n.status', 1)
-				->condition('c.field_campaign_target_id', $entity->nid);
-			$query->join('field_data_field_campaign', 'c', 'c.entity_id = n.nid');
-			$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-			$query->addExpression('sum(p.field_wfbs_price_value)');
-
-			$entity_field[0]['value'] = $query->execute()->fetchField();
-			break;
-		case 'event':
-			$total = 0;
-
-			$query = new EntityFieldQuery();
-			$query->entityCondition('entity_type', 'node')
-				->entityCondition('bundle', 'campaign')
-				->fieldCondition('field_event', 'target_id', $entity->nid);
-			$results = $query->execute();
-
-			if (isset($results['node'])) {
-				$campaigns = array_keys($results['node']);
-				$query = db_select('node', 'n')
-					->condition('type', 'donation')
-					->condition('c.field_campaign_target_id', $campaigns, 'IN');
-				$query->join('field_data_field_campaign', 'c', 'c.entity_id = n.nid');
-				$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-				$query->addExpression('sum(p.field_wfbs_price_value)');
-
-				$total += $query->execute()->fetchField();
-			}
-
-			// add any donations made straight to the event
-			$query = db_select('node', 'n')
-				->condition('n.type', 'donation')
-				->condition('n.status', 1)
-				->condition('e.field_event_target_id', $entity->nid);
-			$query->join('field_data_field_event', 'e', 'e.entity_id = n.nid');
-			$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-			$query->addExpression('sum(p.field_wfbs_price_value)');
-			$total += $query->execute()->fetchField();
-
-			$entity_field[0]['value'] = $total;
-			break;
-		case 'team':
-			$total = 0;
-			$temp = @$entity->field_runners['und'];
-			$runners = array();
-			foreach ($temp as $runner) {
-				$runners[] = (int)$runner['target_id'];
-			}
-
-			// get all campaigns for all team members
-			if (count($runners) &&
-				isset($entity->field_event) &&
-				isset($entity->field_event['und']) &&
-				count($entity->field_event['und'])) {
-				$query = new EntityFieldQuery();
-				$query->entityCondition('entity_type', 'node')
-					->entityCondition('bundle', 'campaign')
-					->propertyCondition('uid', $runners, 'IN')
-					->fieldCondition('field_event', 'target_id', $entity->field_event['und'][0]['target_id']);
-				$results = $query->execute();
-
-				if (isset($results['node'])) {
-					$campaigns = array_keys($results['node']);
-
-					// sum all donations made to any of the campaigns
-					$query = db_select('node', 'n')
-						->condition('n.type', 'donation')
-						->condition('n.status', 1)
-						->condition('c.field_campaign_target_id', $campaigns, 'IN');
-					$query->join('field_data_field_campaign', 'c', 'c.entity_id = n.nid');
-					$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-					$query->addExpression('sum(p.field_wfbs_price_value)');
-
-					$total += $query->execute()->fetchField();
-				}
-			}
-
-			// add any donations made straight to the team
-			$query = db_select('node', 'n')
-				->condition('n.type', 'donation')
-				->condition('n.status', 1)
-				->condition('t.field_team_target_id', $entity->nid);
-			$query->join('field_data_field_team', 't', 't.entity_id = n.nid');
-			$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-			$query->addExpression('sum(p.field_wfbs_price_value)');
-			$total += $query->execute()->fetchField();
-			$entity_field[0]['value'] = $total;
-			break;
-	}
-
 }
 
 function r2ep_node_insert($node) {
