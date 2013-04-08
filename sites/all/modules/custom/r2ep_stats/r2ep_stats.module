@@ -170,7 +170,6 @@ function _r2ep_stats_team_stats() {
 	if (!$node || $node->type != 'team') {
 	 	return '';
 	}
-	dsm($node);
 
 	$runners = @count($node->field_runners['und']);
 	$donations_total = @$node->field_total_donations['und'][0]['value'];
