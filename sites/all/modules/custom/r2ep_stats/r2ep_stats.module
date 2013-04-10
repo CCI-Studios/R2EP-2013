@@ -64,12 +64,12 @@ function _r2ep_stats_national_stats() {
 	$block = array();
 
 	$runner_count = _r2ep_stats_get_all_runners_count();
-	$runners_label = $runner_count == 1 ? 'runner' : 'runners';
+	$runners_label = $runner_count == 1 ? t('runner') : t('runners');
 
 	$money = _r2ep_stats_get_all_donations_total();
 
 	$teams_count = _r2ep_stats_get_all_teams_count();
-	$teams_label = $teams_count == 1 ? 'team' : 'teams';
+	$teams_label = $teams_count == 1 ? t('team') : t('teams');
 
 	$block = array(
 		'#theme' => 'item_list',
@@ -123,10 +123,10 @@ function _r2ep_stats_event_stats() {
 	$donations = @$node->field_total_donations['und'][0]['value'];
 	$teams = @$node->field_teams_count['und'][0]['value'];
 
-	$runners_label = $runners == 1 ? 'runner' : 'runners';
+	$runners_label = $runners == 1 ? t('runner') : t('runners');
 	setlocale(LC_MONETARY, 'en_US');
 	$money = money_format('%.0n', $donations);
-	$teams_label = $teams == 1 ? 'team' : 'teams';
+	$teams_label = $teams == 1 ? t('team') : t('teams');
 
 	$block = array(
 		'#theme' => 'item_list',
@@ -180,10 +180,10 @@ function _r2ep_stats_team_stats() {
 	$donations_total = @$node->field_total_donations['und'][0]['value'];
 	$donations_count = @$node->field_donation_count['und'][0]['value'];
 
-	$runners_label = $runners == 1 ? 'runner' : 'runners';
+	$runners_label = $runners == 1 ? t('runner') : t('runners');
 	setlocale(LC_MONETARY, 'en_US');
 	$money = money_format('%.0n', $donations_total);
-	$donations_label = $donations_count == 1? ' donation' : 'donations';
+	$donations_label = $donations_count == 1? t('donation') : ('donations');
 
 	$block = array(
 		'#theme' => 'item_list',
