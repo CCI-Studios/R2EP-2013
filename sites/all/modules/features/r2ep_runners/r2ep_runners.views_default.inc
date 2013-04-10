@@ -205,8 +205,8 @@ function r2ep_runners_views_default_views() {
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '25';
   $handler->display->display_options['pager']['options']['offset'] = '0';
@@ -215,6 +215,11 @@ function r2ep_runners_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'list';
   $handler->display->display_options['row_plugin'] = 'entity';
   $handler->display->display_options['row_options']['view_mode'] = 'teaser';
+  /* Relationship: Entity Reference: Referencing entity */
+  $handler->display->display_options['relationships']['reverse_field_runners_node']['id'] = 'reverse_field_runners_node';
+  $handler->display->display_options['relationships']['reverse_field_runners_node']['table'] = 'users';
+  $handler->display->display_options['relationships']['reverse_field_runners_node']['field'] = 'reverse_field_runners_node';
+  $handler->display->display_options['relationships']['reverse_field_runners_node']['label'] = 'Teams';
   /* Field: Field: Picture */
   $handler->display->display_options['fields']['field_avatar']['id'] = 'field_avatar';
   $handler->display->display_options['fields']['field_avatar']['table'] = 'field_data_field_avatar';
@@ -233,6 +238,12 @@ function r2ep_runners_views_default_views() {
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['relationship'] = 'reverse_field_runners_node';
+  $handler->display->display_options['fields']['title']['label'] = 'team Title';
   /* Sort criterion: Field: Last Name (field_last_name) */
   $handler->display->display_options['sorts']['field_last_name_value']['id'] = 'field_last_name_value';
   $handler->display->display_options['sorts']['field_last_name_value']['table'] = 'field_data_field_last_name';
@@ -263,6 +274,22 @@ function r2ep_runners_views_default_views() {
     4 => 0,
     3 => 0,
   );
+  /* Filter criterion: Content: Nid */
+  $handler->display->display_options['filters']['nid']['id'] = 'nid';
+  $handler->display->display_options['filters']['nid']['table'] = 'node';
+  $handler->display->display_options['filters']['nid']['field'] = 'nid';
+  $handler->display->display_options['filters']['nid']['relationship'] = 'reverse_field_runners_node';
+  $handler->display->display_options['filters']['nid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['nid']['expose']['operator_id'] = 'nid_op';
+  $handler->display->display_options['filters']['nid']['expose']['label'] = 'Nid';
+  $handler->display->display_options['filters']['nid']['expose']['operator'] = 'nid_op';
+  $handler->display->display_options['filters']['nid']['expose']['identifier'] = 'team_id';
+  $handler->display->display_options['filters']['nid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');
@@ -283,6 +310,9 @@ function r2ep_runners_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
+    t('Teams'),
+    t('team Title'),
+    t('Nid'),
     t('Page'),
   );
   $export['runners'] = $view;
@@ -300,12 +330,14 @@ function r2ep_runners_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Our Team';
+  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['expose_sort_order'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'entity';
@@ -322,6 +354,33 @@ function r2ep_runners_views_default_views() {
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
+  /* Sort criterion: Realname: Real name */
+  $handler->display->display_options['sorts']['realname']['id'] = 'realname';
+  $handler->display->display_options['sorts']['realname']['table'] = 'realname';
+  $handler->display->display_options['sorts']['realname']['field'] = 'realname';
+  $handler->display->display_options['sorts']['realname']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['realname']['expose']['label'] = 'Real name';
+  /* Sort criterion: Field: Total Donations (field_total_donations) */
+  $handler->display->display_options['sorts']['field_total_donations_value']['id'] = 'field_total_donations_value';
+  $handler->display->display_options['sorts']['field_total_donations_value']['table'] = 'field_data_field_total_donations';
+  $handler->display->display_options['sorts']['field_total_donations_value']['field'] = 'field_total_donations_value';
+  $handler->display->display_options['sorts']['field_total_donations_value']['order'] = 'DESC';
+  $handler->display->display_options['sorts']['field_total_donations_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_total_donations_value']['expose']['label'] = 'Total Donations';
+  /* Sort criterion: Field: Donation Count (field_donation_count) */
+  $handler->display->display_options['sorts']['field_donation_count_value']['id'] = 'field_donation_count_value';
+  $handler->display->display_options['sorts']['field_donation_count_value']['table'] = 'field_data_field_donation_count';
+  $handler->display->display_options['sorts']['field_donation_count_value']['field'] = 'field_donation_count_value';
+  $handler->display->display_options['sorts']['field_donation_count_value']['order'] = 'DESC';
+  $handler->display->display_options['sorts']['field_donation_count_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_donation_count_value']['expose']['label'] = 'Donation Count';
+  /* Sort criterion: User: Campaign Count (field_campaign_count) */
+  $handler->display->display_options['sorts']['field_campaign_count_value']['id'] = 'field_campaign_count_value';
+  $handler->display->display_options['sorts']['field_campaign_count_value']['table'] = 'field_data_field_campaign_count';
+  $handler->display->display_options['sorts']['field_campaign_count_value']['field'] = 'field_campaign_count_value';
+  $handler->display->display_options['sorts']['field_campaign_count_value']['order'] = 'DESC';
+  $handler->display->display_options['sorts']['field_campaign_count_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_campaign_count_value']['expose']['label'] = 'Campaign Count';
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
@@ -352,6 +411,10 @@ function r2ep_runners_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('Content referencing User from field_runners'),
+    t('Real name'),
+    t('Total Donations'),
+    t('Donation Count'),
+    t('Campaign Count'),
     t('All'),
     t('Block'),
   );

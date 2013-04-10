@@ -13,9 +13,9 @@ function r2ep_featured_people_taxonomy_default_vocabularies() {
       'name' => 'Categories',
       'machine_name' => 'categories',
       'description' => '',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '0',
+      'weight' => 0,
     ),
   );
 }
