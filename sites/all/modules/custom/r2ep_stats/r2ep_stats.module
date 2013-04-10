@@ -1,29 +1,17 @@
 <?php
-define('R2EP_BLOCK_NATIONAL', 'r2ep_national_stats');
-define('R2EP_BLOCK_EVENT', 'r2ep_event_stats');
-define('R2EP_BLOCK_TEAM', 'r2ep_team_stats');
-define('R2EP_BLOCK_RUNNER', 'r2ep_runner_stats');
 define('R2EP_BLOCK_THERMOMETER', 'r2ep_block_thermometer');
+define('R2EP_STATS_BLOCK', 'r2ep_stats_block');
 
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.queries');
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.computed');
 
 function r2ep_stats_block_info() {
 	$blocks = array();
-	$blocks[R2EP_BLOCK_NATIONAL] = array(
-		'info' => t('R2EP National Statistics'),
-	);
-	$blocks[R2EP_BLOCK_EVENT] = array(
-		'info' => t('R2EP Event Statistics'),
-	);
-	$blocks[R2EP_BLOCK_TEAM] = array(
-		'info' => t('R2EP Team Statistics'),
-	);
-	$blocks[R2EP_BLOCK_RUNNER] = array(
-		'info' => t('R2EP Runner Statistics'),
-	);
 	$blocks[R2EP_BLOCK_THERMOMETER] = array(
 		'info' => t('R2EP Goal Countdown'),
+	);
+	$blocks[R2EP_STATS_BLOCK] = array(
+		'info' => t('R2EP Stats'),
 	);
 
 	return $blocks;
@@ -35,25 +23,29 @@ function r2ep_stats_block_view($delta = '') {
 	$block = array();
 
 	switch ($delta) {
-		case R2EP_BLOCK_NATIONAL:
-			$block['subject'] = t('National Statistics');
-			$block['content'] = _r2ep_stats_national_stats();
-			break;
-		case R2EP_BLOCK_EVENT:
-			$block['subject'] = t('Event Statistics');
-			$block['content'] = _r2ep_stats_event_stats();
-			break;
-		case R2EP_BLOCK_TEAM:
-			$block['subject'] = t('Team Statistics');
-			$block['content'] = _r2ep_stats_team_stats();
-			break;
-		case R2EP_BLOCK_RUNNER:
-			$block['subject'] = t('Runner Statistics');
-			$block['content'] = _r2ep_stats_runner_stats();
-			break;
 		case R2EP_BLOCK_THERMOMETER:
 			$block['subject'] = t('Help Reach Our Goal');
 			$block['content'] = _r2ep_stats_thermometer();
+			break;
+		case R2EP_STATS_BLOCK:
+			$block['subject'] = t('R2EP Stats');
+
+			$node = menu_get_object();
+			$uid = arg(1);
+			$user = @user_load($uid);
+
+			if ($node && $node->type == 'team') {
+				$block['content'] = _r2ep_stats_team_stats();
+			} else if ($node && $node->type == 'campaign') {
+				$block['content'] = _r2ep_stats_runner_stats();
+			} else if ($node && $node->type == 'event') {
+				$block['content'] = _r2ep_stats_event_stats();
+			} else if (arg(0) == 'user' && $uid && $user && $user->uid != 0) {
+				$block['content'] = _r2ep_stats_runner_stats();
+			} else {
+				$block['content'] = _r2ep_stats_national_stats();
+			}
+
 			break;
 	}
 
