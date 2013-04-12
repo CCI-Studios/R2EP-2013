@@ -77,7 +77,7 @@ function _r2ep_share_campaign_link() {
 
 	if (!isset($node)) return '';
 
-	return t('<a class="btn btn--block" href="@url">Share</a>', array('@url' => "/share/{$node->nid}"));
+	return t('<a class="btn btn--block" href="@url">Send Emails</a>', array('@url' => "/share/{$node->nid}"));
 }
 
 function _r2ep_event_registration_block() {

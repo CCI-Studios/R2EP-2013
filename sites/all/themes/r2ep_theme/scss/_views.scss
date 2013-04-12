@@ -69,7 +69,8 @@ div .mediaList {
 
 // sidebar pic
 #block-views-team-picture-block,
-#block-views-runner-avatar-block {
+#block-views-runner-avatar-block,
+#block-views-campaign-avatar-block {
 	img {
 		display: block;
 		padding: 2px;
@@ -98,4 +99,9 @@ div .mediaList {
 		background: url(../images/searchButton-grey.png) center center no-repeat;
 		border: none;
 	}
+}
+
+// campaigns page
+.view-campaigns-page .view-filters {
+	display: none;
 }
