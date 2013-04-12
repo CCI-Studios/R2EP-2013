@@ -24,6 +24,7 @@ ul.menu {
 		font-size: 1.142857143em;
 		color: black;
 		text-transform: uppercase;
+		padding-bottom: 0.5em;
 
 		&:hover { color: white; }
 		&.active {
@@ -34,7 +35,7 @@ ul.menu {
 	ul {
 		display: none;
 		position: absolute;
-		top: 137%;
+		top: 100%;
 		left: -20px;
 		padding: 4px;
 
@@ -90,6 +91,7 @@ ul.menu {
 
 		a, span {
 			font-size: 1em;
+			padding-bottom: 0;
 		}
 	}
 }
