@@ -29,6 +29,7 @@ ul.menu {
 		&:hover {
 			color: white;
 			text-decoration: none;
+			background: url(../images/menu_nub.png) bottom no-repeat;
 		}
 		&.active {
 			color: white;
@@ -36,7 +37,6 @@ ul.menu {
 	}
 
 	ul {
-		display: none;
 		position: absolute;
 		top: 100%;
 		left: -20px;
@@ -44,16 +44,7 @@ ul.menu {
 
 		background: #262626 url(../images/menu-drop-bg.png) top repeat-x;
 
-		&:after {
-			content: '';
-			display: block;
-			position: absolute;
-			bottom: 100%;
-			left: 35px;
-
-			border: 10px solid transparent;
-			border-bottom-color: #272727;
-		}
+		.no-js & { display: none; }
 	}
 
 	ul li {
@@ -76,9 +67,7 @@ ul.menu {
 		}
 	}
 
-	li:hover > ul {
-		display: block;
-	}
+	.no-js & li:hover ul { display: block; }
 }
 
 .menu-tight ul.menu {
