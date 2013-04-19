@@ -1,0 +1,1 @@
+(function(e){e(function(){e("ul.menu ul").show();e("ul.menu ul").hide();e("ul.menu li").hover(function(){clearTimeout(e.data(this,"timer"));e("ul",this).stop(!0,!0).slideDown(100)},function(){e.data(this,"timer",setTimeout(e.proxy(function(){e("ul",this).stop(!0,!0).slideUp(100)},this),300))})})})(jQuery);
