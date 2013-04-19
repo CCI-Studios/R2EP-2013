@@ -29,10 +29,14 @@ html, body {
 
 body {
 	background: #252525 url(../images/cheers.png) bottom no-repeat;
+	padding-top: 124px; // header
 }
 
 header[role='banner'] {
-	position: relative;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
 	padding: 10px 0;
 
 	background: $orange-dark url(../images/header-bg.jpg) top no-repeat;
@@ -40,6 +44,7 @@ header[role='banner'] {
 	z-index: 15;
 
 	.globalContainer { padding-right: 125px; }
+	.admin-menu & { top: 29px; }
 }
 
 .region-banner {
