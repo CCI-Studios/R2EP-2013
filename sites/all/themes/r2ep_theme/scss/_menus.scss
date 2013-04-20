@@ -29,11 +29,14 @@ ul.menu {
 		&:hover {
 			color: white;
 			text-decoration: none;
-			background: url(../images/menu_nub.png) bottom no-repeat;
 		}
 		&.active {
 			color: white;
 		}
+	}
+
+	li.expanded:hover {
+		> a, > span { background: url(../images/menu_nub.png) bottom no-repeat; }
 	}
 
 	ul {
