@@ -13,3 +13,15 @@ $aliases['dev'] = array(
 
 	'ssh-options' => "-p 37241",
 );
+
+$aliases['live'] =  array(
+	'uri' => 'www.r2eptest.ewb.ca',
+	'root' => '/var/www/sites/r2ep',
+	'remote-host' => 'accra.ewb.ca',
+	'remote-user' => 'r2ep',
+
+	'path-aliases' => array(
+		'%dump-dir' => '/var/www/sites/r2ep/_dumps',
+		'%files'	=> 'sites/default/files',
+	),
+);
