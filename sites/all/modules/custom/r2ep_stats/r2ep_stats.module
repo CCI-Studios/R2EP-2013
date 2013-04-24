@@ -73,7 +73,7 @@ function _r2ep_stats_national_stats() {
 
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+		'data'	=> t('<a href="@url"><div><img src="/@path/images/@img" />@text</div></a>', array(
 			'@url'	=> '/runners',
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
@@ -90,7 +90,7 @@ function _r2ep_stats_national_stats() {
 		'class' => array('coin'),
 	);
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+		'data'	=> t('<a href="@url"><div><img src="/@path/images/@img" />@text</div></a>', array(
 			'@url'	=> '/teams',
 			'@path'	=> $path,
 			'@img'	=> 'teams.png',
@@ -130,7 +130,7 @@ function _r2ep_stats_event_stats() {
 
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+		'data'	=> t('<a href="@url"><div><img src="/@path/images/@img" />@text</div></a>', array(
 			'@url'	=> '/runners?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
@@ -147,7 +147,7 @@ function _r2ep_stats_event_stats() {
 		'class' => array('coin'),
 	);
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+		'data'	=> t('<a href="@url"><div><img src="/@path/images/@img" />@text</div></a>', array(
 			'@url'	=> '/teams?field_event_target_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'teams.png',
@@ -192,7 +192,7 @@ function _r2ep_stats_team_stats() {
 
 	$path = drupal_get_path('module', 'r2ep_stats');
 	$block['#items'][] = array(
-		'data'	=> t('<a href="@url"><img src="/@path/images/@img" />@text</a>', array(
+		'data'	=> t('<a href="@url"><div><img src="/@path/images/@img" />@text</div></a>', array(
 			'@url'	=> '/runners?team_id='. $node->nid,
 			'@path'	=> $path,
 			'@img'	=> 'runners.png',
