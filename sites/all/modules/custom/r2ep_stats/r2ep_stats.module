@@ -211,7 +211,7 @@ function _r2ep_stats_team_stats() {
 	$block['#items'][] = array(
 		'data'	=> t('<img src="/@path/images/@img" />@text', array(
 			'@path'	=> $path,
-			'@img'	=> 'coin.png',
+			'@img'	=> 'donations.png',
 			'@text'	=> $donations_count .' '. t($donations_label)
 		)),
 		'class' => array('coin'),
@@ -249,7 +249,7 @@ function _r2ep_stats_runner_stats() {
 	$block['#items'][] = array(
 		'data'	=> t('<img src="/@path/images/@img" />@text', array(
 			'@path'	=> $path,
-			'@img'	=> 'coin.png',
+			'@img'	=> 'campaigns.png',
 			'@text'	=> $campaigns .' '. $campaigns_label
 		)),
 		'class' => array('campaigns'),
@@ -265,7 +265,7 @@ function _r2ep_stats_runner_stats() {
 	$block['#items'][] = array(
 		'data'	=> t('<img src="/@path/images/@img" />@text', array(
 			'@path'	=> $path,
-			'@img'	=> 'coin.png',
+			'@img'	=> 'donations.png',
 			'@text'	=> $donations_count .' '. t($donations_label)
 		)),
 		'class' => array('coin'),
