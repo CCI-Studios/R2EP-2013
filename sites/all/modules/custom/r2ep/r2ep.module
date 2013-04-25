@@ -129,26 +129,47 @@ function _r2ep_event_countdown() {
 		$days = floor($diff/(60*60*24));
 		$hours = floor(($diff - $days*60*60*24)/ (60*60));
 		$minutes = floor(($diff - $days*60*60*24 - $hours*60*60)/ (60));
+		$seconds = floor($diff - $days*60*60*24 - $hours*60*60 - $minutes*60);
 
 		$content = array(
 			'#theme'		=> 'item_list',
 			'#items'	=> array(),
 			'#attributes'	=> array(
 				'class' => array('gridContainer eventCountdown'),
+				'data-object' => 'countdown',
+				'data-date' => $diff,
+				'data-amount' => ($now < $date)? '1':'-1',
 			),
+			'#attachment' => array(
+				'js' => array(
+					'data' => drupal_add_js(drupal_get_path('module', 'r2ep'). '/js/countdown.js')
+				),
+			)
 		);
 
 		$content['#items'][] = array(
+			'data' => '<div>&nbsp</div>',
+			'class' => array('col-1-3'),
+		);
+		$content['#items'][] = array(
 			'data' => '<div class="darkBlock">'. $days .'</div>'. t('days'),
+			'class' => array('col-1-3 days'),
+		);
+		$content['#items'][] = array(
+			'data' => '<div>&nbsp</div>',
 			'class' => array('col-1-3'),
 		);
 		$content['#items'][] = array(
 			'data' => '<div class="darkBlock">'. $hours .'</div>'. t('hours'),
-			'class' => array('col-1-3'),
+			'class' => array('col-1-3 clear hours'),
 		);
 		$content['#items'][] = array(
 			'data' => '<div class="darkBlock">'. $minutes .'</div>'. t('minutes'),
-			'class' => array('col-1-3'),
+			'class' => array('col-1-3 minutes'),
+		);
+		$content['#items'][] = array(
+			'data' => '<div class="darkBlock">'. $seconds .'</div>'. t('seconds'),
+			'class' => array('col-1-3 seconds'),
 		);
 
 		return $content;
