@@ -71,3 +71,19 @@
 	left: 25px;
 }
 
+
+
+.thermometer .track {
+	position: relative;
+	width: 100%;
+	height: 63px;
+	margin-top: 1em;
+
+	background: url(images/race.png) center no-repeat;
+}
+
+.thermometer .guy {
+	position: absolute;
+	left: 0;
+	top: 5px;
+}
