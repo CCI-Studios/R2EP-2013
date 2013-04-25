@@ -74,11 +74,13 @@ header[role='banner'] {
 }
 
 .region-header-bottom {
+	position: relative;
 	float: right;
 	clear: right;
 	width: auto;
 	margin: 0;
 	padding-top: 21px;
+	z-index: 20;
 
 	background: url(../images/borderWhite.png) top repeat-x;
 
