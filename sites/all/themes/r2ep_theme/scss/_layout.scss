@@ -99,6 +99,7 @@ header[role='banner'] {
 	position: relative;
 	z-index: 10;
 	padding: 12px 0;
+	min-width: 960px; // fixes background showing through
 
 	background: $orange-dark url(../images/stats-bg.jpg) top no-repeat;
 	border-top: 1px solid $orange-dark;
