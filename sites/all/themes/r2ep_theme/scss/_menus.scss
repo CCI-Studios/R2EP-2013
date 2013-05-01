@@ -25,6 +25,7 @@ ul.menu {
 		color: black;
 		text-transform: uppercase;
 		padding-bottom: 0.5em;
+		font-weight: bold;
 
 		&:hover {
 			color: white;
@@ -62,6 +63,8 @@ ul.menu {
 		a, span {
 			display: block;
 			color: white;
+			font-weight: normal;
+			font-size: 14px;
 
 			&.active, &:hover {
 				color: $orange-dark;

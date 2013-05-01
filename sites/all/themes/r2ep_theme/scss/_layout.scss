@@ -22,14 +22,24 @@
 .clearfix { @include clearfix; }
 
 
+
 // Site Structure
 html, body {
 	min-height: 100%;
 }
 
 body {
+	// background: white;
 	background: #252525 url(../images/cheers.png) bottom no-repeat;
 	padding-top: 124px; // header
+}
+
+.white-wrap {
+	// position: relative;
+	// width: 1030px;
+	// margin: 0 auto;
+	// overflow: hidden;
+	// box-shadow: 0 0 10px #333;
 }
 
 header[role='banner'] {
@@ -196,6 +206,7 @@ header[role='banner'] {
 footer[role='contentinfo'] {
 	padding: 20px 0 80px;
 
+	background: #252525 url(../images/cheers.png) bottom no-repeat;
 	border-top: 1px solid $orange-dark;
 	font-size: 0.857142857em;
 	color: white;

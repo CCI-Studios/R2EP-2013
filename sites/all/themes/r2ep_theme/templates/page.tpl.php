@@ -74,70 +74,71 @@
  * @ingroup themeable
  */
 ?>
+<div class="white-wrap">
+	<header role="banner"><div class="globalContainer clearfix">
+		<?php print render($page['banner']); ?>
+		<?php print render($page['header_top']); ?>
+		<?php print render($page['header_left']); ?>
+		<?php print render($page['header_bottom']); ?>
+	</div></header>
 
-<header role="banner"><div class="globalContainer clearfix">
-	<?php print render($page['banner']); ?>
-	<?php print render($page['header_top']); ?>
-	<?php print render($page['header_left']); ?>
-	<?php print render($page['header_bottom']); ?>
-</div></header>
+	<?php print render($page['highlighted']); ?>
+	<?php print render($page['stats']); ?>
 
-<?php print render($page['highlighted']); ?>
-<?php print render($page['stats']); ?>
+	<div class="region region-title"><div class="globalContainer">
+		<?php print render($title_prefix); ?>
+		<?php if ($title): ?>
+			<h1 class="title" id="page-title"><span><?php print $title; ?></span></h1>
+		<?php endif; ?>
+		<?php print render($title_suffix); ?>
 
-<div class="region region-title"><div class="globalContainer">
-	<?php print render($title_prefix); ?>
-	<?php if ($title): ?>
-		<h1 class="title" id="page-title"><span><?php print $title; ?></span></h1>
-	<?php endif; ?>
-	<?php print render($title_suffix); ?>
+		<?php print render($page['pre_content']); ?>
+	</div></div>
 
-	<?php print render($page['pre_content']); ?>
-</div></div>
+	<div class="page-wrapper"><div class="globalContainer clearfix">
+		<div class="content-wrapper">
+			<div class="page-content">
+				<a id="main-content"></a>
+				<?php print $messages; ?>
+				<?php print render($tabs); ?>
+				<?php print render($page['help']); ?>
+				<?php if ($action_links): ?>
+					<ul class="action-links"><?php print render($action_links); ?></ul>
+				<?php endif; ?>
+				<?php print render($page['content']); ?>
+				<?php print $feed_icons; ?>
+			</div>
 
-<div class="page-wrapper"><div class="globalContainer clearfix">
-	<div class="content-wrapper">
-		<div class="page-content">
-			<a id="main-content"></a>
-			<?php print $messages; ?>
-			<?php print render($tabs); ?>
-			<?php print render($page['help']); ?>
-			<?php if ($action_links): ?>
-				<ul class="action-links"><?php print render($action_links); ?></ul>
+
+			<?php
+			$post_content = render($page['post_content']);
+			$bottom1 = render($page['bottom_one']);
+			$bottom2 = render($page['bottom_two']);
+
+			if ($post_content || $bottom1 || $bottom2): ?>
+				<div class="page-bottom-container clearfix">
+					<?php print $post_content; ?>
+
+					<?php if ($bottom1 || $bottom2): ?>
+						<div class="gridContainer page-bottom-bottom">
+							<?php print $bottom1; ?>
+							<?php print $bottom2; ?>
+						</div>
+					<?php endif; ?>
+				</div>
 			<?php endif; ?>
-			<?php print render($page['content']); ?>
-			<?php print $feed_icons; ?>
 		</div>
-
 
 		<?php
-		$post_content = render($page['post_content']);
-		$bottom1 = render($page['bottom_one']);
-		$bottom2 = render($page['bottom_two']);
-
-		if ($post_content || $bottom1 || $bottom2): ?>
-			<div class="page-bottom-container clearfix">
-				<?php print $post_content; ?>
-
-				<?php if ($bottom1 || $bottom2): ?>
-					<div class="gridContainer page-bottom-bottom">
-						<?php print $bottom1; ?>
-						<?php print $bottom2; ?>
-					</div>
-				<?php endif; ?>
+		$sidebar_first = render($page['sidebar_first']);
+		$sidebar_second = render($page['sidebar_second']);
+		if ($sidebar_first || $sidebar_second): ?>
+			<div class="region-sidebars">
+				<?php print $sidebar_first; ?>
+				<?php print $sidebar_second; ?>
 			</div>
 		<?php endif; ?>
-	</div>
+	</div></div>
 
-	<?php
-	$sidebar_first = render($page['sidebar_first']);
-	$sidebar_second = render($page['sidebar_second']);
-	if ($sidebar_first || $sidebar_second): ?>
-		<div class="region-sidebars">
-			<?php print $sidebar_first; ?>
-			<?php print $sidebar_second; ?>
-		</div>
-	<?php endif; ?>
-</div></div>
-
-<?php print render($page['footer']); ?>
+	<?php print render($page['footer']); ?>
+</div>

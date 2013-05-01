@@ -8,6 +8,17 @@ define('R2EP_CREATE_TEAM_LINK', 'r2ep_create_team_link');
 define('R2EP_VIEW_CAMPAIGNS', 'r2ep_view_campaigns');
 
 module_load_include('inc', 'r2ep', 'r2ep.blocks');
+module_load_include('inc', 'r2ep', 'r2ep.forms');
+
+// ensure i am the last form alter so i can get at the payment processing fields
+function r2ep_module_implements_alter(&$implementations, $hook) {
+	if ($hook == 'form_alter') {
+		// ordered internally
+		$group = $implementations['r2ep'];
+    	unset($implementations['r2ep']);
+		$implementations['r2ep'] = $group;
+	}
+}
 
 function r2ep_block_info() {
 	$blocks = array();
@@ -308,6 +319,12 @@ function r2ep_form_alter(&$form, &$form_state, $form_id) {
 				'Outsmarting Poverty with EWB' => t('Outsmarting Poverty with EWB'),
 			),
 		);
+	}
+
+	if ($form_id == 'webform_client_form_124' ||
+		$form_id == 'webform_client_form_150' ||
+		false) {
+		_r2ep_donation_form($form, $form_state, $form_id);
 	}
 }
 
