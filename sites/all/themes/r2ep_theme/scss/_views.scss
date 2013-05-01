@@ -127,3 +127,21 @@ div .mediaList {
 		img { display: block; }
 	}
 }
+
+.view-my-campaigns {
+
+	.views-row {
+		overflow: hidden;
+	}
+
+	.views-field-field-featured-image {
+		float: left;
+		margin-right: 10px;
+		padding: 2px;
+		border: 1px solid #d3d3d3;
+
+		img { display: block; }
+	}
+
+	h3 { margin-top: 0; }
+}

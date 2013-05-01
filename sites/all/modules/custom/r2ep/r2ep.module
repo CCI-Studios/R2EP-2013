@@ -20,6 +20,35 @@ function r2ep_module_implements_alter(&$implementations, $hook) {
 	}
 }
 
+function r2ep_entity_update($entity, $type) {
+	if ($entity->type == 'campaign') {
+		_r2ep_only_one_active($entity);
+	}
+}
+
+function _r2ep_only_one_active($entity) {
+	if ($entity->field_active_campaign['und'][0]['value'] == 0) {
+		return;
+	}
+
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->propertyCondition('uid', $entity->uid)
+		->propertyCondition('nid', $entity->nid, '<>');
+	$results = $query->execute();
+
+	if (isset($results['node'])) {
+		$campaigns = array_keys($results['node']);
+		$campaigns = node_load_multiple($campaigns);
+
+		foreach($campaigns as $campaign) {
+			$campaign->field_active_campaign['und'][0]['value'] = 0;
+			node_save($campaign);
+		}
+	}
+}
+
 function r2ep_block_info() {
 	$blocks = array();
 	$blocks[R2EP_EVENT_REGISTRATION_BLOCK] = array(

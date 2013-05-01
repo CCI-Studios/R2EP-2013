@@ -22,19 +22,21 @@
 
 	.field-name-body {
 		position: absolute;
-		bottom: 5em;
+		bottom: 4em;
 		left: 50%;
 		width: 800px;
 		margin-left: -400px;
 
 		color: white;
-		font-size: 18px;
+		font-size: 22px;
 		text-shadow: 0 0 5px #333;
+		font-weight: bold;
 	}
 
 	.large {
-		font-size: 48px;
+		font-size: 52px;
 		line-height: 50px;
+		margin-bottom: 0.25em;
 	}
 
 	// prev

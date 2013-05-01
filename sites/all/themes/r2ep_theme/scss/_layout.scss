@@ -29,17 +29,17 @@ html, body {
 }
 
 body {
-	// background: white;
-	background: #252525 url(../images/cheers.png) bottom no-repeat;
+	background: white;
+	//background: #252525 url(../images/cheers.png) bottom no-repeat;
 	padding-top: 124px; // header
 }
 
 .white-wrap {
-	// position: relative;
-	// width: 1030px;
-	// margin: 0 auto;
-	// overflow: hidden;
-	// box-shadow: 0 0 10px #333;
+	position: relative;
+	width: 1030px;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0 0 10px #333;
 }
 
 header[role='banner'] {

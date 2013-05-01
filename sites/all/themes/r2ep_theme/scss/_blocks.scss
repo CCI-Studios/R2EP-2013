@@ -225,4 +225,30 @@
 
 	a { color: white; }
 	a:hover { color: white; }
+
+	.i18n-fr & { font-size: 15px; }
+}
+
+#block-menu-menu-account-access-menu {
+	a {
+		color: white;
+		font-size: 18px;
+	}
+}
+
+#block-locale-language {
+	a {
+		text-transform: uppercase;
+		font-weight: bold;
+	}
+}
+
+#block-r2ep-stats-r2ep-stats-block {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+#block-views-newest-runners-block,
+#block-views-newest-teams-block {
+	font-weight: bold;
 }

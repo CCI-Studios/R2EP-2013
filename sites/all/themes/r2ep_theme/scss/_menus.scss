@@ -51,7 +51,8 @@ ul.menu {
 		.no-js & { display: none; }
 	}
 
-	ul li {
+	ul li,
+	.views-row {
 		display: block;
 		margin: 0.5em 0.8em;
 		white-space: nowrap;
@@ -63,8 +64,8 @@ ul.menu {
 		a, span {
 			display: block;
 			color: white;
-			font-weight: normal;
 			font-size: 14px;
+			padding: 0;
 
 			&.active, &:hover {
 				color: $orange-dark;
