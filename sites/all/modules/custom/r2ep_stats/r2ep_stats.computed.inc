@@ -282,7 +282,6 @@ function _r2ep_stats_donation_total_team(&$entity_field, $entity_type, $entity, 
 		}
 	}
 
-	dsm($total);
 	$entity_field[0]['value'] = $total;
 }
 
