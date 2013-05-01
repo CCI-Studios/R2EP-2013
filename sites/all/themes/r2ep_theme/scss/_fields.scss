@@ -24,3 +24,16 @@
 	*zoom: 1;
 	padding-right: 1em;
 }
+
+.field-name-field-sponsors {
+	overflow: hidden; // clearfix
+
+	.field-items {
+		margin-left: -23px;
+	}
+
+	.field-item {
+		float: left;
+		margin-left: 23px;
+	}
+}
