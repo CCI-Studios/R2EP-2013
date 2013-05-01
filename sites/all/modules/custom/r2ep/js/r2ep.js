@@ -61,6 +61,7 @@
 
 	$(function() {
 		var $select = $('#edit-canned-message'),
+			$title = $('#edit-title'),
 			$body = $('#edit-body-und-0-value'),
 			$toggle = $('#wysiwyg-toggle-edit-body-und-0-value');
 
@@ -70,6 +71,7 @@
 			}
 
 			$toggle.click();
+			$title.val($select.val());
 			$body.val(messages[$select.val()]);
 			$toggle.click();
 		});
