@@ -247,7 +247,7 @@ function _r2ep_stats_runner_stats() {
 	$donations_count = isset($donations_count)? $donations_count : 0;
 	$donations_total = isset($donations_total)? $donations_total : 0;
 
-	$campaigns_label = $campaigns == 1 ? ' campaign' : ' campaign';
+	$campaigns_label = $campaigns == 1 ? ' campaign' : ' campaigns';
 	setlocale(LC_MONETARY, 'en_US');
 	$money = money_format('%.0n', $donations_total);
 	$donations_label = $donations_count == 1? ' donation' : 'donations';
