@@ -1,0 +1,37 @@
+.webform-client-form {
+
+}
+.webform-client-form .pages {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.webform-client-form .pages > div {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 2130px; /*2865px;*/
+	overflow: hidden;
+}
+
+.webform-client-form .page {
+	width: 690px; /*945px;*/
+	margin: 0 10px;
+	float: left;
+}
+
+.webform-client-form .nextButton,
+.webform-client-form .prevButton {
+	display: block;
+}
+
+.webform-client-form .nextButton {
+	clear: left;
+	float: left;
+}
+
+.webform-client-form .nextButton {
+	clear: left;
+	float: right;
+}
