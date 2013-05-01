@@ -56,11 +56,14 @@ function _r2ep_stats_national_stats() {
 	$block = array();
 
 	$runner_count = _r2ep_stats_get_all_runners_count();
+	$runner_count = isset($runner_count)? $runner_count : 0;
 	$runners_label = $runner_count == 1 ? t('runner') : t('runners');
 
 	$money = _r2ep_stats_get_all_donations_total();
+	$money = isset($money)? $money : 0;
 
 	$teams_count = _r2ep_stats_get_all_teams_count();
+	$teams_count = isset($teams_count)? $teams_count : 0;
 	$teams_label = $teams_count == 1 ? t('team') : t('teams');
 
 	$block = array(
@@ -114,6 +117,10 @@ function _r2ep_stats_event_stats() {
 	$runners = @$node->field_runners_count['und'][0]['value'];
 	$donations = @$node->field_total_donations['und'][0]['value'];
 	$teams = @$node->field_teams_count['und'][0]['value'];
+
+	$runners = isset($runners)? $runners : 0;
+	$donations = isset($donations)? $donations : 0;
+	$teams = isset($teams)? $teams : 0;
 
 	$runners_label = $runners == 1 ? t('runner') : t('runners');
 	setlocale(LC_MONETARY, 'en_US');
@@ -171,6 +178,10 @@ function _r2ep_stats_team_stats() {
 	$runners = @count($node->field_runners['und']);
 	$donations_total = @$node->field_total_donations['und'][0]['value'];
 	$donations_count = @$node->field_donation_count['und'][0]['value'];
+
+	$runners = isset($runners)? $runners : 0;
+	$donations_total = isset($donations_total)? $donations_total : 0;
+	$donations_count = isset($donations_count)? $donations_count : 0;
 
 	$runners_label = $runners == 1 ? t('runner') : t('runners');
 	setlocale(LC_MONETARY, 'en_US');
@@ -231,6 +242,10 @@ function _r2ep_stats_runner_stats() {
 	$campaigns = @$user->field_campaign_count['und'][0]['value'];
 	$donations_count = @$user->field_donation_count['und'][0]['value'];
 	$donations_total = @$user->field_total_donations['und'][0]['value'];
+
+	$campaigns = isset($campaigns)? $campaigns : 0;
+	$donations_count = isset($donations_count)? $donations_count : 0;
+	$donations_total = isset($donations_total)? $donations_total : 0;
 
 	$campaigns_label = $campaigns == 1 ? ' campaign' : ' campaign';
 	setlocale(LC_MONETARY, 'en_US');
