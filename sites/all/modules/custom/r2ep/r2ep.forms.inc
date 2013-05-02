@@ -10,6 +10,7 @@ function _r2ep_donation_form(&$form, &$form_state, $form_id) {
 	unset($form['submitted']['anonymous']);
 
 	$form['pages'] = array(
+		'#parent' => false,
 		'#prefix' => '<div class="pages"><div>',
 		'#suffix' => '</div></div>',
 	);
@@ -52,20 +53,22 @@ function _r2ep_donation_form(&$form, &$form_state, $form_id) {
 	);
 	$form['pages']['page3'][] = array(
 		'#type' => 'markup',
-		'#markup' => '<p class="namePreview"></p>'
+		'#markup' => <<<HTML
+<p class="namePreview"></p>
+<p>
+	<span class="addressPreview"></span> <span class="cityPreview"></span><br/>
+	<span class="postalPreview"></span> <span class="provincePreview"></span><br/>
+	<span class="phonePreview"></span> <span class="emailPreview"></span>
+</p>
+
+<p>
+	<span class="donationPreview"></span> <span class="typePreview"></span>
+</p>
+
+<p class="messagePreview"></p>
+HTML
 	);
-	$form['pages']['page3'][] = array(
-		'#type' => 'markup',
-		'#markup' => '<p class="moneyPreview"></p>'
-	);
-	$form['pages']['page3'][] = array(
-		'#type' => 'markup',
-		'#markup' => '<p class="addressPreview"></p>'
-	);
-	$form['pages']['page3'][] = array(
-		'#type' => 'markup',
-		'#markup' => '<p class="cardPreview"></p>'
-	);
+
 	$form['pages']['page3'][] = array(
 		'#type' => 'markup',
 		'#markup' => '<a class="prevButton">Prev Page</a>',

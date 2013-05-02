@@ -16,6 +16,17 @@
 			$provinceField = null,
 			$countryField = null,
 
+			$namePreview = null,
+			$addressPreview = null,
+			$cityPreview = null,
+			$postalPreview = null,
+			$provincePreview = null,
+			$phonePreview = null,
+			$emailPreview = null,
+			$moneyPreview = null,
+			$typePreview = null,
+			$messagePreview = null,
+
 			found = false,
 			page = 0;
 
@@ -42,27 +53,36 @@
 				$pages = $body.find('.pages');
 				$prevLinks = $body.find('.prevButton');
 				$nextLinks = $body.find('.nextButton');
+
 				$nameFields = $body.find('input[name="wfbs_first_name"], input[name="wfbs_last_name"]');
-				$cardField = $body.find('input[name="wfbs_card_number"]');
 				$addressField = $body.find('input[name="wfbs_address1"]');
 				$cityField = $body.find('input[name="wfbs_city"]');
+				$postalField = $body.find('input[name="wfbs_postal"]');
 				$provinceField = $body.find('input[name="wfbs_province"]');
-				$countryField = $body.find('input[name="wfbs_country"]');
+				$phoneField = $body.find('input[name="wfbs_phone"]');
+				$emailField = $body.find('input[name="wfbs_email"]');
+				$typeField = $body.find('#edit-wfbs-card-type');
+				$messageField = $body.find('#edit-0-pages-page1-0');
 
 				$namePreview = $body.find('.namePreview');
-				$moneyPreview = $body.find('.moneyPreview');
 				$addressPreview = $body.find('.addressPreview');
-				$cardPreview = $body.find('.cardPreview');
+				$cityPreview = $body.find('.cityPreview');
+				$postalPreview = $body.find('.postalPreview');
+				$provincePreview = $body.find('.provincePreview');
+				$phonePreview = $body.find('.phonePreview');
+				$emailPreview = $body.find('.emailPreview');
+				$moneyPreview = $body.find('.donationPreview');
+				$typePreview = $body.find('.typePreview');
+				$messagePreview = $body.find('.messagePreview');
+
 
 				$amount1.change(function() {
 					var value = $amount1.filter(':checked').val();
 					$amount2.filter('[value='+ value +']').attr('checked', true);
-					$moneyPreview.text('$'+ value +' '+ ($monthly1.filter(':checked').val()? 'Monthly' : ''));
 				});
 				$amount2.change(function() {
 					var value = $amount2.filter(':checked').val();
 					$amount1.filter('[value='+ value +']').attr('checked', true);
-					$moneyPreview.text('$'+ value + ($monthly1.filter(':checked').val()? 'Monthly' : ''));
 				});
 
 				$monthly1.change(function() {
@@ -72,14 +92,6 @@
 				$monthly2.change(function() {
 					var value = $monthly2.filter(':checked').val();
 					$monthly1.filter('[value='+ value +']').attr('checked', true);
-				});
-
-				$($addressField, $cityField, $provinceField, $countryField).bind('keyup input paste', function() {
-					$addressPreview.html(
-						$addressField.val() +'<br/>'+
-						$cityField.val() + ', ' + $provinceField.val() +'<br/>'+
-						$countryField.val()
-					);
 				});
 
 				$nameFields.bind('keyup input paste', function() {
@@ -112,10 +124,30 @@
 						index++;
 					}
 
+					if (index == 2) {
+						updatePreview();
+						console.log('updating preview');
+					}
+
 					$pages.children(0).animate({
 						'margin-left': -705*index
 					});
 				});
+
+				var updatePreview = function() {
+					$namePreview.text($nameFields.map(function(index, el) {
+						return $(el).val();
+					}).get().join(' '));
+					$addressPreview.text($addressField.val());
+					$cityPreview.text($cityField.val());
+					$postalPreview.text($postalField.val());
+					$provincePreview.text($provinceField.val());
+					$phonePreview.text($phoneField.val());
+					$emailPreview.text($emailField.val());
+					$moneyPreview.text('$' + $amount1.filter(':checked').val());
+					$typePreview.text($typeField.val());
+					$messagePreview.text($messageField.val());
+				};
 			};
 
 		searchScan();
