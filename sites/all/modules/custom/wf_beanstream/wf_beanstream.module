@@ -149,7 +149,8 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				$form['wfbs_payment_details']['wfbs_set_price'] = array(
 					'#type'		=> 'radios',
 					'#title'	=> t('Select Amount'),
-					'#options'	=> array('25'=>'$25', '50'=>'$50', '100'=>'$100', '500'=>'$500', 'other'=>'Other'),
+					'#options'	=> array('25'=>'$25', '35'=>'$35', '50'=>'$50', '100'=>'$100', 'other'=>'Other'),
+					'#default_value'	=> 50,
 					'#prefix'	=> '<div class="col-1-2">',
 					'#suffix'	=> '</div>',
 				);
