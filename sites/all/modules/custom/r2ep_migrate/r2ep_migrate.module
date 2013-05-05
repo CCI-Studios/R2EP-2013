@@ -1,0 +1,7 @@
+<?php
+
+function r2ep_migrate_migrate_api() {
+	return array(
+		'api' => 2,
+	);
+}

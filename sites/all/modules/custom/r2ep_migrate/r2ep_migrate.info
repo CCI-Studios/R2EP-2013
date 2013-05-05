@@ -1,0 +1,14 @@
+name = R2EP Migrations
+description = Migrations from R2EP's old system to Drupal
+package = R2EP
+core = 7.x
+
+dependencies[] = migrate
+dependencies[] = migrate_extras
+
+files[] = r2ep_migrate.module
+
+files[] = user.inc
+files[] = campaign.inc
+files[] = team.inc
+files[] = donation.inc
