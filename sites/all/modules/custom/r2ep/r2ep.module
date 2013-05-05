@@ -119,8 +119,10 @@ function _r2ep_create_team_link() {
 
 function _r2ep_share_campaign_link() {
 	$node = menu_get_object();
+	Global $user;
 
-	if (!isset($node)) return '';
+	if (!isset($node) || !$user) return '';
+	if ($user->uid != $node->uid) return '';
 
 	return t('<a class="btn btn--block" href="@url">Send Emails</a>', array('@url' => "/share/{$node->nid}"));
 }
