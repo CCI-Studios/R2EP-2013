@@ -26,7 +26,7 @@ function r2ep_menu_alter(&$items) {
 }
 
 function r2ep_entity_update($entity, $type) {
-	if ($entity->type == 'campaign') {
+	if ($type == 'node' &&$entity->type == 'campaign') {
 		_r2ep_only_one_active($entity);
 	}
 }
