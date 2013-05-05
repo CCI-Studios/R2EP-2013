@@ -20,6 +20,11 @@ function r2ep_module_implements_alter(&$implementations, $hook) {
 	}
 }
 
+function r2ep_menu_alter(&$items) {
+	$items['search/user']['title'] = 'Runners';
+	$items['search/user/%menu_tail']['title'] = 'Runners';
+}
+
 function r2ep_entity_update($entity, $type) {
 	if ($entity->type == 'campaign') {
 		_r2ep_only_one_active($entity);
