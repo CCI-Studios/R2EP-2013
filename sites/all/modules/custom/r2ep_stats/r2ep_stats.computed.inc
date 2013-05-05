@@ -76,8 +76,10 @@ function _r2ep_stats_total_donations_team(&$entity_field, $entity_type, $entity,
 	$total = 0;
 	$temp = @$entity->field_runners['und'];
 	$runners = array();
-	foreach ($temp as $runner) {
-		$runners[] = (int)$runner['target_id'];
+	if ($temp) {
+		foreach ($temp as $runner) {
+			$runners[] = (int)$runner['target_id'];
+		}
 	}
 
 	// get all campaigns for all team members
@@ -194,8 +196,10 @@ function _r2ep_stats_donation_count_team(&$entity_field, $entity_type, $entity, 
 	$total = 0;
 	$temp = @$entity->field_runners['und'];
 	$runners = array();
-	foreach ($temp as $runner) {
-		$runners[] = (int)$runner['target_id'];
+	if ($temp) {
+		foreach ($temp as $runner) {
+			$runners[] = (int)$runner['target_id'];
+		}
 	}
 
 	// get all campaigns for all team members
@@ -253,8 +257,10 @@ function _r2ep_stats_donation_total_team(&$entity_field, $entity_type, $entity, 
 	$total = 0;
 	$temp = @$entity->field_runners['und'];
 	$runners = array();
-	foreach ($temp as $runner) {
-		$runners[] = (int)$runner['target_id'];
+	if ($temp) {
+		foreach ($temp as $runner) {
+			$runners[] = (int)$runner['target_id'];
+		}
 	}
 
 	// get all campaigns for all team members
