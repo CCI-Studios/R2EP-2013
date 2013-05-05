@@ -19,7 +19,8 @@ class DonationMigration extends Migration {
 		);
 
 		$query = Database::getConnection('default', 'r2ep')
-			->select('goo_donations', 'd');
+			->select('goo_donations', 'd')
+			->orderBy('d.donationid');
 		$query->fields('d', array('donationid', 'campaignid', 'donationamount', 'monthly', 'donationmessage', 'displayonpage', 'displayanonymously', 'datedonated', 'txid', 'txnumber', 'firstname', 'lastname', 'email', 'userid', 'preferredlanguage', 'fullyanonymous', 'donationtype', 'manualtransactionid', 'hiddenbycampaigner', 'contactid', ));
 
 		$this->source = new MigrateSourceSQL($query);
@@ -51,9 +52,8 @@ class DonationMigration extends Migration {
 		$this->addFieldMapping('field_contact_country:language')->defaultValue('en');
 
 		$this->addFieldMapping('field_wfbs_price', 'donationamount');
-
-		// $this->addFieldMapping('field_campaign', 'campaignid')
-		// 	->sourceMigration('Campaign');
+		$this->addFieldMapping('field_campaign', 'campaignid')
+			->sourceMigration('Campaign');
 		$this->addFieldMapping('field_team');
 		$this->addFieldMapping('field_event');
 
