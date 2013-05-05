@@ -1,5 +1,6 @@
 <?php
-define('R2EP_BLOCK_THERMOMETER', 'r2ep_block_thermometer');
+define('R2EP_BLOCK_USER_THERMOMETER', 'r2ep_block_user_thermometer');
+define('R2EP_BLOCK_GROUP_THERMOMETER', 'r2ep_block_group_thermometer');
 define('R2EP_STATS_BLOCK', 'r2ep_stats_block');
 
 module_load_include('inc', 'r2ep_stats', 'r2ep_stats.queries');
@@ -7,8 +8,11 @@ module_load_include('inc', 'r2ep_stats', 'r2ep_stats.computed');
 
 function r2ep_stats_block_info() {
 	$blocks = array();
-	$blocks[R2EP_BLOCK_THERMOMETER] = array(
-		'info' => t('R2EP Goal Countdown'),
+	$blocks[R2EP_BLOCK_USER_THERMOMETER] = array(
+		'info' => t('R2EP User Thermometer'),
+	);
+	$blocks[R2EP_BLOCK_GROUP_THERMOMETER] = array(
+		'info' => t('R2EP Group Thermometer'),
 	);
 	$blocks[R2EP_STATS_BLOCK] = array(
 		'info' => t('R2EP Stats'),
@@ -23,9 +27,13 @@ function r2ep_stats_block_view($delta = '') {
 	$block = array();
 
 	switch ($delta) {
-		case R2EP_BLOCK_THERMOMETER:
+		case R2EP_BLOCK_USER_THERMOMETER:
+			$block['subject'] = t('Help Reach My Goal');
+			$block['content'] = _r2ep_stats_user_thermometer();
+			break;
+		case R2EP_BLOCK_GROUP_THERMOMETER:
 			$block['subject'] = t('Help Reach Our Goal');
-			$block['content'] = _r2ep_stats_thermometer();
+			$block['content'] = _r2ep_stats_group_thermometer();
 			break;
 		case R2EP_STATS_BLOCK:
 			$block['subject'] = t('R2EP Stats');
@@ -375,36 +383,51 @@ function computed_field_field_total_goal_compute(&$entity_field, $entity_type, $
 	}
 }
 
-function _r2ep_stats_thermometer() {
-	$content = array();
+function _r2ep_stats_user_thermometer() {
+	if (arg(0) != 'user') {
+		return '';
+	}
+
+	$uid = arg(1);
+	$user = user_load($uid);
+
+	$goal = @$user->field_total_goal['und'][0]['value'];
+	$current = @$user->field_total_donations['und'][0]['value'];
+
+	return _r2ep_stats_thermometer($goal, $current);
+}
+
+function _r2ep_stats_group_thermometer() {
+	$node = menu_get_object();
 	$goal = 0;
 	$current = 0;
-	$path = drupal_get_path('module', 'r2ep_stats');
 
-	if (arg(0) === 'user') {
-		$uid = arg(1);
-		$user = user_load($uid);
+	if (!$node) return '';
 
-		$goal = @$user->field_total_goal['und'][0]['value'];
-		$current = @$user->field_total_donations['und'][0]['value'];
-	} else {
-		$node = menu_get_object();
-
-		switch ($node->type) {
-			case 'campaign':
-				$goal = @$node->field_goal['und'][0]['value'];
-				$current = @$node->field_total_donations['und'][0]['value'];
-				break;
-			case 'event':
-				$goal = @$node->field_total_goal['und'][0]['value'];
-				$current = @$node->field_total_donations['und'][0]['value'];
-				break;
-			case 'team':
-				$goal = @$node->field_total_goal['und'][0]['value'];
-				$current = @$node->field_total_donations['und'][0]['value'];
-				break;
-		}
+	switch ($node->type) {
+		case 'campaign':
+			$goal = @$node->field_goal['und'][0]['value'];
+			$current = @$node->field_total_donations['und'][0]['value'];
+			break;
+		case 'event':
+			$goal = @$node->field_total_goal['und'][0]['value'];
+			$current = @$node->field_total_donations['und'][0]['value'];
+			break;
+		case 'team':
+			$goal = @$node->field_total_goal['und'][0]['value'];
+			$current = @$node->field_total_donations['und'][0]['value'];
+			break;
+		default:
+			return '';
 	}
+
+	return _r2ep_stats_thermometer($goal, $current);
+}
+
+
+function _r2ep_stats_thermometer($goal, $current) {
+	$content = array();
+	$path = drupal_get_path('module', 'r2ep_stats');
 
 	if (!$goal) return;
 	drupal_add_css(drupal_get_path('module', 'r2ep_stats') . '/r2ep_stats.css');
@@ -458,3 +481,4 @@ function _r2ep_stats_thermometer() {
 
 	return $content;
 }
+
