@@ -344,7 +344,7 @@ function r2ep_form_alter(&$form, &$form_state, $form_id) {
 	if ($form_id == 'campaign_node_form') {
 		$form['canned_message'] = array(
 			'#type' => 'select',
-			'#title' => t('Use a canned message'),
+			'#title' => t('Use one of our themed messages'),
 			'#weight' => 3,
 			'#after_build' => array('_r2ep_campaign_add_js'),
 			'#options' => array(
