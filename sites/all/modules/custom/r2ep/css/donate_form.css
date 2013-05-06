@@ -11,22 +11,23 @@
 	position: relative;
 	top: 0;
 	left: 0;
-	width: 2130px; /*2865px;*/
+	width: 310%; /*2130px;*/
 	overflow: hidden;
 }
 
 .webform-client-form .page {
-	width: 690px; /*945px;*/
-	margin: 0 10px;
+	width: 30%; /*690px*/
+	margin: 0 1.5%;
 	float: left;
 }
 
 .webform-client-form .nextButton,
 .webform-client-form .prevButton {
 	display: block;
+	cursor: pointer;
 }
 
-.webform-client-form .nextButton {
+.webform-client-form .prevButton {
 	clear: left;
 	float: left;
 }
@@ -34,4 +35,37 @@
 .webform-client-form .nextButton {
 	clear: left;
 	float: right;
+	padding-right: 10px;
+}
+
+.webform-client-form .form-actions {
+	clear: both;
+}
+
+.webform-client-form label {
+	font-weight: bold;
+}
+
+.webform-client-form input + label {
+	font-weight: normal;
+}
+
+.webform-client-form .form-radios .form-item {
+	padding-right: 1em;
+}
+
+/* Hide duplicate submit */
+.webform-client-form .pages + .form-actions {
+	display: none;
+}
+
+#webform-component-anonymous {
+	margin: 2em 0;
+}
+
+#modal-title {
+	margin: 0;
+	font-size: 24px;
+	color: #F50;
+	line-height: 43px;
 }

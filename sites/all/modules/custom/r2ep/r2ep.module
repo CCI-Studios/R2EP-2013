@@ -277,21 +277,21 @@ function r2ep_node_insert($node) {
 			node_object_prepare($cnode);
 			node_save($cnode);
 
-			drupal_goto("node/$campaign");
+			// drupal_goto("node/$campaign");
 		}
 
 		if ($team) {
 			$tnode = node_load($team);
 			node_save($tnode);
 
-			drupal_goto("node/$team");
+			// drupal_goto("node/$team");
 		}
 
 		if ($event) {
 			$enode = node_load($event);
 			node_save($enode);
 
-			drupal_goto("node/$event");
+			// drupal_goto("node/$event");
 		}
 	}
 }
@@ -357,9 +357,7 @@ function r2ep_form_alter(&$form, &$form_state, $form_id) {
 		);
 	}
 
-	if ($form_id == 'webform_client_form_124' ||
-		$form_id == 'webform_client_form_150' ||
-		false) {
+	if ($form_id == 'webform_client_form_150') {
 		_r2ep_donation_form($form, $form_state, $form_id);
 	}
 }

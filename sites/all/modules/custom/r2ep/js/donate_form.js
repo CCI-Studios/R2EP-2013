@@ -46,13 +46,14 @@
 			setup = function() {
 				$body = $('.webform-client-form');
 				$content = $body.find('> div');
-				$amount1 = $body.find('input[name="1"]');
+				$amount1 = $body.find('input[name="0"]');
 				$amount2 = $body.find('input[name="wfbs_set_price"]');
-				$monthly1 = $body.find('input[name="2"]');
+				$monthly1 = $body.find('input[name="1"]');
 				$monthly2 = $body.find('input[name="wfbs_reoccuring"]');
 				$pages = $body.find('.pages');
 				$prevLinks = $body.find('.prevButton');
 				$nextLinks = $body.find('.nextButton');
+				console.log($amount1);
 
 				$nameFields = $body.find('input[name="wfbs_first_name"], input[name="wfbs_last_name"]');
 				$addressField = $body.find('input[name="wfbs_address1"]');
@@ -103,34 +104,33 @@
 					$namePreview.text(name);
 				});
 
-				$prevLinks.click(function() {
+				$(document).delegate('#modalContent .prevButton', 'click', function() {
 					var $this = $(this)
 						index = $prevLinks.index($this);
 
-					if (index > 0) {
-						index--;
+					if (page > 0) {
+						page--;
 					}
 
 					$pages.children(0).animate({
-						'margin-left': -705*index
+						'margin-left': (-100*page + '%')
 					});
 				});
 
-				$nextLinks.click(function() {
+				$(document).delegate('#modalContent .nextButton', 'click', function() {
 					var $this = $(this)
 						index = $nextLinks.index($this);
 
-					if (index < 2) {
-						index++;
+					if (page < 2) {
+						page++;
 					}
 
-					if (index == 2) {
+					if (page == 2) {
 						updatePreview();
-						console.log('updating preview');
 					}
 
 					$pages.children(0).animate({
-						'margin-left': -705*index
+						'margin-left': (-100*page + '%')
 					});
 				});
 
