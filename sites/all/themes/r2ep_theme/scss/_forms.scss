@@ -116,3 +116,14 @@ fieldset {
 .filter-wrapper {
 	display: none;
 }
+
+
+// email form
+#views-form-share-campaign-page {
+	#edit-from, #edit-to,
+	#edit-token, #edit-additional { display: none; }
+
+	.form-item-views-send-direct,
+	.form-item-views-send-carbon-copy,
+	.form-item-views-send-remember { display: none; }
+}

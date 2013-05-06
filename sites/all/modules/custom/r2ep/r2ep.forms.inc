@@ -80,3 +80,6 @@ HTML
 	// unset($form['actions']);
 
 }
+
+function _r2ep_email_form(&$form, &$form_state, $form_id) {
+}
