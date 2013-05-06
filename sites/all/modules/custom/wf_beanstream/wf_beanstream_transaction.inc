@@ -48,7 +48,7 @@ class wf_beanstream_transaction {
 		$this->input['ordAddress1'] = $line1;
 		$this->input['ordAddress2'] = $line2;
 		$this->input['ordCity'] = $city;
-		$this->input['ordProvince'] = $prov;
+		$this->input['ordProvince'] = substr($prov, 0, 2);
 		$this->input['ordPostalCode'] = $code;
 		$this->input['ordCountry'] = substr($country, 0, 2);
 	}
