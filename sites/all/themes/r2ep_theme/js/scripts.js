@@ -5,6 +5,7 @@
 
 		$('ul.menu li').hover(function() {
 			clearTimeout($.data(this, 'timer'));
+			$(this).parent().find('ul').slideUp(100);
 			$('ul', this).stop(true, true).slideDown(100);
 		}, function() {
 			$.data(this, 'timer', setTimeout($.proxy(function() {
