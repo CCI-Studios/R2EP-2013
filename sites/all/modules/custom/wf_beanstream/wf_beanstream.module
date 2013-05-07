@@ -2,8 +2,6 @@
 /*
 	TODO:
 	- add fields to webform programatically
-
-
 */
 
 function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
@@ -19,8 +17,8 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 
 		$form['payment_options']['field_wfbs_use'] = $form['field_wfbs_use'];
 		unset($form['field_wfbs_use']);
-		$form['payment_options']['field_wfbs_api_key'] = $form['field_wfbs_api_key'];
-		unset($form['field_wfbs_api_key']);
+		$form['payment_options']['field_wfbs_sandbox'] = $form['field_wfbs_sandbox'];
+		unset($form['field_wfbs_sandbox']);
 		$form['payment_options']['field_wfbs_price'] = $form['field_wfbs_price'];
 		unset($form['field_wfbs_price']);
 		$form['payment_options']['field_wfbs_flexible'] = $form['field_wfbs_flexible'];
@@ -245,8 +243,8 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 function _wf_beanstream_form_alter_validate(&$form, &$form_state) {
 	$form['field_wfbs_use'] = $form['payment_options']['field_wfbs_use'];
 	unset($form['payment_options']['field_wfbs_use']);
-	$form['field_wfbs_api_key'] = $form['payment_options']['field_wfbs_api_key'];
-	unset($form['payment_options']['field_wfbs_api_key']);
+	$form['field_wfbs_sandbox'] = $form['payment_options']['field_wfbs_sandbox'];
+	unset($form['payment_options']['field_wfbs_sandbox']);
 	$form['field_wfbs_price'] = $form['payment_options']['field_wfbs_price'];
 	unset($form['payment_options']['field_wfbs_price']);
 	$form['field_wfbs_flexible'] = $form['payment_options']['field_wfbs_flexible'];
@@ -272,7 +270,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	if (!$node) return;
 
 	// if there are no other validation errors, do the transaction
-	$key = isset($node->field_wfbs_api_key['und'])? $node->field_wfbs_api_key['und'][0]['value'] : '';
+	$sandbox = @$node->field_wfbs_sandbox['und'][0]['value'];
 	$sku = isset($node->field_wfbs_sku['und'])? $node->field_wfbs_sku['und'][0]['value'] : '';
 	$note = isset($node->field_wfbs_note['und'])? $node->field_wfbs_note['und'][0]['value'] : '';
 	$prefix = isset($node->field_wfbs_prefix['und'])? $node->field_wfbs_prefix['und'][0]['value'] : '';
@@ -294,6 +292,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$lastname = $form_state['values']['wfbs_last_name'];
 	$email = $form_state['values']['wfbs_email'];
 	$phone = $form_state['values']['wfbs_phone'];
+	$reoccuring = $form_state['values']['wfbs_reoccuring'];
 
 	$cardholder_name = $form_state['values']['wfbs_cardholder_name'];
 	$card_number = $form_state['values']['wfbs_card_number'];
@@ -304,12 +303,16 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$address1 = $form_state['values']['wfbs_address1'];
 	$address2 = $form_state['values']['wfbs_address2'];
 	$city = $form_state['values']['wfbs_city'];
-	$province = $form_state['values']['wfbs_province'];
+	$province = substr($form_state['values']['wfbs_province'], 0, 2);
 	$postal = $form_state['values']['wfbs_postal'];
-	$country = $form_state['values']['wfbs_country'];
+	$country = substr($form_state['values']['wfbs_country'], 0, 2);
 
-
-	$trn = new wf_beanstream_transaction($key); // TODO: Set key
+	// try to include shared transaction
+	@include '/home/www/mainsite/pages/whatyoucando/cccommon/transaction.php';
+	if (!class_exists('Transaction')) {
+		include 'transaction.php';
+	}
+	$trn = new Transaction(!$sandbox);
 	$trn->setCardInfo($cardholder_name, $card_number, $card_month, $card_year);
 	$trn->setContactInfo($cardholder_name, $email, $phone, $address1, $address2, $city,
 		$province, $postal, $country);
@@ -317,7 +320,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 
 	$trn->addItem($sku, 1, $price, $note);
 
-	if ($node->field_wfbs_reocurring && $node->field_wfbs_reocurring['und'][0]['value']) {
+	if ($reoccuring) {
 		$trn->makeMonthly($sku, $price);
 	}
 
@@ -326,6 +329,79 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 
 	if ($trn->succeeded) {
 		module_invoke_all('wfbs_payment_success', $trn, $form, $form_state);
+		$fromname = $firstname .' '. $lastname;
+		$address = $address1 ."\n";
+		$address .= $city .', '. $province ."\n";
+		$address .= $postal ."\n";
+		$address .= $country;
+		$receiptID = $trn->output['trnOrderNumber'];
+
+		if (!$reoccuring && $price >= 20) {
+			$date = date('F j, Y');
+
+			@include("/home/www/mainsite/pages/whatyoucando/cccommon/ereceipt.php");
+			if (function_exists('new_receipt')) {
+				$receipt = new_receipt($fromname, $address, $date, $note, $price,
+					@$trn->output['ewbDonationId'], 'en', "/home/www/mainsite/pages/whatyoucando/cccommon/");
+			} else {
+				$receipt = false;
+			}
+		} else {
+			$receipt = false;
+		}
+
+		if ($receipt) {
+			$email_from = 'Engineers Without Borders <info@ewb.ca>';
+			$email_subject = 'Thank you for your donation to Engineers Without Borders';
+			$email_msg = "Dear $firstname,\n\nThank you for supporting Engineers Without Borders.  Attached to this email is a tax receipt for your recent donation of \$$price.  Your generous contribution is enabling us to positively impact the lives of thousands of people each year in rural communities throughout West and Southern Africa.\n\nWith your support EWB has pioneered sophisticated responses to complex development challenges and is impacting vulnerable communities where it is needed most.  EWB works across all sectors to address the challenges of extreme poverty, taking an analytical and innovative approach to effect lasting change in Canada and Africa.\n\nRecently, EWB volunteers working in Ghana's agriculture sector have ensured that farmers can use business planning and monitoring tools to generate sustainable crop production. As a result many farmers will now have enough ongoing income to send their children to school for the first time.  Our experience in Ghana is just one example of EWB's long-term impact on rural communities throughout Africa.\n\nWith a renewed vision, EWB aims to work in the coming year to further build the capability of rural Africans, development partners, government leaders, and Canadians as a whole to eliminate poverty.  We choose strong partners to improve the effectiveness of sustainable development at all levels, through both policy and field-based work.\n\nHowever with almost 10 years experience, EWB has realized that there are many miles left to go before extreme poverty will be eliminated in Africa.  Creating appropriate and lasting solutions to the complexities of poverty is not easy, and often takes time.  As a result, EWB depends on the continued support of donors like you to ensure our ongoing impact both overseas, and at home.\n\nOnce again on behalf of all of us at EWB we thank you for your support - you are directly helping us foster opportunities for rural Africans to create lasting change in their lives.\n\nWarm regards,\nGeorge Roter, Co-Founder and CEO\n\nPlease keep the following receipt number for your records: $receiptID\nYour electronic tax receipt is attached to this email.  Note that the free Adobe Reader (or similar software) is required to view the receipt; you can download a copy at http://www.adobe.com/reader";
+		} else {
+			$email_from = 'Engineers Without Borders <info@ewb.ca>';
+			$email_subject = 'Thank you for your donation to Engineers Without Borders';
+			$email_msg = "Dear $firstname,\n\nThank you for your recent donation of \$$price to Engineers Without Borders.  Your generous contribution is enabling us to positively impact the lives of thousands of people each year in rural communities throughout West and Southern Africa.\n\nWith your support EWB has pioneered sophisticated responses to complex development challenges and is impacting vulnerable communities where it is needed most.  EWB works across all sectors to address the challenges of extreme poverty, taking an analytical and innovative approach to effect lasting change in Canada and Africa.\n\nRecently, EWB volunteers working in Ghana's agriculture sector have ensured that farmers can use business planning and monitoring tools to generate sustainable crop production. As a result many farmers will now have enough ongoing income to send their children to school for the first time.  Our experience in Ghana is just one example of EWB's long-term impact on rural communities throughout Africa.\n\nWith a renewed vision, EWB aims to work in the coming year to further build the capability of rural Africans, development partners, government leaders, and Canadians as a whole to eliminate poverty.  We choose strong partners to improve the effectiveness of sustainable development at all levels, through both policy and field-based work.\n\nHowever with almost 10 years experience, EWB has realized that there are many miles left to go before extreme poverty will be eliminated in Africa.  Creating appropriate and lasting solutions to the complexities of poverty is not easy, and often takes time.  As a result, EWB depends on the continued support of donors like you to ensure our ongoing impact both overseas, and at home.\n\nOnce again on behalf of all of us at EWB we thank you for your support - you are directly helping us foster opportunities for rural Africans to create lasting change in their lives.\n\nWarm regards,\nGeorge Roter, Co-Founder and CEO\n\nPlease keep the following receipt number for your records: $receiptID";
+		}
+
+		include('Mail.php');
+		include('Mail/mime.php');
+		$mime = new Mail_mime();
+		$mime->setFrom($email_from);
+		$mime->setSubject($email_subject);
+		$mime->setTxtBody($email_msg);
+
+		if ($receipt) {
+			$mime->addAttachment($receipt, 'application/pdf', 'receipt.pdf', false);
+		}
+
+		$body = $mime->get();
+		$to = '"'. addslashes($fromname) .'" <'. addslashes($email) .'>';
+		$hdrs = array('Return-Path' => 'donations@ewb.ca', 'To' => $to);
+		$hdrs = $mime->headers($hdrs);
+		$mail =& Mail::factory('smtp');
+		$mail->send($to, $hdrs, $body);
+
+		if ($reoccuring) {
+            $subject = "Perspectives MONTHLY donation [" . $trn->output['trnOrderNumber'] . "]";
+        } else {
+            $subject = "Perspectives donation [" . $trn->output['trnOrderNumber'] . "]";
+        }
+
+		$tracking_email = "";
+	    $tracking_email .= sprintf("%20s:  %s", 'donation type', $reoccuring) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'amount', $price) . "\n";
+
+	    $tracking_email .= sprintf("%20s:  %s", 'Name', $fromname) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Address', $address) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Email', $email) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
+
+	    $tracking_email .= "\n";
+	    foreach ($trn->output as $key => $value) {
+	        $tracking_email .= sprintf("%20s:  %s", $key, $value) . "\n";
+	    }
+
+	    // mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+
+	    mysql_close();
 	} else {
 		form_set_error('', $trn->output['messageText']);
 		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);

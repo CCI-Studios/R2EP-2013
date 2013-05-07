@@ -5,4 +5,3 @@ core = 7.x
 package = R2EP
 dependencies[] = webform
 files[] = wf_beanstream.module
-files[] = wf_beanstream_transaction.inc
