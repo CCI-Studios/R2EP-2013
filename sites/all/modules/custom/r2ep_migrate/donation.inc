@@ -23,6 +23,10 @@ class DonationMigration extends Migration {
 			->orderBy('d.donationid');
 		$query->fields('d', array('donationid', 'campaignid', 'donationamount', 'monthly', 'donationmessage', 'displayonpage', 'displayanonymously', 'datedonated', 'txid', 'txnumber', 'firstname', 'lastname', 'email', 'userid', 'preferredlanguage', 'fullyanonymous', 'donationtype', 'manualtransactionid', 'hiddenbycampaigner', 'contactid', ));
 
+		$query->leftJoin('goo_campaigns', 'c', 'c.campaignid = d.campaignid');
+		$query->leftJoin('goo_metacampaign', 'm', 'm.id = c.metacampaign');
+		$query->condition('m.domain', 'r2ep.ewb.ca');
+
 		$this->source = new MigrateSourceSQL($query);
 		$this->destination = new MigrateDestinationNode('donation');
 
@@ -74,6 +78,10 @@ class DonationMigration extends Migration {
 			'field_avatar:destination_file', 'field_avatar:file_replace', 'field_avatar:preserve_files',
 			'field_avatar:source_dir', 'field_avatar:alt', 'field_avatar:title',
 		));
+	}
+
+	function prepateRow($row) {
+		$row->datedonated = strtotime($row->datedonated);
 	}
 
 }

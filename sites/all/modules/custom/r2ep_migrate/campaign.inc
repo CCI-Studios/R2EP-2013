@@ -43,6 +43,8 @@ class CampaignMigration extends Migration {
 			->select('goo_campaigns', 'c');
 		$query->fields('c', array('campaignid', 'userid', 'shortname', 'cellphone', 'metacampaign', 'state',));
 		$query->leftJoin('goo_campaigns_look', 'l', '(l.campaignid = c.campaignid)');
+		$query->leftJoin('goo_metacampaign', 'm', '(m.id = c.metacampaign)');
+		$query->condition('m.domain', 'r2ep.ewb.ca');
 		$query->fields('l', array('title', 'goal', 'textbody',));
 
 		$this->source = new MigrateSourceSQL($query);

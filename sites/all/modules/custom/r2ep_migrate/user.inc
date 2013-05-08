@@ -13,6 +13,7 @@ class UserMigration extends Migration {
 				'userid' => array(
 					'type' => 'int',
 					'not null' => true,
+					'alias' => 'u',
 				),
 			),
 			MigrateDestinationUser::getKeySchema()
@@ -22,6 +23,14 @@ class UserMigration extends Migration {
 			->select('goo_users', 'u');
 		$query->fields('u', array('userid', 'email', 'firstname',
 			'lastname', 'password', 'isadmin',));
+
+		$query->leftJoin('goo_campaigns', 'c', 'c.userid = u.userid');
+		$query->leftJoin('goo_metacampaign', 'm', 'm.id = c.metacampaign');
+
+		$query->condition('m.domain', 'r2ep.ewb.ca');
+		$query->condition('u.password', '', '<>');
+		$query->condition('c.datecreated', time(date('Y-1-1')), '>');
+
 
 		$this->source = new MigrateSourceSQL($query);
 		$this->destination = new MigrateDestinationUser();

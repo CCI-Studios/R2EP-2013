@@ -123,6 +123,7 @@ function _r2ep_stats_get_campaigns_for_runners($runners) {
 function _r2ep_stats_get_all_donations_total() {
 	$query = db_select('node', 'n')
 			->condition('n.type', 'donation')
+			->condition('n.created', strtotime(date('Y-1-1')), '>=')
 			->condition('n.status', 1);
 	$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
 	$query->addExpression('sum(p.field_wfbs_price_value)');

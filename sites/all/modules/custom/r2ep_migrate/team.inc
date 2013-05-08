@@ -45,8 +45,14 @@ class TeamMigration extends Migration {
 
 		$query->leftJoin('goo_campaigns_team', 'ct', '(ct.teamid = t.id)');
 		$query->leftJoin('goo_campaigns', 'c', '(c.campaignid=ct.campaignid)');
+		$query->leftJoin('goo_metacampaign', 'm', '(m.id = c.metacampaign)');
+
 		$query->addExpression('GROUP_CONCAT(c.userid)', 'runners');
 		$query->addExpression('MAX(c.metacampaign)', 'event');
+		$query->condition('m.domain', 'r2ep.ewb.ca');
+		$query->condition('t.visible', '1');
+		$query->condition('t.locked', '0');
+
 		$query->groupBy('t.id');
 
 		$this->source = new MigrateSourceSQL($query);
