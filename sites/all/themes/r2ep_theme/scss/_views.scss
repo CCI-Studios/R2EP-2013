@@ -145,3 +145,23 @@ div .mediaList {
 
 	h3 { margin-top: 0; }
 }
+
+// teams
+.view-teams {
+	.field-name-field-total-donations,
+	.field-name-field-total-goal,
+	.field-name-field-donation-count {
+		display: inline;
+		padding: 0;
+
+		&:before {
+			content: ', '
+		}
+
+		div { display: inline; }
+	}
+
+	.field-name-field-total-donations:before {
+		content: '';
+	}
+}
