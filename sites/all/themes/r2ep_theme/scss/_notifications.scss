@@ -1,0 +1,22 @@
+#block-views-notifications-block {
+	margin-bottom: 1em;
+	padding: 0.5em 1em;
+
+	color: black;
+	border: 1px solid orange;
+	background: #f18f3d;
+
+	.views-row { margin-top: 1em; }
+	.views-row:first-child { margin-top: 0; }
+
+	.views-field-field-reference { white-space: nowrap; }
+
+	.views-field-delete-node {
+		float: right;
+		margin-left: 0.5em;
+
+		font-size: 1.3em;
+	}
+
+	a { color: white; }
+}

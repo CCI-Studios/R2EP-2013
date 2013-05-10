@@ -1,0 +1,6 @@
+name = R2EP Notifications Handling
+core = 7.x
+
+package = R2EP
+; dependencies[] =
+files[] = r2ep_notifications.module

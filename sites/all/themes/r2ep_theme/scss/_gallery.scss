@@ -1,7 +1,9 @@
 // header image
 #block-views-header-image-block,
 #block-views-header-gallery-block,
-#block-views-general-header-block {
+#block-views-general-header-block,
+#block-views-campaign-header-block,
+#block-views-profile-header-image-block {
 	.node > h2 { display: none; }
 
 	.content {
@@ -81,7 +83,9 @@
 }
 
 
-#block-views-header-image-block + #block-views-general-header-block,
-#block-views-header-gallery-block + #block-views-general-header-block {
+#block-views-header-image-block ~ #block-views-general-header-block,
+#block-views-header-gallery-block ~ #block-views-general-header-block,
+#block-views-campaign-header-block ~ #block-views-general-header-block,
+#block-views-profile-header-image-block ~ #block-views-general-header-block {
 	display: none;
 }

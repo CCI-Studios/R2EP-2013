@@ -452,6 +452,7 @@ function _r2ep_donation_submitted(&$form, &$form_state) {
 	$donation->field_contact_province = array('und' => array(array('value' => $form_state['values']['wfbs_province'])));
 	$donation->field_contact_postal = array('und' => array(array('value' => $form_state['values']['wfbs_postal'])));
 	$donation->field_contact_country = array('und' => array(array('value' => $form_state['values']['wfbs_country'])));
+	$donation->field_description = array('und' => array(array('value' => $form_state['values']['submitted'][4])));
 
 	$form_node = $form['#node'];
 	$campaign_id = _r2ep_form_value($form_node, $form_state, 'campaign_id');

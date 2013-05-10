@@ -1,0 +1,9 @@
+<?php
+
+function r2ep_notifications_menu_alter(&$items) {
+	$items['node/%node/delete']['page callback'] = 'r2ep_notifications_delete_function';
+  $items['node/%node/delete']['page arguments'] = array(1);
+  $items['node/%node/delete']['module'] = 'r2ep_notifications';
+  $items['node/%node/delete']['file'] = 'r2ep_notifications.pages.inc';
+}
+

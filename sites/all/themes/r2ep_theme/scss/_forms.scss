@@ -127,3 +127,8 @@ fieldset {
 	.form-item-views-send-carbon-copy,
 	.form-item-views-send-remember { display: none; }
 }
+
+// modal form
+div.ctools-modal-content .modal-content {
+	padding-top: 0;
+}

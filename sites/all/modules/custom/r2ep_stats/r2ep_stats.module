@@ -45,7 +45,7 @@ function r2ep_stats_block_view($delta = '') {
 			if ($node && $node->type == 'team') {
 				$block['content'] = _r2ep_stats_team_stats();
 			} else if ($node && $node->type == 'campaign') {
-				$block['content'] = _r2ep_stats_runner_stats();
+				$block['content'] = _r2ep_stats_campaign_stats();
 			} else if ($node && $node->type == 'event') {
 				$block['content'] = _r2ep_stats_event_stats();
 			} else if (arg(0) == 'user' && $uid && $user && $user->uid != 0) {
@@ -297,6 +297,65 @@ function _r2ep_stats_runner_stats() {
 	return $block;
 }
 
+function _r2ep_stats_campaign_stats() {
+	$block = array();
+	$node = menu_get_object();
+
+	if (!$node || $node->type != 'campaign') {
+	 	return '';
+	}
+
+	$donations_total = @$node->field_total_donations['und'][0]['value'];
+	$donations_count = @$node->field_donation_count['und'][0]['value'];
+	$goal = @$node->field_goal['und'][0]['value'];
+
+	$donations_total = isset($donations_total)? $donations_total : 0;
+	$donations_count = isset($donations_count)? $donations_count : 0;
+	$goal = isset($goal)? $goal : 0;
+
+	$runners_label = $runners == 1 ? t('runner') : t('runners');
+	setlocale(LC_MONETARY, 'en_US');
+	$money = money_format('%.0n', $donations_total);
+	$goal = money_format('%.0n', $goal);
+	$donations_label = $donations_count == 1? t('donation') : ('donations');
+
+	$block = array(
+		'#theme' => 'item_list',
+		'#items' => array(),
+		'#attributes' => array(
+			'class' => 'stats-list'
+		),
+	);
+
+	// FIXME change to goal
+	$path = drupal_get_path('module', 'r2ep_stats');
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $money .' '. t('raised'),
+		)),
+		'class' => array('coin'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<div><img src="/@path/images/@img" />@text</div>', array(
+			'@path'	=> $path,
+			'@img'	=> 'donations.png',
+			'@text'	=> $donations_count .' '. $donations_label
+		)),
+		'class' => array('runners'),
+	);
+	$block['#items'][] = array(
+		'data'	=> t('<img src="/@path/images/@img" />@text', array(
+			'@path'	=> $path,
+			'@img'	=> 'coin.png',
+			'@text'	=> $goal .' goal'
+		)),
+		'class' => array('coin'),
+	);
+
+	return $block;
+}
 
 // computed fields
 function computed_field_field_total_donations_compute(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
@@ -394,7 +453,7 @@ function _r2ep_stats_user_thermometer() {
 	$goal = @$user->field_total_goal['und'][0]['value'];
 	$current = @$user->field_total_donations['und'][0]['value'];
 
-	return _r2ep_stats_thermometer($goal, $current);
+	return _r2ep_stats_thermometer($goal, $current, 'my goal');
 }
 
 function _r2ep_stats_group_thermometer() {
@@ -421,11 +480,11 @@ function _r2ep_stats_group_thermometer() {
 			return '';
 	}
 
-	return _r2ep_stats_thermometer($goal, $current);
+	return _r2ep_stats_thermometer($goal, $current, 'our goal');
 }
 
 
-function _r2ep_stats_thermometer($goal, $current) {
+function _r2ep_stats_thermometer($goal, $current, $tense = 'goal') {
 	$content = array();
 	$path = drupal_get_path('module', 'r2ep_stats');
 
@@ -435,7 +494,6 @@ function _r2ep_stats_thermometer($goal, $current) {
 	$percent = $current/$goal * 100;
 	setlocale(LC_MONETARY, 'en_US');
 	$goal_money = money_format('%.0n', $goal);
-	$half_money = money_format('%.0n', $goal/2);
 	$current_money = money_format('%.0n', $current);
 
 	$content['#attached']['js'] = array(
@@ -462,7 +520,7 @@ function _r2ep_stats_thermometer($goal, $current) {
 		),
 		array(
 			'#type'		=> 'markup',
-			'#markup'	=> "<span>$goal_money</span><br/>our goal",
+			'#markup'	=> "<span>$goal_money</span><br/>". $tense,
 			'#prefix'	=> '<div class="col-1-2">',
 			'#suffix'	=> '</div>',
 		)

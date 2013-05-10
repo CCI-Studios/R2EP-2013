@@ -54,6 +54,8 @@ class DonationMigration extends Migration {
 		$this->addFieldMapping('field_contact_postal:language')->defaultValue('en');
 		$this->addFieldMapping('field_contact_country');
 		$this->addFieldMapping('field_contact_country:language')->defaultValue('en');
+		$this->addFieldMapping('field_description', 'donationmessage');
+		$this->addFieldMapping('field_description:language')->defaultValue('en');
 
 		$this->addFieldMapping('field_wfbs_price', 'donationamount');
 		$this->addFieldMapping('field_campaign', 'campaignid')

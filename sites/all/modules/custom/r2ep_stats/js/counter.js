@@ -1,11 +1,19 @@
 (function ($) {
 	$.fn.increment = function (from, to, duration) {
-	    var self = this;
+	    var self = this,
+	    	rx = /(\d+)(\d{3})/;
 	    $({number: from}).animate({number: to}, {
 	        duration: duration,
 	        easing: 'swing',
 	        step: function () {
-	            self.text(Math.ceil(this.number));
+	        	var s = String(Math.ceil(this.number)).replace(/^\d+/, function(w){
+        			while(rx.test(w)){
+            			w= w.replace(rx, '$1,$2');
+        			}
+        			return w;
+    			});
+
+	            self.text(s);
 	        }
 	    });
 	};
