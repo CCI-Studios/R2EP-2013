@@ -287,7 +287,6 @@ function r2ep_node_insert($node) {
 
 		if ($campaign) {
 			$cnode = node_load($campaign);
-			node_object_prepare($cnode);
 			node_save($cnode);
 
 			// drupal_goto("node/$campaign");
@@ -305,6 +304,13 @@ function r2ep_node_insert($node) {
 			node_save($enode);
 
 			// drupal_goto("node/$event");
+		}
+	} else if ($node->type == 'campaign') {
+		$user = @$node->uid;
+
+		if ($user) {
+			$unode = user_load($user);
+			user_save($unode);
 		}
 	}
 }
