@@ -7,7 +7,7 @@
 
 		runners.each(function() {
 			var $this = $(this),
-				percent = $this.data('percent'),
+				percent = Math.min($this.data('percent'), 100),
 				target = (width - runnerWidth) * percent / 100.0;
 
 			$this.animate({
