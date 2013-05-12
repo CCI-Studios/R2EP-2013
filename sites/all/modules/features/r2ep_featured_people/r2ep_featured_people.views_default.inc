@@ -191,6 +191,13 @@ function r2ep_featured_people_views_default_views() {
 
   /* Display: News 2x2 */
   $handler = $view->new_display('block', 'News 2x2', 'block');
+  $handler->display->display_options['defaults']['footer'] = FALSE;
+  /* Footer: Global: Text area */
+  $handler->display->display_options['footer']['area']['id'] = 'area';
+  $handler->display->display_options['footer']['area']['table'] = 'views';
+  $handler->display->display_options['footer']['area']['field'] = 'area';
+  $handler->display->display_options['footer']['area']['content'] = '<div><a href="/news">See All News</a></div>';
+  $handler->display->display_options['footer']['area']['format'] = 'filtered_html';
 
   /* Display: News 3x1 */
   $handler = $view->new_display('block', 'News 3x1', 'block_1');
@@ -216,6 +223,7 @@ function r2ep_featured_people_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('News 2x2'),
+    t('<div><a href="/news">See All News</a></div>'),
     t('News 3x1'),
   );
   $export['news'] = $view;

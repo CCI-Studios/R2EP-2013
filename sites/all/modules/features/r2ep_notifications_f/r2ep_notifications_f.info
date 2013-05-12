@@ -1,0 +1,10 @@
+name = R2EP Notifications
+core = 7.x
+package = R2EP
+version = 7.x-1.0
+project = r2ep_notifications_f
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[views_view][] = notifications
+features_exclude[dependencies][views] = views
+project path = sites/all/modules/features

@@ -1,0 +1,11 @@
+name = R2EP Campaign Donations
+core = 7.x
+package = R2EP
+version = 7.x-1.0
+project = r2ep_campaign_donations
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[views_view][] = campaign_donations
+features_exclude[dependencies][ctools] = ctools
+project path = sites/all/modules/features

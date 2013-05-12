@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the R2EP Campaigns Listing feature.
+ */
+
+include_once 'r2ep_campaigns_listing.features.inc';

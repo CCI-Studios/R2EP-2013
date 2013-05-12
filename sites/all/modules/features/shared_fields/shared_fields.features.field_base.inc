@@ -19,6 +19,9 @@ function shared_fields_field_default_field_bases() {
       0 => 'node',
     ),
     'field_name' => 'body',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(
       'format' => array(
         'columns' => array(
@@ -148,7 +151,7 @@ function shared_fields_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_event',
     'field_permissions' => array(
-      'type' => 2,
+      'type' => 0,
     ),
     'foreign keys' => array(
       'node' => array(
@@ -540,7 +543,8 @@ $display_output = money_format(\'%.0n\', $entity_field_item[\'value\']) . \' rai
         'data_size' => 'normal',
         'data_type' => 'float',
       ),
-      'display_format' => '$display_output = $entity_field_item[\'value\'];',
+      'display_format' => 'setlocale(LC_MONETARY, \'en_US\');
+$display_output = money_format(\'%.0n\', $entity_field_item[\'value\']) . \' goal\';',
       'store' => 1,
     ),
     'translatable' => 0,

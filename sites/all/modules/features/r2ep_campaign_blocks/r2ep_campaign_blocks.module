@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the R2EP Campaign Blocks feature.
+ */
+
+include_once 'r2ep_campaign_blocks.features.inc';

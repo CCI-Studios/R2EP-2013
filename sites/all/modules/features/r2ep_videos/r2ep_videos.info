@@ -35,4 +35,6 @@ features[variable][] = node_preview_video
 features[variable][] = node_submitted_video
 features[views_view][] = videos
 features_exclude[dependencies][ctools] = ctools
+features_exclude[field][node-video-field_short_description] = node-video-field_short_description
+features_exclude[field][node-video-field_youtube_link] = node-video-field_youtube_link
 project path = sites/all/modules/features

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the R2EP My Donations feature.
+ */
+
+include_once 'r2ep_my_donations.features.inc';

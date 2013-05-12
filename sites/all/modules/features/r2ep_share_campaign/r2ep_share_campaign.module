@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the R2EP Share Campaign feature.
+ */
+
+include_once 'r2ep_share_campaign.features.inc';

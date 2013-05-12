@@ -20,7 +20,7 @@ function r2ep_runners_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 7,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -56,7 +56,7 @@ function r2ep_runners_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => -7,
+      'weight' => 5,
     ),
   );
 
@@ -70,7 +70,7 @@ function r2ep_runners_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -92,7 +92,7 @@ function r2ep_runners_field_default_field_instances() {
       'module' => 'computed_field',
       'settings' => array(),
       'type' => 'computed',
-      'weight' => 10,
+      'weight' => 13,
     ),
   );
 
@@ -120,10 +120,10 @@ function r2ep_runners_field_default_field_instances() {
     'entity_type' => 'user',
     'field_name' => 'field_description',
     'label' => 'Description',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 1,
-      'user_register_form' => 1,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
@@ -132,7 +132,7 @@ function r2ep_runners_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => -8,
+      'weight' => 5,
     ),
   );
 
@@ -146,7 +146,7 @@ function r2ep_runners_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -168,7 +168,7 @@ function r2ep_runners_field_default_field_instances() {
       'module' => 'computed_field',
       'settings' => array(),
       'type' => 'computed',
-      'weight' => 9,
+      'weight' => 12,
     ),
   );
 
@@ -183,7 +183,7 @@ function r2ep_runners_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 5,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -207,7 +207,7 @@ function r2ep_runners_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -10,
+      'weight' => 0,
     ),
   );
 
@@ -222,7 +222,7 @@ function r2ep_runners_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 4,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -246,7 +246,7 @@ function r2ep_runners_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -9,
+      'weight' => 1,
     ),
   );
 
@@ -257,10 +257,11 @@ function r2ep_runners_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
+        'module' => 'computed_field',
         'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
+        'type' => 'computed_field_plain',
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -282,7 +283,7 @@ function r2ep_runners_field_default_field_instances() {
       'module' => 'computed_field',
       'settings' => array(),
       'type' => 'computed',
-      'weight' => 7,
+      'weight' => 11,
     ),
   );
 
@@ -293,11 +294,11 @@ function r2ep_runners_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'computed_field',
         'settings' => array(),
         'type' => 'computed_field_plain',
-        'weight' => 8,
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -318,7 +319,7 @@ function r2ep_runners_field_default_field_instances() {
       'module' => 'computed_field',
       'settings' => array(),
       'type' => 'computed',
-      'weight' => 11,
+      'weight' => 14,
     ),
   );
 

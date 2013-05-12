@@ -44,12 +44,20 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['fields']['field_contact_phone']['field'] = 'field_contact_phone';
   $handler->display->display_options['fields']['field_contact_phone']['label'] = 'P';
   $handler->display->display_options['fields']['field_contact_phone']['element_type'] = 'span';
+  $handler->display->display_options['fields']['field_contact_phone']['hide_empty'] = TRUE;
+  $handler->display->display_options['fields']['field_contact_phone']['hide_alter_empty'] = FALSE;
   /* Field: Content: Contact Email */
   $handler->display->display_options['fields']['field_contact_email']['id'] = 'field_contact_email';
   $handler->display->display_options['fields']['field_contact_email']['table'] = 'field_data_field_contact_email';
   $handler->display->display_options['fields']['field_contact_email']['field'] = 'field_contact_email';
-  $handler->display->display_options['fields']['field_contact_email']['label'] = 'E';
+  $handler->display->display_options['fields']['field_contact_email']['label'] = '';
+  $handler->display->display_options['fields']['field_contact_email']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_contact_email']['alter']['text'] = 'Click to Email';
+  $handler->display->display_options['fields']['field_contact_email']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_contact_email']['alter']['path'] = 'mailto:[field_contact_email-email]';
   $handler->display->display_options['fields']['field_contact_email']['element_type'] = 'span';
+  $handler->display->display_options['fields']['field_contact_email']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_contact_email']['hide_empty'] = TRUE;
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -91,7 +99,7 @@ function r2ep_events_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('P'),
-    t('E'),
+    t('Click to Email'),
     t('All'),
     t('Block'),
   );
@@ -196,7 +204,6 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['table'] = 'field_data_field_date';
   $handler->display->display_options['filters']['field_date_value']['field'] = 'field_date_value';
   $handler->display->display_options['filters']['field_date_value']['value']['value'] = '2013';
-  $handler->display->display_options['filters']['field_date_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['operator'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['identifier'] = 'field_date_value';
@@ -256,6 +263,62 @@ function r2ep_events_views_default_views() {
 
   /* Display: Event List */
   $handler = $view->new_display('block', 'Event List', 'block_1');
+
+  /* Display: Events Menu List */
+  $handler = $view->new_display('block', 'Events Menu List', 'block_3');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['inline'] = array(
+    'field_date' => 'field_date',
+    'field_location' => 'field_location',
+  );
+  $handler->display->display_options['row_options']['separator'] = '|';
+  $handler->display->display_options['row_options']['hide_empty'] = TRUE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'event' => 'event',
+  );
+  /* Filter criterion: Content: Date (field_date) */
+  $handler->display->display_options['filters']['field_date_value']['id'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['table'] = 'field_data_field_date';
+  $handler->display->display_options['filters']['field_date_value']['field'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['value']['value'] = '2013';
+  $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
+  $handler->display->display_options['filters']['field_date_value']['expose']['operator'] = 'field_date_value_op';
+  $handler->display->display_options['filters']['field_date_value']['expose']['identifier'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['expose']['required'] = TRUE;
+  $handler->display->display_options['filters']['field_date_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  $handler->display->display_options['filters']['field_date_value']['granularity'] = 'year';
+  $handler->display->display_options['filters']['field_date_value']['year_range'] = '-1:+0';
   $translatables['events'] = array(
     t('Master'),
     t('Upcoming Events'),
@@ -274,6 +337,7 @@ function r2ep_events_views_default_views() {
     t('last »'),
     t('Upcoming Events Block'),
     t('Event List'),
+    t('Events Menu List'),
   );
   $export['events'] = $view;
 
@@ -302,18 +366,14 @@ function r2ep_events_views_default_views() {
   $handler->display->display_options['relationships']['field_event_target_id']['id'] = 'field_event_target_id';
   $handler->display->display_options['relationships']['field_event_target_id']['table'] = 'field_data_field_event';
   $handler->display->display_options['relationships']['field_event_target_id']['field'] = 'field_event_target_id';
-  $handler->display->display_options['relationships']['field_event_target_id']['required'] = TRUE;
-  /* Field: Content: Event */
-  $handler->display->display_options['fields']['field_event']['id'] = 'field_event';
-  $handler->display->display_options['fields']['field_event']['table'] = 'field_data_field_event';
-  $handler->display->display_options['fields']['field_event']['field'] = 'field_event';
-  $handler->display->display_options['fields']['field_event']['label'] = '';
-  $handler->display->display_options['fields']['field_event']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_event']['type'] = 'entityreference_entity_view';
-  $handler->display->display_options['fields']['field_event']['settings'] = array(
-    'view_mode' => 'teaser',
-    'links' => 0,
-  );
+  $handler->display->display_options['relationships']['field_event_target_id']['label'] = 'Event';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['relationship'] = 'field_event_target_id';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Date (field_date) */
   $handler->display->display_options['sorts']['field_date_value']['id'] = 'field_date_value';
   $handler->display->display_options['sorts']['field_date_value']['table'] = 'field_data_field_date';
@@ -426,7 +486,7 @@ function r2ep_events_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('Content entity referenced from field_event'),
+    t('Event'),
     t('All'),
     t('Block'),
     t('Past Events'),
