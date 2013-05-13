@@ -1,8 +1,10 @@
 name = R2EP Share Campaign
 core = 7.x
 package = R2EP
+php = 5.2.4
 version = 7.x-1.0
 project = r2ep_share_campaign
+dependencies[] = ctools
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:1
 features[views_view][] = share_campaign

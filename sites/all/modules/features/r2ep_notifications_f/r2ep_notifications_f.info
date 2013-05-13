@@ -1,8 +1,10 @@
 name = R2EP Notifications
 core = 7.x
 package = R2EP
+php = 5.2.4
 version = 7.x-1.0
 project = r2ep_notifications_f
+dependencies[] = ctools
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:1
 features[views_view][] = notifications

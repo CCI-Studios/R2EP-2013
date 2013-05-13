@@ -1,6 +1,7 @@
 name = R2EP Campaign Donations
 core = 7.x
 package = R2EP
+php = 5.2.4
 version = 7.x-1.0
 project = r2ep_campaign_donations
 dependencies[] = views
