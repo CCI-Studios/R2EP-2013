@@ -289,6 +289,9 @@ function r2ep_node_insert($node) {
 			$cnode = node_load($campaign);
 			node_save($cnode);
 
+			// update user
+			$user = user_load($cnode->uid);
+			user_save($user);
 			// drupal_goto("node/$campaign");
 		}
 
