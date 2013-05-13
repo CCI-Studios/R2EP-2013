@@ -20,8 +20,7 @@ class UserMigration extends Migration {
 		);
 
 		$query = Database::getConnection('default', 'r2ep')
-			->select('goo_users', 'u')
-			->range(0, 30);
+			->select('goo_users', 'u');
 		$query->fields('u', array('userid', 'email', 'firstname',
 			'lastname', 'password', 'isadmin'));
 
