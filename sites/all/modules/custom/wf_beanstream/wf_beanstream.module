@@ -406,8 +406,8 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	        $tracking_email .= sprintf("%20s:  %s", $key, $value) . "\n";
 	    }
 
-	    // mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
-	    mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    // mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
 
 	    mysql_close();
 	} else {
