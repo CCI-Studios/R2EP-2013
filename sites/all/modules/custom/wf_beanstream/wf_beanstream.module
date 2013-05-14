@@ -143,6 +143,15 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 			);
 
 			// dynamic price
+			if ($node->field_wfbs_price && $node->field_wfbs_price['und'][0]['value']) {
+				$form['wfbs_payment_details']['wfbs_price'] = array(
+					'#type' => 'markup',
+					'#markup' => '<p>'. t('Amount') .': $'. $node->field_wfbs_price['und'][0]['value'] .'</p>',
+					'#prefix' => '<div class="col-2-2">',
+					'#suffix' => '</div>',
+				);
+			}
+
 			if ($node->field_wfbs_flexible && $node->field_wfbs_flexible['und'][0]['value']) {
 				$form['wfbs_payment_details']['wfbs_set_price'] = array(
 					'#type'		=> 'radios',
