@@ -467,20 +467,21 @@ function _r2ep_stats_group_thermometer() {
 		case 'campaign':
 			$goal = @$node->field_goal['und'][0]['value'];
 			$current = @$node->field_total_donations['und'][0]['value'];
+			return _r2ep_stats_thermometer($goal, $current, 'my goal');
 			break;
 		case 'event':
 			$goal = @$node->field_total_goal['und'][0]['value'];
 			$current = @$node->field_total_donations['und'][0]['value'];
+			return _r2ep_stats_thermometer($goal, $current, 'our goal');
 			break;
 		case 'team':
 			$goal = @$node->field_total_goal['und'][0]['value'];
 			$current = @$node->field_total_donations['und'][0]['value'];
+			return _r2ep_stats_thermometer($goal, $current, 'our goal');
 			break;
 		default:
 			return '';
 	}
-
-	return _r2ep_stats_thermometer($goal, $current, 'our goal');
 }
 
 
