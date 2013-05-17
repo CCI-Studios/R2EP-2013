@@ -291,6 +291,10 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$note = isset($node->field_wfbs_note['und'])? $node->field_wfbs_note['und'][0]['value'] : '';
 	$prefix = isset($node->field_wfbs_prefix['und'])? $node->field_wfbs_prefix['und'][0]['value'] : '';
 
+	if ($parent) {
+		$sku .= $parent->title;
+	}
+
 	if ($node->field_wfbs_flexible && $node->field_wfbs_flexible['und'][0]['value']) {
 		if ($form_state['values']['wfbs_price']) {
 			$price = $form_state['values']['wfbs_price'];
