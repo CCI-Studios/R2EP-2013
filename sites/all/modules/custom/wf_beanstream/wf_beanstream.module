@@ -363,6 +363,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 			if (function_exists('new_receipt')) {
 				$receipt = new_receipt($fromname, $address, $date, $note, $price,
 					@$trn->output['ewbDonationId'], 'en', "/home/www/mainsite/pages/whatyoucando/cccommon/");
+				$receiptID = mysql_insert_id();
 			} else {
 				$receipt = false;
 			}
@@ -414,6 +415,10 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
 	    if ($parent) {
 		    $tracking_email .= "\n\n". 'Run to End Poverty - '. $parent->title ."\n";
+		}
+
+		if ($receiptID) {
+			$tracking_email .= sprintf("%20s:  %s", 'ereceipt', $receiptID) . "\n";
 		}
 
 	    $tracking_email .= "\n";
