@@ -277,6 +277,14 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$node = $form['#node'];
 	if (!$node) return;
 
+	if (isset($form_state['values']['submitted']['campaign_id'])) {
+		$parent = node_load($form_state['values']['submitted']['campaign_id']);
+	}
+
+	if (isset($form_state['values']['submitted']['event_id'])) {
+		$parent = node_load($form_state['values']['submitted']['event_id']);
+	}
+
 	// if there are no other validation errors, do the transaction
 	$sandbox = @$node->field_wfbs_sandbox['und'][0]['value'];
 	$sku = isset($node->field_wfbs_sku['und'])? $node->field_wfbs_sku['und'][0]['value'] : '';
@@ -316,10 +324,14 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$country = substr($form_state['values']['wfbs_country'], 0, 2);
 
 	// try to include shared transaction
+	mysql_connect('localhost', 'username', 'password');
+	mysql_select_db('mainsite');
+
 	@include '/home/www/mainsite/pages/whatyoucando/cccommon/transaction.php';
 	if (!class_exists('Transaction')) {
 		include 'transaction.php';
 	}
+
 	$trn = new Transaction(!$sandbox);
 	$trn->setCardInfo($cardholder_name, $card_number, $card_month, $card_year);
 	$trn->setContactInfo($cardholder_name, $email, $phone, $address1, $address2, $city,
@@ -400,20 +412,23 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	    $tracking_email .= sprintf("%20s:  %s", 'Address', $address) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Email', $email) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
+	    if ($parent) {
+		    $tracking_email .= "\n\n". 'Run to End Poverty - '. $parent->title ."\n";
+		}
 
 	    $tracking_email .= "\n";
 	    foreach ($trn->output as $key => $value) {
 	        $tracking_email .= sprintf("%20s:  %s", $key, $value) . "\n";
 	    }
 
-	    mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
-	    // mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
-
-	    mysql_close();
+	    //mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
 	} else {
 		form_set_error('', 'We weren\'t able to process your donation. The bank said: '. $trn->output['messageText']);
 		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);
 	}
+
+	mysql_close();
 }
 
 function _wf_beanstream_payment_form_submit($form, &$form_state) {
