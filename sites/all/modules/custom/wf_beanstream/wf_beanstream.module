@@ -409,7 +409,8 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	    $tracking_email .= sprintf("%20s:  %s", 'donation type', $reoccuring) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'amount', $price) . "\n";
 
-	    $tracking_email .= sprintf("%20s:  %s", 'Name', $fromname) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'First Name', $firstname) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Last Name', $lastname) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Address', $address) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Email', $email) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
