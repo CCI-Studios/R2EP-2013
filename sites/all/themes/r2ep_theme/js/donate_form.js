@@ -28,18 +28,22 @@
 			$messagePreview = null,
 
 			found = false,
-			page = 0;
+			page = 0,
+			timer = null,
+			delay = 500,
 
 			searchScan = function () {
 				if ($('.webform-client-form').length) {
-
 					if (!found) {
 						setup();
 					}
 					found = true;
 
+					timer = setTimeout(searchScan, delay);
 				} else {
-					setTimeout(searchScan, 1500);
+					page = 0;
+					found = false;
+					timer = setTimeout(searchScan, delay);
 				}
 			},
 
@@ -53,7 +57,6 @@
 				$pages = $body.find('.pages');
 				$prevLinks = $body.find('.prevButton');
 				$nextLinks = $body.find('.nextButton');
-				console.log($amount1);
 
 				$nameFields = $body.find('input[name="wfbs_first_name"], input[name="wfbs_last_name"]');
 				$addressField = $body.find('input[name="wfbs_address1"]');
@@ -64,6 +67,16 @@
 				$emailField = $body.find('input[name="wfbs_email"]');
 				$typeField = $body.find('#edit-wfbs-card-type');
 				$messageField = $body.find('#edit-0-pages-page1-0');
+				$cardField = $body.find('#edit-wfbs-card-number');
+				$cardField.keypress(function() {
+					$cardField.validateCreditCard(function(result) {
+						if (result.luhn_valid) {
+							$cardField.removeClass('error');
+						} else {
+							$cardField.addClass('error');
+						}
+					});
+				});
 
 				$namePreview = $body.find('.namePreview');
 				$addressPreview = $body.find('.addressPreview');
@@ -75,7 +88,6 @@
 				$moneyPreview = $body.find('.donationPreview');
 				$typePreview = $body.find('.typePreview');
 				$messagePreview = $body.find('.messagePreview');
-
 
 				$amount1.change(function() {
 					var value = $amount1.filter(':checked').val();
@@ -104,7 +116,7 @@
 					$namePreview.text(name);
 				});
 
-				$(document).delegate('#modalContent .prevButton', 'click', function() {
+				$prevLinks.click(function() {
 					var $this = $(this)
 						index = $prevLinks.index($this);
 
@@ -117,7 +129,7 @@
 					});
 				});
 
-				$(document).delegate('#modalContent .nextButton', 'click', function() {
+				$nextLinks.click( function() {
 					var $this = $(this)
 						index = $nextLinks.index($this);
 
@@ -132,6 +144,13 @@
 					$pages.children(0).animate({
 						'margin-left': (-100*page + '%')
 					});
+				});
+
+				$body.submit(function() {
+					clearTimeout(timer);
+					page = 0;
+					found = false;
+					timer = setTimeout(searchScan, delay*4);
 				});
 
 				var updatePreview = function() {
@@ -150,6 +169,6 @@
 				};
 			};
 
-		searchScan();
+		timer = searchScan();
 	});
 }(jQuery));

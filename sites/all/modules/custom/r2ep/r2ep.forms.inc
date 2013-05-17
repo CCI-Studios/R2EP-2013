@@ -1,7 +1,7 @@
 <?php
 
 function _r2ep_donation_form(&$form, &$form_state, $form_id) {
-	$form['#attached']['js'][] = drupal_get_path('module', 'r2ep'). '/js/donate_form.js';
+	// $form['#attached']['js'][] = drupal_get_path('module', 'r2ep'). '/js/donate_form.js';
 	$form['#attached']['css'][] = drupal_get_path('module', 'r2ep'). '/css/donate_form.css';
 
 	$form['pages'] = array(

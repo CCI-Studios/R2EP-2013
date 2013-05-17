@@ -5,6 +5,7 @@
 	width: 100%;
 	overflow: hidden;
 	position: relative;
+	padding-bottom: 2em;
 }
 
 .webform-client-form .pages > div {
