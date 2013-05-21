@@ -303,7 +303,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$prefix = isset($node->field_wfbs_prefix['und'])? $node->field_wfbs_prefix['und'][0]['value'] : '';
 
 	if ($parent) {
-		$sku .= $parent->title;
+		$sku .= '_'. strtolower($city_name);
 	}
 
 	if ($node->field_wfbs_flexible && $node->field_wfbs_flexible['und'][0]['value']) {
