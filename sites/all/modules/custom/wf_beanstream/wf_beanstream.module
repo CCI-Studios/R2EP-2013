@@ -72,7 +72,7 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#type'		=> 'textfield',
 				'#title'	=> t('First Name'),
 				'#required'	=> true,
-				'#value'	=> $first_name,
+				'#default_value'	=> $first_name,
 				'#prefix'	=> '<div class="col-1-2">',
 				'#suffix'	=> '</div>',
 			);
@@ -80,14 +80,14 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#type'		=> 'textfield',
 				'#title'	=> t('Last Name'),
 				'#required'	=> true,
-				'#value'	=> $last_name,
+				'#default_value'	=> $last_name,
 				'#prefix'	=> '<div class="col-1-2">',
 				'#suffix'	=> '</div>',
 			);
 			$form['wfbs_personal_info']['wfbs_email'] = array(
 				'#type'		=> 'textfield',
 				'#title'	=> t('Email Address'),
-				'#value'	=> $email,
+				'#default_value'	=> $email,
 				'#required' => true,
 				'#prefix'	=> '<div class="col-1-2">',
 				'#suffix'	=> '</div>',
@@ -198,7 +198,7 @@ function wf_beanstream_form_alter(&$form, &$form_state, $form_id) {
 				'#type'		=> 'textfield',
 				'#title'	=> t('Cardholder Name'),
 				'#required'	=> true,
-				'#value'	=> "$first_name $last_name",
+				'#default_value' => "$first_name $last_name",
 				'#prefix'	=> '<div class="clear col-1-2">',
 				'#suffix'	=> '</div><div class="col-1-2">&nbsp;</div>',
 			);
