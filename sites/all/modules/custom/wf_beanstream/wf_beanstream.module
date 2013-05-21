@@ -283,12 +283,17 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$node = $form['#node'];
 	if (!$node) return;
 
-	if (isset($form_state['values']['submitted']['campaign_id'])) {
-		$parent = node_load($form_state['values']['submitted']['campaign_id']);
+	$cid = @$form_state['values']['submitted']['campaign_id'];
+	$eid = @$form_state['values']['submitted']['event_id'];
+
+	if (isset($cid) && $cid) {
+		$parent = node_load($cid);
+		$eid = $parent->field_event['und'][0]['target_id'];
 	}
 
-	if (isset($form_state['values']['submitted']['event_id'])) {
-		$parent = node_load($form_state['values']['submitted']['event_id']);
+	if (isset($eid) && $eid) {
+		$parent = node_load($eid);
+		$city_name = @$parent->field_city_name['und'][0]['value'];
 	}
 
 	// if there are no other validation errors, do the transaction
@@ -427,6 +432,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	    if ($parent) {
 		    $tracking_email .= "\n\n". 'Run to End Poverty - '. $parent->title ."\n";
 		}
+
 
 		if ($receiptID) {
 			$tracking_email .= sprintf("%20s:  %s", 'ereceipt', $receiptID) . "\n";
