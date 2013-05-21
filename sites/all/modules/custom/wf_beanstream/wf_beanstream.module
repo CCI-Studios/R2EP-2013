@@ -378,7 +378,8 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 			if (function_exists('new_receipt')) {
 				$receipt = new_receipt($fromname, $address, $date, $note, $price,
 					@$trn->output['ewbDonationId'], 'en', "/home/www/mainsite/pages/whatyoucando/cccommon/");
-				$receiptID = mysql_insert_id();
+				$sqlresult = mysql_query("SELECT LAST_INSERT_ID()");
+                list($receiptID) = mysql_fetch_array($sqlresult);
 			} else {
 				$receipt = false;
 			}
