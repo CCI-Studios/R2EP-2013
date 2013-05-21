@@ -33,8 +33,10 @@
 			delay = 500,
 
 			searchScan = function () {
-				if ($('.webform-client-form').length) {
-					if (!found) {
+				var $result = $('.webform-client-form');
+				if ($result.length) {
+					// new found node !== old node
+					if ($body == null || $result.get(0) !== $body.get(0)) {
 						setup();
 					}
 					found = true;
@@ -50,7 +52,7 @@
 			setup = function() {
 				$body = $('.webform-client-form');
 				$content = $body.find('> div');
-				$amount1 = $body.find('input[name="0"]');
+				$amount1 = $body.find('input[name="0[0]"]');
 				$amount2 = $body.find('input[name="wfbs_set_price"]');
 				$monthly1 = $body.find('input[name="1"]');
 				$monthly2 = $body.find('input[name="wfbs_reoccuring"]');
@@ -146,12 +148,21 @@
 					});
 				});
 
-				$body.submit(function() {
-					clearTimeout(timer);
-					page = 0;
-					found = false;
-					timer = setTimeout(searchScan, delay*4);
+				$body.submit(function(event) {
+					if (page == 2) {
+						clearTimeout(timer);
+						page = 0;
+						found = false;
+						timer = setTimeout(searchScan, delay*4);
+					} else {
+						$nextLinks.eq(page).click();
+						event.preventDefault(); // cancel submit
+						event.stopPropagation();
+						return false;
+					}
 				});
+
+				$body.data('events').submit.reverse(); // run me first FIXME: hack
 
 				var updatePreview = function() {
 					$namePreview.text($nameFields.map(function(index, el) {
