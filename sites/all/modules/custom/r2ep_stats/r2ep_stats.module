@@ -41,7 +41,7 @@ function r2ep_stats_block_view($delta = '') {
 			$node = menu_get_object();
 			$uid = arg(1);
 			$user = @user_load($uid);
-			$event_id = (int)$_GET['field_event_target_id'];
+			$event_id = isset($_GET['field_event_target_id'])? (int)$_GET['field_event_target_id'] : null;
 
 			if ($node && $node->type == 'team') {
 				$block['content'] = _r2ep_stats_team_stats();
@@ -118,7 +118,7 @@ function _r2ep_stats_national_stats() {
 function _r2ep_stats_event_stats() {
 	$block = array();
 	$node = menu_get_object();
-	$event_id = (int)$_GET['field_event_target_id'];
+	$event_id = isset($_GET['field_event_target_id'])? (int)$_GET['field_event_target_id'] : null;
 
 	if (!$node && is_numeric($event_id)) {
 		$node = node_load($event_id);
