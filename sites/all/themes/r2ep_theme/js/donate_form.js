@@ -35,7 +35,7 @@
 			delay = 500,
 
 			searchScan = function () {
-				var $result = $('.webform-client-form');
+				var $result = $('#webform-client-form-124, #webform-client-form-150, #webform-client-form-151');
 				if ($result.length) {
 					// new found node !== old node
 					if ($body == null || $result.get(0) !== $body.get(0)) {
@@ -52,7 +52,7 @@
 			},
 
 			setup = function() {
-				$body = $('.webform-client-form');
+				$body = $('#webform-client-form-124, #webform-client-form-150, #webform-client-form-151');
 				$content = $body.find('> div');
 				$amount1 = $body.find('input[name="0[0]"]');
 				$amount2 = $body.find('input[name="wfbs_set_price"]');
