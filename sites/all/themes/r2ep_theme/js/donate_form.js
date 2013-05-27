@@ -4,6 +4,8 @@
 			$content = null;
 			$amount1 = null,
 			$amount2 = null,
+			$other1 = null,
+			$other2 = null,
 			$monthly1 = null,
 			$monthly2 = null,
 			$prevLinks = null,
@@ -54,6 +56,8 @@
 				$content = $body.find('> div');
 				$amount1 = $body.find('input[name="0[0]"]');
 				$amount2 = $body.find('input[name="wfbs_set_price"]');
+				$other1 = $body.find('input[name="0[2]"]');
+				$other2 = $body.find('input[name="wfbs_price"]');
 				$monthly1 = $body.find('input[name="1"]');
 				$monthly2 = $body.find('input[name="wfbs_reoccuring"]');
 				$pages = $body.find('.pages');
@@ -99,6 +103,23 @@
 					var value = $amount2.filter(':checked').val();
 					$amount1.filter('[value='+ value +']').attr('checked', true);
 				});
+				$other1.keyup(function(event) {
+					var character = String.fromCharCode(event.which);
+					if ($other1.val()) {
+						$other2.val($other1.val());
+						$amount1.last().attr('checked', true);
+						$amount2.last().attr('checked', true);
+					}
+				});
+				$other2.keyup(function(event) {
+					var character = String.fromCharCode(event.which);
+					if ($other2.val()) {
+						$other1.val($other2.val());
+						$amount1.last().attr('checked', true);
+						$amount2.last().attr('checked', true);
+					}
+				});
+
 
 				$monthly1.change(function() {
 					var value = $monthly1.filter(':checked').val();
@@ -174,7 +195,12 @@
 					$provincePreview.text($provinceField.val());
 					$phonePreview.text($phoneField.val());
 					$emailPreview.text($emailField.val());
-					$moneyPreview.text('$' + $amount1.filter(':checked').val());
+
+					if ($amount1.last().attr('checked')) {
+						$moneyPreview.text('$' + $other2.val());
+					} else {
+						$moneyPreview.text('$' + $amount1.filter(':checked').val());
+					}
 					$typePreview.text($typeField.val());
 					$messagePreview.text($messageField.val());
 				};
