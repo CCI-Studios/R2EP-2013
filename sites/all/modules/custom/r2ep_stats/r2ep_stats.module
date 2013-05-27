@@ -41,12 +41,13 @@ function r2ep_stats_block_view($delta = '') {
 			$node = menu_get_object();
 			$uid = arg(1);
 			$user = @user_load($uid);
+			$event_id = (int)$_GET['field_event_target_id'];
 
 			if ($node && $node->type == 'team') {
 				$block['content'] = _r2ep_stats_team_stats();
 			} else if ($node && $node->type == 'campaign') {
 				$block['content'] = _r2ep_stats_campaign_stats();
-			} else if ($node && $node->type == 'event') {
+			} else if (($node && $node->type == 'event') || is_numeric($event_id)) {
 				$block['content'] = _r2ep_stats_event_stats();
 			} else if (arg(0) == 'user' && $uid && $user && $user->uid != 0) {
 				$block['content'] = _r2ep_stats_runner_stats();
@@ -117,6 +118,11 @@ function _r2ep_stats_national_stats() {
 function _r2ep_stats_event_stats() {
 	$block = array();
 	$node = menu_get_object();
+	$event_id = (int)$_GET['field_event_target_id'];
+
+	if (!$node && is_numeric($event_id)) {
+		$node = node_load($event_id);
+	}
 
 	if (!$node || $node->type != 'event') {
 		return '';
