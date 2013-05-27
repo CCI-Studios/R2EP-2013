@@ -82,4 +82,25 @@ HTML
 }
 
 function _r2ep_email_form(&$form, &$form_state, $form_id) {
+	$nid = arg(1);
+	$node = node_load($nid);
+	$user = user_load($node->uid);
+	$name = $user->realname;
+	$url = url("node/$nid", array('absolute' => true ));
+
+	$form['mail']['views_send_subject']['#default_value'] = 'You can drive the impact of my run!';
+	$form['mail']['views_send_message']['#default_value'] = <<<html
+Hi [views-send-first_name],
+
+This year, I am one of hundreds of Canadians participating in Run to End Poverty, a nationwide campaign that seeks to bring people together with one common goal: to eliminate extreme poverty in rural Africa. You can be the driving force that makes this possible. The system of poverty is incredibly complex and rather than shying away from this, I have decided to embrace it. I have decided to courageously commit to joining this movement in order to support the incredible work of Engineers Without Borders. You can amplify the impact of each stride by donating to my run. Your donation will enable innovative approaches to deliver impactful and sustainable solutions. Together we have the potential to bring about a positive change in our world.
+
+Please read my reason for running: $url
+
+Support smart development by making a donation to Engineers Without Borders today. It's simple and easy - all you have to do is click the donate now button. $url
+
+Feel free to ask me any questions you might have - this isn't just about money. When you donate to EWB you are helping to create lasting change, not ongoing charity.
+
+Thanks for your support,
+$name
+html;
 }
