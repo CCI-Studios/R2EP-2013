@@ -289,6 +289,16 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	if (isset($cid) && $cid) {
 		$parent = node_load($cid);
 		$eid = $parent->field_event['und'][0]['target_id'];
+
+		// get the campaing owner
+		$uid = $parent->uid;
+		$owner = user_load($uid);
+		$campaigner = array(
+			@$owner->field_first_name['und'][0]['value'],
+			@$owner->field_last_name['und'][0]['value'],
+			@$owner->mail,
+		);
+		$campaigner = implode(' ', array_filter($campaigner, 'strlen'));
 	}
 
 	if (isset($eid) && $eid) {
@@ -422,14 +432,25 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
         }
 
 		$tracking_email = "";
-	    $tracking_email .= sprintf("%20s:  %s", 'Donation type', $reoccuring) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Donation type', ($reoccuring == 1 ? 'Monthly' : 'One Time')) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Amount', $price) . "\n";
+	    if ($campaigner) {
+		    $tracking_email .= sprintf("%20s:  %s", 'Campaigner', $campaigner) ."\n";
+		}
 
+		$tracking_email .= sprintf("%20s:  %s", 'Campaign Year', date('Y')) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'First Name', $firstname) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Last Name', $lastname) . "\n";
-	    $tracking_email .= sprintf("%20s:  %s", 'Address', $address) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Email', $email) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Address 1', $address1) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Address 2', $address2) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'City', $city) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Province', strtoupper($province)) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Country', strtoupper($country)) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Postal', strtoupper($postal)) . "\n";
+
+
 	    if ($parent) {
 		    $tracking_email .= "\n\n". 'Run to End Poverty - '. $parent->title ."\n";
 		}
@@ -444,8 +465,8 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	        $tracking_email .= sprintf("%20s:  %s", $key, $value) . "\n";
 	    }
 
-	    //mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
-	    mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    mail("donations@ewb.ca, monitoring@ewb.ca", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
+	    //mail("jbennett@ccistudios.com", $subject, $tracking_email, "From: Donation System <itsupport@ewb.ca>");
 	} else {
 		form_set_error('', 'We weren\'t able to process your donation. The bank said: '. $trn->output['messageText']);
 		module_invoke_all('wfbs_payment_failed', $trn, $form, $form_state);
