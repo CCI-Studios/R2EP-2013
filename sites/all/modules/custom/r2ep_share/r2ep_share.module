@@ -39,16 +39,20 @@ function _r2ep_share_content() {
 	drupal_add_css($path .'/r2ep_share.css');
 	$content = array();
 
+
 	$title = drupal_get_title();
+	$summary = "Find out why I've joined the Canada-wide Run to End Poverty. You can support my run and be part of the incredible mvement that brings people together with one common goal: to eliminate extreme poverty in rural Africa.";
+	$title_short = "See why I'm Running to end poverty";
 	$url = $GLOBALS['base_url'] .'/'. request_path();
 
 	$services = array(
-		'facebook' => 'http://www.facebook.com/sharer.php?u=%url&t=%title',
-		'twitter' => 'http://twitter.com/share?text=%title&url=%url',
+		'facebook' => 'https://facebook.com/dialog/feed?app_id=453654021395820&link=%url&name=%title&description=%summary&redirect_uri=http://r2ep.ewb.ca',
+		//'facebook' => 'http://www.facebook.com/sharer.php?u=%url&p[t]=%title&p[summary]=%summary',
+		'twitter' => 'http://twitter.com/share?text=%title_short&url=%url',
 		'google' => 'https://plus.google.com/share?url=%url',
-		'pintrest' => 'http://pinterest.com/pin/create/button/?url=%url&description=%title&media=', // FIXME: What media?
-		'linkedin' => 'http://www.linkedin.com/shareArticle?mini=true&url=%url&title=%title',
-		'tumblr' => 'http://www.tumblr.com/share/link?url=%url&name=%title',
+		'pintrest' => 'http://pinterest.com/pin/create/button/?url=%url&description=%summary&media=', // FIXME: What media?
+		'linkedin' => 'http://www.linkedin.com/shareArticle?mini=true&url=%url&title=%summary',
+		'tumblr' => 'http://www.tumblr.com/share/link?url=%url&name=%summary',
 		'rss' => '/rss.xml', // FIXME: page page specific
 	);
 
@@ -58,6 +62,8 @@ function _r2ep_share_content() {
 
 	foreach($services as $name => $link) {
 		$link = str_replace('%url', urlencode($url), $link);
+		$link = str_replace('%summary', urlencode($summary), $link);
+		$link = str_replace('%title_short', urlencode($title_short), $link);
 		$link = str_replace('%title', urlencode($title), $link);
 
 		$content['#items'][] = array(
