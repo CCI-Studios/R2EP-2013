@@ -334,6 +334,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$email = $form_state['values']['wfbs_email'];
 	$phone = $form_state['values']['wfbs_phone'];
 	$reoccuring = $form_state['values']['wfbs_reoccuring'];
+	$language = $form_state['values']['submitted']['preferred_language'];
 
 	$cardholder_name = $form_state['values']['wfbs_cardholder_name'];
 	$card_number = $form_state['values']['wfbs_card_number'];
@@ -441,6 +442,7 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 		$tracking_email .= sprintf("%20s:  %s", 'Campaign Year', date('Y')) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'First Name', $firstname) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Last Name', $lastname) . "\n";
+	    $tracking_email .= sprintf("%20s:  %s", 'Preferred Language', $language) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Email', $email) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Phone', $phone) . "\n";
 	    $tracking_email .= sprintf("%20s:  %s", 'Address 1', $address1) . "\n";
