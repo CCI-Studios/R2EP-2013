@@ -54,9 +54,9 @@
 			setup = function() {
 				$body = $('#webform-client-form-124, #webform-client-form-150, #webform-client-form-151');
 				$content = $body.find('> div');
-				$amount1 = $body.find('input[name="0[0]"]');
+				$amount1 = $body.find('input[name="0"]');
 				$amount2 = $body.find('input[name="wfbs_set_price"]');
-				$other1 = $body.find('input[name="0[2]"]');
+				$other1 = $body.find('input[name="2"]');
 				$other2 = $body.find('input[name="wfbs_price"]');
 				$monthly1 = $body.find('input[name="1"]');
 				$monthly2 = $body.find('input[name="wfbs_reoccuring"]');
