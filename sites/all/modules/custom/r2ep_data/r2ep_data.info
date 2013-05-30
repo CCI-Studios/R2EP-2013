@@ -1,0 +1,6 @@
+name = Run 2 End Poverty Data Export
+description = Data Export Module for R2EP
+core = 7.x
+
+package = R2EP
+files[] = r2ep_data.module

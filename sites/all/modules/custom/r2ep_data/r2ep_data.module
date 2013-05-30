@@ -1,0 +1,109 @@
+<?php
+
+function r2ep_data_menu() {
+	$items = array();
+	$items['event_export'] = array(
+		'title' => 'CSV Data Export',
+		'access callback' => '_r2ep_data_event_access',
+		'page callback' => '_r2ep_data_event'
+	);
+
+	return $items;
+}
+
+// only event owners and admins may access page
+function _r2ep_data_event_access() {
+	$event_id = arg(1);
+
+	if (!$event_id || !is_numeric($event_id)) {
+		return false;
+	}
+
+	$event = node_load($event_id);
+	return node_access('update', $event);
+}
+
+function _r2ep_data_event($event_id) {
+	if (!$event_id || !is_numeric($event_id)) {
+		return;
+	}
+
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->fieldCondition('field_event', 'target_id', $event_id);
+
+	$event = node_load($event_id);
+
+	header('Cache-Control: public');
+	header('Content-Type: application/octet-stream');
+	header('Cache-Control: no-store, no-cache, must-revalidate');
+	header('Cache-Control: post-check=0, pre-check=0');
+	header("Content-Disposition: attachment; filename=\"{$event->title}\";");
+	header('Content-Transfer-encoding: binary');
+
+
+	$result = $query->execute();
+	if (isset($result['node'])) {
+		$nodes = node_load_multiple(array_keys($result['node']));
+
+		echo "firstname, lastname, cell, email, goal, count, total\r\n";
+
+		foreach ($nodes as $node) {
+			$user = user_load($node->uid);
+
+			$firstname = field_get_items('user', $user, 'field_first_name');
+			$firstname = count($firstname)? $firstname[0]['value'] : '';
+			$lastname = field_get_items('user', $user, 'field_last_name');
+			$lastname = count($lastname)? $lastname[0]['value'] : '';
+			$cell = field_get_items('user', $user, 'field_cell_number');
+			$cell = count($cell)? $cell[0]['value'] : '';
+			$goal = field_get_items('node', $node, 'field_goal');
+			$goal = count($goal)? $goal[0]['value'] : 0;
+			$count = field_get_items('node', $node, 'field_donation_count');
+			$count = count($goal)? $count[0]['value'] : 0;
+			$donations = field_get_items('node', $node, 'field_total_donations');
+			$donations = count($goal)? $donations[0]['value'] : 0;
+
+			$fields = array(
+				$firstname,
+				$lastname,
+				$cell,
+				$user->mail,
+				$goal,
+				$count,
+				$donations,
+			);
+
+			echo implode(',', $fields) ."\r\n";
+		}
+	}
+
+	drupal_exit();
+}
+
+function r2ep_data_block_info() {
+	$blocks = array();
+	$blocks['r2ep_data_export'] = array(
+		'info' => t('CSV Data Export')
+	);
+
+	return $blocks;
+}
+
+function r2ep_data_block_view($delta) {
+	$block = array();
+
+	switch($delta) {
+		case 'r2ep_data_export':
+			$node = menu_get_object();
+
+			if ($node && $node->type == 'event') {
+				$block['subject'] = '<none>';
+				$block['content'] = "<a class=\"btn btn--block\" href=\"/event_export/{$node->nid}\">Download CSV</a>";
+			}
+			break;
+	}
+
+	return $block;
+}
