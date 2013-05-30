@@ -57,18 +57,15 @@ function _r2ep_donation_form(&$form, &$form_state, $form_id) {
 		'#type' => 'markup',
 		'#markup' => <<<HTML
 <p>Please review your donation details below and click "Submit Donation":</p>
-<p class="namePreview"></p>
+<p>Donating As: <span class="namePreview"></span></p>
+<p>Donation Message: <span class="messagePreview"></span></p>
+<p>Donation Amount: <span class="donationPreview"></span> via <span class="typePreview"></span></p>
 <p>
+	<strong>Receipting Information:</strong><br/>
 	<span class="addressPreview"></span>, <span class="cityPreview"></span><br/>
 	<span class="postalPreview"></span>, <span class="provincePreview"></span><br/>
 	<span class="phonePreview"></span>, <span class="emailPreview"></span>
 </p>
-
-<p>
-	<span class="donationPreview"></span> via <span class="typePreview"></span>
-</p>
-
-<p class="messagePreview"></p>
 HTML
 	);
 

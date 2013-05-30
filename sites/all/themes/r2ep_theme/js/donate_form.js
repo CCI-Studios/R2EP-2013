@@ -17,6 +17,7 @@
 			$cityField = null,
 			$provinceField = null,
 			$countryField = null,
+			$anonymous = null,
 
 			$namePreview = null,
 			$addressPreview = null,
@@ -63,6 +64,7 @@
 				$pages = $body.find('.pages');
 				$prevLinks = $body.find('.prevButton');
 				$nextLinks = $body.find('.nextButton');
+				$anonymous = $body.find('input[name="submitted[anonymous]"]');
 
 				$nameFields = $body.find('input[name="wfbs_first_name"], input[name="wfbs_last_name"]');
 				$addressField = $body.find('input[name="wfbs_address1"]');
@@ -72,7 +74,7 @@
 				$phoneField = $body.find('input[name="wfbs_phone"]');
 				$emailField = $body.find('input[name="wfbs_email"]');
 				$typeField = $body.find('#edit-wfbs-card-type');
-				$messageField = $body.find('#edit-0-pages-page1-0');
+				$messageField = $body.find('#edit-submitted-message');
 				$cardField = $body.find('#edit-wfbs-card-number');
 				$cardField.keypress(function() {
 					$cardField.validateCreditCard(function(result) {
@@ -136,7 +138,12 @@
 						name += $(this).val() + ' ';
 					});
 					name = name.trim();
-					$namePreview.text(name);
+
+					if ($anonymous.filter(':checked').val() == 0) {
+						$namePreview.text(name);
+					} else {
+						$namePreview.text('Anonymous');
+					}
 				});
 
 				$prevLinks.click(function() {
