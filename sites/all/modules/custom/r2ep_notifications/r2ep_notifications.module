@@ -1,5 +1,29 @@
 <?php
 
+function r2ep_notifications_menu() {
+	$items = array();
+
+	$items['admin/config/r2ep/notifications'] = array(
+		'title' => 'R2EP Notifications Settings',
+		'description' => 'Notification Settings for Twilio etc.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('_r2ep_notifications_config_form'),
+		'access arguments' => array('administer settings'),
+		'file' => 'r2ep_notifications.pages.inc',
+	);
+
+	$items['send-notification'] = array(
+		'title' => t('Send A Notification'),
+		'description' => t('Send a notification to your runnners or team mates'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('_r2ep_notifications_form'),
+		'access arguments' => array('access content'),
+		'file' => 'r2ep_notifications.pages.inc',
+	);
+
+	return $items;
+}
+
 function r2ep_notifications_menu_alter(&$items) {
 	$items['node/%node/delete']['page callback'] = 'r2ep_notifications_delete_function';
   $items['node/%node/delete']['page arguments'] = array(1);
