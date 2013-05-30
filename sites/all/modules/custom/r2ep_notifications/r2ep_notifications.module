@@ -1,5 +1,28 @@
 <?php
 
+function r2ep_notifications_block_info() {
+	$blocks = array();
+
+	$blocks['r2ep_notifications_link'] = array(
+		'info' => t('Link to Notifications Page'),
+	);
+
+	return $blocks;
+}
+
+function r2ep_notifications_block_view($delta) {
+	$block = array();
+
+	switch ($delta) {
+		case 'r2ep_notifications_link':
+			$block['title'] = '<none>';
+			$block['content'] = '<a href="/send-notification" class="btn btn--block">Send Notification</a>';
+			break;
+	}
+
+	return $block;
+}
+
 function r2ep_notifications_menu() {
 	$items = array();
 
