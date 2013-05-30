@@ -484,6 +484,49 @@ function _r2ep_donation_submitted(&$form, &$form_state) {
 
 	$donation = node_submit($donation);
 	node_save($donation);
+
+	// if donating to campaign send notification/email
+	if ($campaign_id) {
+		$campaign = node_load($campaign_id);
+		$user = user_load($campaign->uid);
+
+		$notification = new stdClass();
+		$notification->title = "Notification";
+		$notification->type = "notification";
+		node_object_prepare($notification);
+		$notification->language = LANGUAGE_NONE;
+		$notification->uid = $campaign->uid;
+		$notification->status = 1;
+		$notification->promote = 0;
+		$notification->comment = 1;
+		$notification->field_description = array(
+			'und' => array(array(
+				'value' => 'You have received a new donation',
+			))
+		);
+		$notification = node_submit($notification);
+		node_save($notification);
+
+		$name = $user->realname;
+		$donor = $form_state['values']['wfbs_first_name'] .' '. $form_state['values']['wfbs_last_name'];
+		$amount = $price;
+		$url = url("node/{$campaign_id}", array('absolute' => true));
+
+		$message = <<<HTML
+Good news $name,
+
+$donor has donated $amount to your Run to End Poverty campaign!
+
+You've added yet another person to the list of people who support our work, and you've made greater impact possible. That's fantastic news!
+
+You can track all your progress on your campaign page and send $donor a thank you email here: $url
+
+Keep up the great work!
+Run to End Poverty - Engineers Without Borders Canada
+HTML;
+
+		mail($user->mail, 'You\'ve received a donation!', $message);
+	}
 }
 
 function _r2ep_form_value($form, $form_state, $field) {
