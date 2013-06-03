@@ -14,6 +14,7 @@
 			$nameFields = null,
 			$cardField = null,
 			$addressField = null,
+			$addressField2 = null,
 			$cityField = null,
 			$provinceField = null,
 			$countryField = null,
@@ -68,6 +69,7 @@
 
 				$nameFields = $body.find('input[name="wfbs_first_name"], input[name="wfbs_last_name"]');
 				$addressField = $body.find('input[name="wfbs_address1"]');
+				$addressField2 = $body.find('input[name="wfbs_address2"]');
 				$cityField = $body.find('input[name="wfbs_city"]');
 				$postalField = $body.find('input[name="wfbs_postal"]');
 				$provinceField = $body.find('input[name="wfbs_province"]');
@@ -186,7 +188,7 @@
 					} else {
 						$namePreview.text('Anonymous');
 					}
-					$addressPreview.text($addressField.val());
+					$addressPreview.text($addressField.val() +', '+ $addressField2.val());
 					$cityPreview.text($cityField.val());
 					$postalPreview.text($postalField.val());
 					$provincePreview.text($provinceField.val());

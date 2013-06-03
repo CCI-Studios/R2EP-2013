@@ -62,8 +62,9 @@ function _r2ep_donation_form(&$form, &$form_state, $form_id) {
 <p>Donation Amount: <span class="donationPreview"></span> via <span class="typePreview"></span></p>
 <p>
 	<strong>Receipting Information:</strong><br/>
-	<span class="addressPreview"></span>, <span class="cityPreview"></span><br/>
-	<span class="postalPreview"></span>, <span class="provincePreview"></span><br/>
+	<span class="addressPreview"></span><br/>
+	<span class="cityPreview"></span>, <span class="provincePreview"></span><br/>
+	<span class="postalPreview"></span><br/>
 	<span class="phonePreview"></span>, <span class="emailPreview"></span>
 </p>
 HTML
