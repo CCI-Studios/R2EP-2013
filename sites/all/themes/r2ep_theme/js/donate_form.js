@@ -132,20 +132,6 @@
 					$monthly1.filter('[value='+ value +']').attr('checked', true);
 				});
 
-				$nameFields.bind('keyup input paste', function() {
-					var name = '';
-					$nameFields.each(function() {
-						name += $(this).val() + ' ';
-					});
-					name = name.trim();
-
-					if ($anonymous.filter(':checked').val() == 0) {
-						$namePreview.text(name);
-					} else {
-						$namePreview.text('Anonymous');
-					}
-				});
-
 				$prevLinks.click(function() {
 					var $this = $(this)
 						index = $prevLinks.index($this);
@@ -193,9 +179,13 @@
 				$body.data('events').submit.reverse(); // run me first FIXME: hack
 
 				var updatePreview = function() {
-					$namePreview.text($nameFields.map(function(index, el) {
-						return $(el).val();
-					}).get().join(' '));
+					if ($anonymous.filter(':checked').val() == 0) {
+						$namePreview.text($nameFields.map(function(index, el) {
+							return $(el).val();
+						}).get().join(' '));
+					} else {
+						$namePreview.text('Anonymous');
+					}
 					$addressPreview.text($addressField.val());
 					$cityPreview.text($cityField.val());
 					$postalPreview.text($postalField.val());
