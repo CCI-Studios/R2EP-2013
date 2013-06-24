@@ -400,6 +400,9 @@ function _r2ep_campaign_submitted(&$form, &$form_state) {
 	global $user;
 	$user_fields = user_load($user->uid);
 
+	// map from submission to event_id dynamically
+	$event_id = _r2ep_form_value($form['#node'], $form_state, 'event_id');
+
 	$campaign = new stdClass();
 	$campaign->title = $user_fields->realname .'\'s '. t('Campaign');
 	$campaign->type = 'campaign';
@@ -411,7 +414,7 @@ function _r2ep_campaign_submitted(&$form, &$form_state) {
 	$campaign->promote = 0;
 	$campaign->comment = 1; // off
 	$campaign->field_event = array('und' => array(array(
-		'target_id' => $form_state['values']['submitted'][4]
+		'target_id' => $event_id
 	))); // event_id
 
 	$campaign = node_submit($campaign);
