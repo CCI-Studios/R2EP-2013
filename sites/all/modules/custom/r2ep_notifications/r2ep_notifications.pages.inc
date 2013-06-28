@@ -89,9 +89,10 @@ function _r2ep_notifications_form($form_state) {
 	}
 
 	$form['message'] = array(
-		'#type' => 'textarea',
+		'#type' => 'textfield',
 		'#title' => t('Message'),
 		'#required' => true,
+		'#maxlength' => 140,
 	);
 
 	$form['submit'] = array(
