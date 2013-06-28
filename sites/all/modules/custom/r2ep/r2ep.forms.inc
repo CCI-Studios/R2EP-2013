@@ -67,6 +67,7 @@ function _r2ep_donation_form(&$form, &$form_state, $form_id) {
 	<span class="postalPreview"></span><br/>
 	<span class="phonePreview"></span>, <span class="emailPreview"></span>
 </p>
+<p>Please click submit only once to avoid multiple transactions</p>
 HTML
 	);
 
