@@ -45,7 +45,7 @@ function _r2ep_notifications_form($form_state) {
 		->fields('node', array('nid', 'title'))
 		->condition('type', 'team')
 		->condition('status', 1)
-		->condition('uid', $user->uid)
+		// ->condition('uid', $user->uid) // allow all access since we are doing admin only
 		->orderBy('title');
 	$teamOptions = array('0' => 'None');
 	foreach($teamQuery->execute() as $team) {
@@ -57,7 +57,7 @@ function _r2ep_notifications_form($form_state) {
 		->fields('node', array('nid', 'title'))
 		->condition('type', 'event')
 		->condition('status', 1)
-		->condition('uid', $user->uid)
+		// ->condition('uid', $user->uid) // allow all access since we are doing admin only
 		->orderBy('title');
 	$eventOptions = array('0' => 'None');
 	foreach($eventQuery->execute() as $event) {
