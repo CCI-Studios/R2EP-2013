@@ -345,9 +345,9 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 	$address1 = $form_state['values']['wfbs_address1'];
 	$address2 = $form_state['values']['wfbs_address2'];
 	$city = $form_state['values']['wfbs_city'];
-	$province = substr($form_state['values']['wfbs_province'], 0, 2);
+	$province = strtoupper(substr($form_state['values']['wfbs_province'], 0, 2));
 	$postal = strtoupper($form_state['values']['wfbs_postal']);
-	$country = substr($form_state['values']['wfbs_country'], 0, 2);
+	$country = strtoupper(substr($form_state['values']['wfbs_country'], 0, 2));
 
 	// try to include shared transaction
 	mysql_connect('localhost', 'username', 'password');
