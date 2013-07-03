@@ -1,0 +1,14 @@
+#block-views-event-leader-board-block {
+	position: relative;
+
+	h2 { text-align: center; }
+
+	.view-filters {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+	.views-exposed-widgets { margin: 0; }
+
+	.view-footer { font-weight: bold; }
+}
