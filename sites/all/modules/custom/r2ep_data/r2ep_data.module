@@ -47,10 +47,22 @@ function _r2ep_data_event($event_id) {
 	if (isset($result['node'])) {
 		$nodes = node_load_multiple(array_keys($result['node']));
 
-		echo "firstname, lastname, cell, email, goal, count, total\r\n";
+		echo "firstname, lastname, cell, email, goal, count, total, teams\r\n";
 
 		foreach ($nodes as $node) {
 			$user = user_load($node->uid);
+
+			$query = db_select('node', 'n');
+			$query->leftJoin('field_data_field_runners', 'r', 'r.entity_id = n.nid');
+			$query->leftJoin('field_data_field_event', 'e', 'e.entity_id = n.nid');
+			$query->addField('n', 'title');
+			$query->condition('n.type', 'team');
+			$query->condition('r.field_runners_target_id', '1');
+			$query->condition('e.field_event_target_id', $event_id);
+			$query->condition('n.uid', $user->uid);
+
+			$teams = $query->execute()->fetchCol();
+
 
 			$firstname = field_get_items('user', $user, 'field_first_name');
 			$firstname = count($firstname)? $firstname[0]['value'] : '';
@@ -73,6 +85,7 @@ function _r2ep_data_event($event_id) {
 				$goal,
 				$count,
 				$donations,
+				'"'. implode(', ', $teams) .'"',
 			);
 
 			echo implode(',', $fields) ."\r\n";
