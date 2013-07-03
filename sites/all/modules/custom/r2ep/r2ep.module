@@ -348,7 +348,6 @@ function r2ep_node_update($node) {
 
 // handle form submissions
 function r2ep_form_alter(&$form, &$form_state, $form_id) {
-
 	if (!path_is_admin($_GET['q'])) {
 		if (isset($form['#node']) &&
 			isset($form['#node']->field_r2ep_make_campaign) &&

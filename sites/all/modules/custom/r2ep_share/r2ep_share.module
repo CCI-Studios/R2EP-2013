@@ -82,3 +82,19 @@ function _r2ep_share_content() {
 function _r2ep_hidden_share_content() {
 	return _r2ep_share_content();
 }
+
+function r2ep_share_menu() {
+	$items = array();
+
+	$items['import-contacts'] = array(
+		'title'	=> t('Mass Import Your Contacts'),
+		'description' => t('Batch import a group of users'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('_r2ep_share_import_form'),
+		'access arguments' => array('create campaign contact entry'),
+		// 'access arguments' => TRUE,
+		'file' => 'r2ep_share.import.inc',
+	);
+
+	return $items;
+}
