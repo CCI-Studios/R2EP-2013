@@ -28,11 +28,6 @@ function _r2ep_data_event($event_id) {
 		return;
 	}
 
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'campaign')
-		->fieldCondition('field_event', 'target_id', $event_id);
-
 	$event = node_load($event_id);
 
 	header('Cache-Control: public');
@@ -42,54 +37,70 @@ function _r2ep_data_event($event_id) {
 	header("Content-Disposition: attachment; filename=\"{$event->title}.csv\";");
 	header('Content-Transfer-encoding: binary');
 
+	$query = <<<QUERY
+SELECT
+fname.field_first_name_value,
+lname.field_last_name_value,
+cell.field_cell_number_value,
+gender.field_gender_value,
+u.mail,
+shirt.data as "Shirt",
+g.field_goal_value,
+c.field_donation_count_value,
+t.field_total_donations_value,
+(
+	SELECT group_concat(team.title) FROM node AS team
 
-	$result = $query->execute();
-	if (isset($result['node'])) {
-		$nodes = node_load_multiple(array_keys($result['node']));
+	left join field_data_field_event as te on te.entity_id = team.nid
+	left join field_data_field_runners as rs on rs.entity_id = team.nid
 
-		echo "firstname, lastname, cell, email, goal, count, total, teams\r\n";
+	WHERE
+	team.type = 'team' AND
+	te.field_event_target_id = :eid and
+	rs.field_runners_target_id = n.uid
+) as "Teams"
+FROM node as n
 
-		foreach ($nodes as $node) {
-			$user = user_load($node->uid);
+left join field_data_field_event as e on e.entity_id = n.nid
+left join users as u on u.uid = n.uid
+left join field_data_field_first_name as fname on fname.entity_id = u.uid
+left join field_data_field_last_name as lname on lname.entity_id = u.uid
+left join field_data_field_cell_number as cell on cell.entity_id = u.uid
+left join field_data_field_gender as gender on gender.entity_id = u.uid
+left join field_data_field_goal as g on g.entity_id = n.nid
+left join field_data_field_donation_count as c on c.entity_id = n.nid
+left join field_data_field_total_donations as t on t.entity_id = n.nid
+left join webform_submissions as wf on wf.uid = n.uid
+left join webform_submitted_data as shirt on shirt.sid = wf.sid
 
-			$query = db_select('node', 'n');
-			$query->leftJoin('field_data_field_runners', 'r', 'r.entity_id = n.nid');
-			$query->leftJoin('field_data_field_event', 'e', 'e.entity_id = n.nid');
-			$query->addField('n', 'title');
-			$query->condition('n.type', 'team');
-			$query->condition('r.field_runners_target_id', '1');
-			$query->condition('e.field_event_target_id', $event_id);
-			$query->condition('n.uid', $user->uid);
+where
+n.type = 'campaign' and
+e.field_event_target_id = :eid and
+(fname.bundle = 'user' or fname.bundle IS NULL) and
+(lname.bundle = 'user' or lname.bundle IS NULL) and
+(cell.bundle = 'user' or cell.bundle IS NULL) and
+(gender.bundle = 'user' or gender.bundle IS NULL) and
+(shirt.cid = 6 or shirt.cid IS NULL)
 
-			$teams = $query->execute()->fetchCol();
+group by n.nid
+QUERY;
+	$results = db_query($query, array(':eid' => $event_id));
 
-
-			$firstname = field_get_items('user', $user, 'field_first_name');
-			$firstname = count($firstname)? $firstname[0]['value'] : '';
-			$lastname = field_get_items('user', $user, 'field_last_name');
-			$lastname = count($lastname)? $lastname[0]['value'] : '';
-			$cell = field_get_items('user', $user, 'field_cell_number');
-			$cell = count($cell)? $cell[0]['value'] : '';
-			$goal = field_get_items('node', $node, 'field_goal');
-			$goal = count($goal)? $goal[0]['value'] : 0;
-			$count = field_get_items('node', $node, 'field_donation_count');
-			$count = count($goal)? $count[0]['value'] : 0;
-			$donations = field_get_items('node', $node, 'field_total_donations');
-			$donations = count($goal)? $donations[0]['value'] : 0;
-
-			$fields = array(
-				$firstname,
-				$lastname,
-				$cell,
-				$user->mail,
-				$goal,
-				$count,
-				$donations,
-				'"'. implode(', ', $teams) .'"',
-			);
-
-			echo implode(',', $fields) ."\r\n";
-		}
+	echo "firstname, lastname, cell, email, goal, count, total, teams\r\n";
+	foreach($results as $result) {
+		$values = array(
+			$result->field_first_name_value,
+			$result->field_last_name_value,
+			$result->field_cell_number_value,
+			$result->field_gender_value,
+			$result->mail,
+			$result->Shirt,
+			$result->field_goal_value,
+			$result->field_donation_count_value,
+			$result->field_total_donations_value,
+			('"'. $result->Teams .'"'),
+		);
+		echo implode(', ', $values) ."\r\n";
 	}
 
 	drupal_exit();
