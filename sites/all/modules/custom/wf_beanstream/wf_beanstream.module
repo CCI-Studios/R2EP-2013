@@ -275,7 +275,6 @@ function _wf_beanstream_form_alter_validate(&$form, &$form_state) {
 
 
 function _wf_beanstream_payment_form_validate($form, &$form_state) {
-
 	// bail early
 	if (form_get_errors()) return;
 
@@ -375,6 +374,11 @@ function _wf_beanstream_payment_form_validate($form, &$form_state) {
 
 	if ($trn->succeeded) {
 		module_invoke_all('wfbs_payment_success', $trn, $form, $form_state);
+
+		if ($node->field_r2ep_make_donation['und']['0']['value'] !== '1') { // not donation
+			mysql_close();
+			return;
+		}
 		$fromname = $firstname .' '. $lastname;
 		$address = $address1 ."\n";
 		$address .= $city .', '. $province ."\n";
