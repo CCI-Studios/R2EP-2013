@@ -31,7 +31,7 @@ function r2ep_notifications_menu() {
 		'description' => 'Notification Settings for Twilio etc.',
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array('_r2ep_notifications_config_form'),
-		'access arguments' => array('administer settings'),
+		'access arguments' => array('access administration pages'),
 		'file' => 'r2ep_notifications.pages.inc',
 	);
 
@@ -40,7 +40,7 @@ function r2ep_notifications_menu() {
 		'description' => t('Send a notification to your runnners or team mates'),
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array('_r2ep_notifications_form'),
-		'access arguments' => array('administer settings'),
+		'access arguments' => array('access administration pages'),
 		'file' => 'r2ep_notifications.pages.inc',
 	);
 
