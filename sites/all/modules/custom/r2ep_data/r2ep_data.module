@@ -4,23 +4,21 @@ function r2ep_data_menu() {
 	$items = array();
 	$items['event_export'] = array(
 		'title' => 'CSV Data Export',
-		'access callback' => '_r2ep_data_event_access',
-		'page callback' => '_r2ep_data_event'
+		'page callback' => '_r2ep_data_event',
+		'access arguments' => array('edit any event content'),
+	);
+	$items['export/national'] = array(
+		'title' => 'National CSV Data Export',
+		'page callback' => '_r2ep_data_national',
+		'access arguments' => array('edit any event content'),
+	);
+	$items['export/inactive'] = array(
+		'title' => 'Inactive Users CSV Data Export',
+		'page callback' => '_r2ep_data_inactive',
+		'access arguments' => array('edit any event content'),
 	);
 
 	return $items;
-}
-
-// only event owners and admins may access page
-function _r2ep_data_event_access() {
-	$event_id = arg(1);
-
-	if (!$event_id || !is_numeric($event_id)) {
-		return false;
-	}
-
-	$event = node_load($event_id);
-	return node_access('update', $event);
 }
 
 function _r2ep_data_event($event_id) {
@@ -30,12 +28,7 @@ function _r2ep_data_event($event_id) {
 
 	$event = node_load($event_id);
 
-	header('Cache-Control: public');
-	header('Content-Type: application/octet-stream');
-	header('Cache-Control: no-store, no-cache, must-revalidate');
-	header('Cache-Control: post-check=0, pre-check=0');
-	header("Content-Disposition: attachment; filename=\"{$event->title}.csv\";");
-	header('Content-Transfer-encoding: binary');
+	_r2ep_cvs_headers("{$event->title}.csv");
 
 	$query = <<<QUERY
 SELECT
@@ -104,6 +97,99 @@ QUERY;
 	}
 
 	drupal_exit();
+}
+
+function _r2ep_data_national() {
+	_r2ep_cvs_headers("National.csv");
+
+	$query = db_select('node', 'n')
+		->condition('n.type', 'donation')
+		->condition('n.status', 1)
+		// check for this year
+		->condition('eid.field_event_target_id', null) // event directly matches
+		->condition('cid.field_campaign_target_id', null); // event matches through campaign
+	$query->addField('fname', 'field_first_name_value', 'fname');
+	$query->addField('lname', 'field_last_name_value', 'lname');
+	$query->addField('email', 'field_contact_email_email', 'email');
+	$query->addField('phone', 'field_contact_phone_value', 'phone');
+	$query->addField('address1', 'field_contact_address1_value', 'address1');
+	$query->addField('address2', 'field_contact_address2_value', 'address2');
+	$query->addField('city', 'field_contact_city_value', 'city');
+	$query->addField('province', 'field_contact_province_value', 'province');
+	$query->addField('postal', 'field_contact_postal_value', 'postal');
+	$query->addField('country', 'field_contact_country_value', 'country');
+	$query->addField('price', 'field_wfbs_price_value', 'amount');
+	$query->addField('anonymous', 'field_anonymous_value', 'anonymous');
+
+	$query->leftJoin('field_data_field_first_name', 'fname', 'fname.entity_id=n.nid');
+	$query->leftJoin('field_data_field_last_name', 'lname', 'lname.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_email', 'email', 'email.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_phone', 'phone', 'phone.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_address1', 'address1', 'address1.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_address2', 'address2', 'address2.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_city', 'city', 'city.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_province', 'province', 'province.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_postal', 'postal', 'postal.entity_id=n.nid');
+	$query->leftJoin('field_data_field_contact_country', 'country', 'country.entity_id=n.nid');
+	$query->leftJoin('field_data_field_wfbs_price', 'price', 'price.entity_id=n.nid');
+	$query->leftJoin('field_data_field_campaign', 'cid', 'cid.entity_id=n.nid');
+	$query->leftJoin('field_data_field_event', 'eid', 'eid.entity_id=n.nid');
+	$query->leftJoin('field_data_field_anonymous', 'anonymous', 'anonymous.entity_id=n.nid');
+
+	$results = $query->execute();
+
+	echo "first name, last name, email address, phone number, address1, address2, city, province, postal code, country, amount, campaign ID, event ID, anonymous\r\n";
+	while($result = $results->fetchAssoc()) {
+		echo implode(', ', $result) ."\r\n";
+	}
+
+	drupal_exit();
+}
+
+function _r2ep_data_inactive() {
+	_r2ep_cvs_headers("Inactive.csv");
+
+	$query = <<<QUERY
+SELECT fname.field_first_name_value, lname.field_last_name_value, cell.field_cell_number_value, gender.field_gender_value, mail,
+	max(a.field_active_campaign_value) AS active FROM users AS u
+LEFT JOIN node AS c ON c.uid = u.uid
+LEFT JOIN field_data_field_active_campaign AS a ON a.entity_id=c.nid
+
+LEFT JOIN field_data_field_first_name AS fname ON fname.entity_id = u.uid
+LEFT JOIN field_data_field_last_name AS lname ON lname.entity_id = u.uid
+LEFT JOIN field_data_field_cell_number AS cell ON cell.entity_id = u.uid
+LEFT JOIN field_data_field_gender AS gender ON gender.entity_id = u.uid
+
+WHERE
+ u.status = 1
+ AND (fname.bundle = 'user' OR fname.bundle IS NULL)
+ AND (lname.bundle = 'user' OR lname.bundle IS NULL)
+ AND (cell.bundle = 'user' OR cell.bundle IS NULL)
+ AND (gender.bundle = 'user' OR gender.bundle IS NULL)
+ AND ( c.type IS NULL OR c.type = 'campaign' )
+
+GROUP BY u.uid
+HAVING active = 0 OR active IS NULL
+QUERY;
+
+	$results = db_query($query, array(':eid' => $event_id));
+	echo "firstname, lastname, email, cell, gender\r\n";
+	while($result = $results->fetchAssoc()) {
+		array_pop($result); // pop active
+		echo implode(', ', $result) ."\r\n";
+	}
+	echo "\n";
+
+	drupal_exit();
+}
+
+function _r2ep_cvs_headers($filename) {
+	header('Cache-Control: public');
+	header('Content-Type: application/octet-stream');
+	header('Cache-Control: no-store, no-cache, must-revalidate');
+	header('Cache-Control: post-check=0, pre-check=0');
+	header("Content-Disposition: attachment; filename=\"$filename\";");
+	header('Content-Transfer-encoding: binary');
 }
 
 function r2ep_data_block_info() {
