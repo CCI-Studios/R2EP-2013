@@ -39,36 +39,21 @@ function _r2ep_stats_total_donations_campaign(&$entity_field, $entity_type, $ent
 }
 
 function _r2ep_stats_total_donations_event(&$entity_field, $entity_type, $entity, $field, $instance, $langcode, $items) {
-	$total = 0;
-
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'campaign')
-		->fieldCondition('field_event', 'target_id', $entity->nid);
-	$results = $query->execute();
-
-	if (isset($results['node'])) {
-		$campaigns = array_keys($results['node']);
-		$query = db_select('node', 'n')
-			->condition('type', 'donation')
-			->condition('c.field_campaign_target_id', $campaigns, 'IN');
-		$query->join('field_data_field_campaign', 'c', 'c.entity_id = n.nid');
-		$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
-		$query->addExpression('sum(p.field_wfbs_price_value)');
-
-		$total += $query->execute()->fetchField();
-	}
-
-	// add any donations made straight to the event
+	$or = db_or()
+		->condition('event.field_event_target_id', $entity->nid) // event directly matches
+		->condition('cevent.field_event_target_id', $entity->nid); // event matches through campaign
 	$query = db_select('node', 'n')
 		->condition('n.type', 'donation')
 		->condition('n.status', 1)
-		->condition('e.field_event_target_id', $entity->nid);
-	$query->join('field_data_field_event', 'e', 'e.entity_id = n.nid');
-	$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id = n.nid');
+		->condition($or);
+	$query->join('field_data_field_wfbs_price', 'p', 'p.entity_id=n.nid'); // get amounts
+	$query->leftJoin('field_data_field_event', 'event', 'event.entity_id=n.nid'); // direct donation (optional)
+	$query->leftJoin('field_data_field_campaign', 'cid', 'cid.entity_id=n.nid'); // link to campaigns for indirect donation
+	$query->leftJoin('node', 'campaign', 'campaign.nid=cid.field_campaign_target_id');
+	$query->leftJoin('field_data_field_event', 'cevent', 'cevent.entity_id=campaign.nid');
 	$query->addExpression('sum(p.field_wfbs_price_value)');
-	$total += $query->execute()->fetchField();
 
+	$total = $query->execute()->fetchField();
 	$entity_field[0]['value'] = $total;
 }
 
