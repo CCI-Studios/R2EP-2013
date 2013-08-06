@@ -1,0 +1,7 @@
+name = R2EP Share Email handler
+description = Handles the tracking of shared emails
+package = R2EP
+core = 7.x
+
+dependencies[] = views_send
+dependencies[] = mimemail

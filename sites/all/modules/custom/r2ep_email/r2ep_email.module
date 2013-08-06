@@ -1,0 +1,97 @@
+<?php
+
+function r2ep_email_menu() {
+	$items['contacts/share/opened/%node'] = array(
+		'title' => 'Opened Contact Email',
+		'page callback' => 'r2ep_email_opened',
+		'page arguments' => array(3),
+		'access callback' => true,
+	);
+	$items['contacts/share/clicked/%node'] = array(
+		'title' => 'Clicked Contact Email',
+		'page callback' => 'r2ep_email_clicked',
+		'page arguments' => array(3),
+		'access callback' => true,
+	);
+
+	return $items;
+}
+
+function r2ep_email_opened($contact = false) {
+	// get contact with id
+	if (!$contact) { return; }
+	if ($contact->type != 'campaign_contact') { return; }
+	$opened = field_get_items('node', $contact, 'field_email_opened');
+
+	// set opened time if not set
+	if (!$opened || !count($opened)) {
+		$contact->field_email_opened[$contact->language] = array(
+			0 => array('value' => time())
+		);
+
+		// save node
+		node_submit($contact);
+		node_save($contact);
+	}
+
+	// return gif
+	$im = file_get_contents(dirname(__FILE__) .'/transparent.gif');
+	header('Content-Type: image/gif');
+	echo $im;
+}
+
+function r2ep_email_clicked($contact = false) {
+	// get contact with id
+	if (!$contact) { return; }
+	if ($contact->type != 'campaign_contact') { return; }
+	$clicked = field_get_items('node', $contact, 'field_email_clicked');
+	$campaignIDs = field_get_items('node', $contact, 'field_campaign');
+
+	// set clicked time if not set
+	if (!$clicked || !count($clicked)) {
+		$contact->field_email_clicked[$contact->language] = array(
+			0 => array('value' => time())
+		);
+
+		// save node
+		node_submit($contact);
+		node_save($contact);
+	}
+
+	// set session key
+	user_cookie_save(array(
+		'donating_contact' => $contact->nid
+	));
+	// print $_COOKIE['Drupal.visitor.donating_contact']; //outputs value
+
+	if (count($campaignIDs)) {
+		drupal_goto('node/'. $campaignIDs[0]['target_id']);
+	}
+}
+
+function r2ep_email_wfbs_payment_success($trn, $form, $data) {
+	if (isset($_COOKIE['Drupal_visitor_donating_contact'])) {
+		// check is user is a contact
+		$contactID = $_COOKIE['Drupal_visitor_donating_contact'];
+		if (!$contactID) { return; }
+		$contact = node_load($contactID);
+		if (!$contact) { return; }
+
+		print_r($contact);
+
+		$donated = field_get_items('node', $contact, 'field_email_donated');
+
+		if (!$donated || !count($donated)) {
+			$contact->field_email_donated[$contact->language] = array(
+				0 => array('value' => time())
+			);
+
+			// save node
+			node_submit($contact);
+			node_save($contact);
+		}
+	}
+
+	die;
+}
+
