@@ -18,7 +18,17 @@ function r2ep_data_menu() {
 		'access arguments' => array('edit any event content'),
 	);
 
+	$items['admin/stats'] = array(
+		'title' => 'National Numbers',
+		'page callback' => '_r2ep_data_admin',
+		'access arguments' => array('access content overview'),
+	);
+
 	return $items;
+}
+
+function _r2ep_data_admin() {
+	return '<ul><li><a href="/export/national">National Stats</a></li><li><a href="/export/inactive">Inactive Users</a></li>';
 }
 
 function _r2ep_data_event($event_id) {
