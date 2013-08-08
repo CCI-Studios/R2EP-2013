@@ -77,8 +77,6 @@ function r2ep_email_wfbs_payment_success($trn, $form, $data) {
 		$contact = node_load($contactID);
 		if (!$contact) { return; }
 
-		print_r($contact);
-
 		$donated = field_get_items('node', $contact, 'field_email_donated');
 
 		if (!$donated || !count($donated)) {
@@ -91,7 +89,5 @@ function r2ep_email_wfbs_payment_success($trn, $form, $data) {
 			node_save($contact);
 		}
 	}
-
-	die;
 }
 
