@@ -1,0 +1,69 @@
+<?php
+
+function r2ep_eoy_form_event_node_form_alter(&$form, &$form_state, $form_id) {
+	if (!isset($form['#node'])) return; // only available on saved nodes
+	if (!$form['#node']->status) return; // only available on published events
+
+	$form['actions'][] = array(
+		'#type' => 'submit',
+		'#value' => t('End of Year'),
+		'#weight' => 20,
+		'#submit' => array('node_form_submit', 'r2ep_eoy_form_submit')
+	);
+
+	dsm($form);
+}
+
+function r2ep_eoy_form_submit($form, &$form_state) {
+	if (isset($form['#node'])) {
+		$node = $form['#node'];
+		r2ep_eoy_unpublish_node($node->nid);
+	}
+}
+
+function r2ep_eoy_unpublish_node($nid) {
+	$node = node_load($nid);
+
+	// append year to title
+	$year = date('Y');
+	if (substr($node->title, -strlen($year)) != $year) {
+		$node->title .= ' '. $year;
+	}
+	$node->status = 0; // unpublish
+	node_save($node);
+
+	// get all campaigns
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'campaign')
+		->fieldCondition('field_event', 'target_id', $node->nid);
+	$result = $query->execute();
+
+	if (isset($result['node'])) {
+		$nids = array_keys($result['node']);
+		$campaigns = node_load_multiple($nids);
+
+		foreach($campaigns as $campaign) {
+			$campaign->status = 0; // unpublish
+			$campaign->field_active_campaign[LANGUAGE_NONE][0] = 0; // inactive
+			node_save($campaign);
+		}
+	}
+
+	// get all teams
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'team')
+		->fieldCondition('field_event', 'target_id', $node->nid);
+	$result = $query->execute();
+
+	if (isset($result['node'])) {
+		$nids = array_keys($result['node']);
+		$teams = node_load_multiple($nids);
+
+		foreach ($teams as $team) {
+			$team->status = 0;
+			node_save($team);
+		}
+	}
+}

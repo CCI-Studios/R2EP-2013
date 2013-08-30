@@ -115,7 +115,7 @@ function _r2ep_data_national() {
 	$query = db_select('node', 'n')
 		->condition('n.type', 'donation')
 		->condition('n.status', 1)
-		// check for this year
+		->condition('n.created', strtotime(date('Y-1-1')), '>=') // check for this year
 		->condition('eid.field_event_target_id', null) // event directly matches
 		->condition('cid.field_campaign_target_id', null); // event matches through campaign
 	$query->addField('fname', 'field_first_name_value', 'fname');

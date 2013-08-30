@@ -1,0 +1,4 @@
+name = R2EP Year of Year
+description = Provides functionality to handle end of year event roll overs
+core = 7.x
+package = R2EP

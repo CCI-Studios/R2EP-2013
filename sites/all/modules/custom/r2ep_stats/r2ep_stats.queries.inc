@@ -40,7 +40,10 @@ function _r2ep_stats_number_of_campaigns_for_user($uid) {
 
 
 function _r2ep_stats_get_all_runners_count() {
-	return db_query("SELECT count(uid) FROM {users} where status = 1")->fetchField();
+	return db_query("SELECT count(*) as 'count'
+		from (
+  			select uid from node where type='campaign' and status=1 group by uid
+		) sq")->fetchField();
 }
 
 function _r2ep_stats_get_runners_for_team($teamid) {
