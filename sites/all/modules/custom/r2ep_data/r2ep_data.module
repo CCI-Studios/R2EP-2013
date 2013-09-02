@@ -47,7 +47,7 @@ lname.field_last_name_value,
 cell.field_cell_number_value,
 gender.field_gender_value,
 u.mail,
-shirt.data as "Shirt",
+if (shirt.cid = 6, shirt.data, '') as "Shirt",
 g.field_goal_value,
 c.field_donation_count_value,
 t.field_total_donations_value,
@@ -82,14 +82,14 @@ e.field_event_target_id = :eid and
 (fname.bundle = 'user' or fname.bundle IS NULL) and
 (lname.bundle = 'user' or lname.bundle IS NULL) and
 (cell.bundle = 'user' or cell.bundle IS NULL) and
-(gender.bundle = 'user' or gender.bundle IS NULL) and
-(shirt.cid = 6 or shirt.cid IS NULL)
+(gender.bundle = 'user' or gender.bundle IS NULL)
 
 group by n.nid
+order by lname.field_last_name_value, fname.field_first_name_value
 QUERY;
 	$results = db_query($query, array(':eid' => $event_id));
 
-	echo "firstname, lastname, cell, email, goal, count, total, teams\r\n";
+	echo "firstname, lastname, cell, gender, email, shirt, goal, count, total, teams\r\n";
 	foreach($results as $result) {
 		$values = array(
 			$result->field_first_name_value,
