@@ -10,8 +10,6 @@ function r2ep_eoy_form_event_node_form_alter(&$form, &$form_state, $form_id) {
 		'#weight' => 20,
 		'#submit' => array('node_form_submit', 'r2ep_eoy_form_submit')
 	);
-
-	dsm($form);
 }
 
 function r2ep_eoy_form_submit($form, &$form_state) {
