@@ -181,7 +181,7 @@ function _r2ep_notifications_form_submit($form, &$form_state) {
 		$cell = field_get_items('user', $user, 'field_cell_number');
 		if ($cell && count($cell)) {
 			$number = $cell[0]['value'];
-			$message = $client->account->sms_messages->create(
+			$client->account->sms_messages->create(
 				$from,
 				$number,
 				$message
