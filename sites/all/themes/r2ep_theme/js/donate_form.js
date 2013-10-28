@@ -206,5 +206,10 @@
 			};
 
 		timer = searchScan();
+
+		$("form#webform-client-form-150").submit(function(){
+			$("form#webform-client-form-150 input[type='submit']").attr("disabled", true).val("Please wait");
+			return true;
+		});
 	});
 }(jQuery));
