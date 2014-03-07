@@ -63,19 +63,17 @@
 		var $select = $('#edit-canned-message'),
 			$title = $('#edit-title'),
 			$body = $('#edit-body-und-0-value'),
-			$toggle = $('#wysiwyg-toggle-edit-body-und-0-value');
+			$toggle = $('#edit-body-und-0-format--2');
 
 		$select.change(function() {
 			if ($select.val() == 'none') {
 				return;
 			}
 
-			$toggle.click();
+			$toggle.val("plain_text").change();
 			$title.val($select.val());
 			$body.val(messages[$select.val()]);
-			$toggle.click();
+			$toggle.val("email_html").change();
 		});
 	})
 }(jQuery));
-
-
