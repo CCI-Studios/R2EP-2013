@@ -1,8 +1,5 @@
 (function ($) {
 	$(function() {
-		$('ul.menu ul').show();
-		$('ul.menu ul').hide();
-
 		$('ul.menu li').hover(function() {
 			clearTimeout($.data(this, 'timer'));
 			$(this).parent().find('ul').slideUp(100);
