@@ -44,6 +44,8 @@ function _r2ep_share_content() {
 	$summary = "Find out why I've joined the Canada-wide Run to End Poverty. You can support my run and be part of the incredible mvement that brings people together with one common goal: to eliminate extreme poverty in rural Africa.";
 	$title_short = "See why I'm Running to end poverty";
 	$url = $GLOBALS['base_url'] .'/'. request_path();
+	if (request_path() == 'user')
+		$url .= '/'.$user->uid;
 
 	$services = array(
 		'facebook' => 'https://facebook.com/dialog/feed?app_id=453654021395820&link=%url&name=%title&description=%summary&redirect_uri=http://r2ep.ewb.ca',
