@@ -25,7 +25,7 @@
 		counters.each(function () {
 			var $this = $(this),
 				start = $this.data('start'),
-				end = $this.data('end');
+				end = $this.data('end'),
 				parent = $this.parent();
 
 			parent.prepend('$');

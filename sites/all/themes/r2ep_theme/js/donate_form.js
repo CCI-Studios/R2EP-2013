@@ -1,7 +1,7 @@
 (function ($) {
 	$(function() {
 		var $body = null,
-			$content = null;
+			$content = null,
 			$amount1 = null,
 			$amount2 = null,
 			$other1 = null,
@@ -15,7 +15,12 @@
 			$cardField = null,
 			$addressField = null,
 			$addressField2 = null,
+			$postalField = null,
+			$phoneField = null,
+			$emailField = null,
 			$cityField = null,
+			$typeField = null,
+			$messageField = null,
 			$provinceField = null,
 			$countryField = null,
 			$anonymous = null,
@@ -135,7 +140,7 @@
 				});
 
 				$prevLinks.click(function() {
-					var $this = $(this)
+					var $this = $(this),
 						index = $prevLinks.index($this);
 
 					if (page > 0) {
@@ -148,7 +153,7 @@
 				});
 
 				$nextLinks.click( function() {
-					var $this = $(this)
+					var $this = $(this),
 						index = $nextLinks.index($this);
 
 					if (page < 2) {
