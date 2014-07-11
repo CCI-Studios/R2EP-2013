@@ -113,8 +113,8 @@ function r2ep_block_view($delta = '') {
 
 function _r2ep_create_team_link() {
 	$node = menu_get_object();
-
-	return t('<a class="btn btn--block" href="/node/add/team">Create Team</a>');
+	$year = date('Y');
+	return t('<a class="btn btn--block" href="/events" style="margin-bottom:5px;">Sign Up for '.$year.' Races</a><a class="btn btn--block" href="/node/add/team">Create Team</a>');
 }
 
 function _r2ep_share_campaign_link() {
@@ -348,6 +348,7 @@ function r2ep_node_update($node) {
 
 // handle form submissions
 function r2ep_form_alter(&$form, &$form_state, $form_id) {
+
 	if (!path_is_admin($_GET['q'])) {
 		if (isset($form['#node']) &&
 			isset($form['#node']->field_r2ep_make_campaign) &&
